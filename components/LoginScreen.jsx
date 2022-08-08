@@ -7,7 +7,11 @@ import {
   Pressable,
 } from "react-native";
 
-export default function Login() {
+export default function Login({ navigation }) {
+  function handleSignUpPress() {
+    navigation.navigate("Sign Up");
+  }
+
   return (
     <View style={styles.container}>
       <Image
@@ -26,7 +30,7 @@ export default function Login() {
       <View style={styles.divideLine}></View>
       <View style={styles.viewRow}>
         <Text style={styles.signupText}>New to ChipIn?</Text>
-        <Pressable style={styles.sigupButton}>
+        <Pressable style={styles.sigupButton} onPress={handleSignUpPress}>
           <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up</Text>
         </Pressable>
       </View>
