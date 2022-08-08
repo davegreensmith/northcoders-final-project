@@ -30,7 +30,7 @@ export default function SignUpScreen() {
         placeholder="A brief description of your skills and abilities..."
       />
       <TextInput style={styles.textField} placeholder="Your postcode" />
-      <Pressable style={styles.loginButton}>
+      <Pressable style={styles.signUpButton}>
         <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
       </Pressable>
     </View>
@@ -59,12 +59,12 @@ const styles = StyleSheet.create({
     width: 200,
     margin: 10,
   },
-  loginButton: {
+  signUpButton: {
     backgroundColor: "#47c9af",
     borderColor: "#000",
     borderWidth: 1,
     borderRadius: 5,
-    width: 90,
+    width: 100,
     margin: 20,
     padding: 10,
   },
