@@ -6,6 +6,7 @@ import {
   addDoc,
   setDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -13,6 +14,7 @@ import {
   signOut,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { useState } from "react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs",
@@ -76,6 +78,7 @@ export function signUpNewUser(email, password) {
       ]);
     })
     .then(([email, id]) => {
+      setUser({ email, id });
       console.log(email, "<<< email");
       addUser(email, id);
     })
@@ -99,10 +102,22 @@ export function userLogout() {
 
 export function userLogin(email, password) {
   signInWithEmailAndPassword(auth, email, password)
-    .then((cred) => {
-      console.log("user logged in", cred.user);
+    .then(() => {
+      console.log("user logged in");
+      return { msg: "working" };
     })
     .catch((err) => {
       console.log(err.message);
     });
+}
+
+//update user info
+export function updateUserInfo() {
+  const userRef = doc(db, "users", auth.currentUser.reloadUserInfo.localId);
+
+  updateDoc(userRef, {
+    fname: "Jan",
+  }).then(() => {
+    console.log("user updated");
+  });
 }
