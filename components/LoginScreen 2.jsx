@@ -11,9 +11,6 @@ export default function Login({ navigation }) {
   function handleSignUpPress() {
     navigation.navigate("Sign Up");
   }
-   function handleLoginPress() {
-     navigation.navigate("Splash");
-   }
 
   return (
     <View style={styles.container}>
@@ -27,7 +24,7 @@ export default function Login({ navigation }) {
         secureTextEntry={true}
         placeholder="Password"
       />
-      <Pressable style={styles.loginButton} onPress={handleLoginPress}>
+      <Pressable style={styles.loginButton}>
         <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
       </Pressable>
       <View style={styles.divideLine}></View>
@@ -92,7 +89,7 @@ const styles = StyleSheet.create({
     borderColor: "#000",
     borderWidth: 1,
     borderRadius: 5,
-    width: 100,
+    width: 90,
     margin: 10,
     padding: 10,
   },
