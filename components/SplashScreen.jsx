@@ -4,16 +4,75 @@ import {
   Image,
   Text,
   View,
-  Pressable
+  Pressable,
+  ScrollView
 } from "react-native";
 import Header from "./Header";
+import NavBar from "./NavBar";
+
 
 
 export default function SplashScreen() {
-    return(
-        <View>
-            <Header/>
-            <Text>SplashScreen</Text>
-        </View>
-    )
+    return (
+      <ScrollView>
+        <Header />
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+
+        <NavBar />
+      </ScrollView>
+    );
 }
