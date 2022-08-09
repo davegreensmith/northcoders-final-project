@@ -6,13 +6,16 @@ import {
   View,
   Pressable,
 } from "react-native";
+import { useState } from "react";
+import { userLogin, userLogout } from "../firebase/config";
 
-export default function Login({ navigation }) {
-  function handleSignUpPress() {
-    navigation.navigate("Sign Up");
-  }
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
    function handleLoginPress() {
      navigation.navigate("Splash");
+     userLogin(email, password);
    }
 
   return (
@@ -21,13 +24,22 @@ export default function Login({ navigation }) {
         style={styles.logo}
         source={require("../assets/chip-in-logo-1.png")}
       />
-      <TextInput style={styles.textField} placeholder="Email" />
+      <TextInput
+        style={styles.textField}
+        placeholder="Email"
+        onChangeText={setEmail}
+        value={email}
+      />
       <TextInput
         style={styles.textField}
         secureTextEntry={true}
         placeholder="Password"
+        onChangeText={setPassword}
+        value={password}
       />
+
       <Pressable style={styles.loginButton} onPress={handleLoginPress}>
+
         <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
       </Pressable>
       <View style={styles.divideLine}></View>
