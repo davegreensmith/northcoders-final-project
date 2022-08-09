@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, addDoc, setDoc, doc, updateDoc } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { useState, useEffect } from 'react';
+import authContextProvider from '../context/authContext';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs',
@@ -16,15 +17,11 @@ export const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 export const auth = getAuth();
-const [user, setUser] = useState(null);
+// const [user, setUser] = useState(null);
 
 useEffect(() => {
-  onAuthStateChanged(auth, (loggedInUser) => {
-    if (loggedInUser) {
-      setUser(loggedInUser);
-    } else {
-      setUser(null);
-    }
+  authContextProvider().then(({ user }) => {
+    console.log(user);
   });
 }, []);
 
@@ -79,7 +76,7 @@ export function signUpNewUser(email, password) {
     });
 }
 
-signUpNewUser('test123@gmail.com', 'pa55w0rd');
+// signUpNewUser('test123@gmail.com', 'pa55w0rd');
 
 //logging in and out
 export function userLogout() {
