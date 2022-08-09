@@ -32,10 +32,12 @@ export const db = getFirestore();
 export const auth = getAuth();
 
 // const [loggedInUser, setLoggedInUser] = useState(null);
+let loggedInUser = {};
 
 auth.onAuthStateChanged(function (user) {
   if (user) {
     console.log(`${user.reloadUserInfo.email} is logged in`);
+    loggedInUser = user;
   } else {
     console.log("no one logged in :(");
   }
