@@ -15,7 +15,6 @@ import {
   signOut,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-// import { useState } from "react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs",
@@ -31,12 +30,11 @@ export const app = initializeApp(firebaseConfig);
 export const db = getFirestore();
 export const auth = getAuth();
 
-// const [loggedInUser, setLoggedInUser] = useState(null);
 let loggedInUser = {};
 
 auth.onAuthStateChanged(function (user) {
   if (user) {
-    console.log(`${user.reloadUserInfo.email} is logged in`);
+    console.log(user.reloadUserInfo.localId, "<<< authState");
     loggedInUser = user;
   } else {
     console.log("no one logged in :(");
@@ -51,7 +49,6 @@ export const errandsRef = collection(db, "errands");
 export function fetchUsers() {
   getDocs(usersRef)
     .then((snapshot) => {
-      // console.log(snapshot.docs, "<<< snapshot");
       let users = [];
       snapshot.docs.forEach((doc) => {
         users.push({ ...doc.data(), id: doc.id });
@@ -63,13 +60,14 @@ export function fetchUsers() {
     });
 }
 
-// write new user to the databaseauth
+// write new user to the database
 export function addUser(email, id) {
   const userRef = doc(db, "users", id);
 
-  setDoc(userRef, { email })
-    .then(() => {
-      console.log("users table updated");
+  return Promise.all([setDoc(userRef, { email }), id])
+    .then(([undefined, id]) => {
+      console.log(`new user with id ${id} has been added`);
+      return id;
     })
     .catch((err) => {
       console.log(err.message);
@@ -84,14 +82,12 @@ export function signUpNewUser(email, password) {
         cred.user.reloadUserInfo.email,
         "<<< createUserwithPass email"
       );
-      console.log(cred.user.reloadUserInfo.localId, "<<< auth ID");
       return Promise.all([
         cred.user.reloadUserInfo.email,
         cred.user.reloadUserInfo.localId,
       ]);
     })
     .then(([email, id]) => {
-      console.log(email, "<<< email");
       addUser(email, id);
     })
     .catch((err) => {
@@ -114,8 +110,7 @@ export function userLogout() {
 export function userLogin(email, password) {
   signInWithEmailAndPassword(auth, email, password)
     .then((cred) => {
-      // console.log("user logged in", cred.user);
-      return { msg: "working" };
+      console.log(`${cred.user.uid} logged in. <<< userLogin`);
     })
     .catch((err) => {
       console.log(err.message);
@@ -147,8 +142,8 @@ export function deleteUser(id) {
 }
 
 //update user info
-export function updateUserInfo() {
-  const userRef = doc(db, "users", auth.currentUser.reloadUserInfo.localId);
+export function updateUserInfo(userId) {
+  const userRef = doc(db, "users", userId);
 
   updateDoc(userRef, {
     fname: "Jan",
@@ -165,17 +160,6 @@ export function updateErrand(errandID, updateBody) {
     console.log("errand updated");
   });
 }
-
-updateErrand("jTUz4CRGZPT9vSS3YNiM", {
-  author: "saleh",
-  description: "new description",
-  dueDate: "yesterday",
-  errandName: "really difficult task",
-  location: "liverpool",
-  requirements: "none",
-  timeframe: "2 days",
-  type: "easy work",
-});
 
 //delete errands
 export function deleteErrand(errandID) {

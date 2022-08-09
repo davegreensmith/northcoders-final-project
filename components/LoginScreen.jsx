@@ -7,20 +7,20 @@ import {
   Pressable,
 } from "react-native";
 import { useState } from "react";
-import { userLogin, userLogout } from "../firebase/config";
+import { userLogin } from "../firebase/config";
 
-export default function LoginScreen({navigation}) {
+export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-   function handleLoginPress() {
-     navigation.navigate("Splash")
-     userLogin(email, password);
-   }
+  function handleLoginPress() {
+    navigation.navigate("Splash");
+    userLogin(email, password);
+  }
 
-   function handleSignUpPress() {
-     navigation.navigate("Sign Up");
-   }
+  function handleSignUpPress() {
+    navigation.navigate("Sign Up");
+  }
 
   return (
     <View style={styles.container}>
@@ -43,7 +43,6 @@ export default function LoginScreen({navigation}) {
       />
 
       <Pressable style={styles.loginButton} onPress={handleLoginPress}>
-
         <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
       </Pressable>
       <View style={styles.divideLine}></View>
