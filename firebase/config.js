@@ -7,6 +7,7 @@ import {
   setDoc,
   doc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -164,3 +165,12 @@ updateErrand("jTUz4CRGZPT9vSS3YNiM", {
   timeframe: "2 days",
   type: "easy work",
 });
+
+//delete errands
+export function deleteErrand(errandID) {
+  const errandRef = doc(db, "errands", errandID);
+
+  deleteDoc(errandRef).then(() => {
+    console.log("errand deleted");
+  });
+}
