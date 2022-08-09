@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, addDoc, setDoc, doc, updateDoc } from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { useState, useEffect } from 'react';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs',
@@ -15,6 +16,17 @@ export const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 export const auth = getAuth();
+const [user, setUser] = useState(null);
+
+useEffect(() => {
+  onAuthStateChanged(auth, (loggedInUser) => {
+    if (loggedInUser) {
+      setUser(loggedInUser);
+    } else {
+      setUser(null);
+    }
+  });
+}, []);
 
 //collection refs
 export const usersRef = collection(db, 'users');
@@ -84,6 +96,7 @@ export function userLogin(email, password) {
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       console.log('user logged in');
+      console.log(user, '<<< user in async land');
       return { msg: 'working' };
     })
     .catch((err) => {
@@ -102,4 +115,7 @@ export function updateUserInfo() {
   });
 }
 
-signUpNewUser('dave@dave.com', 'wiggles');
+userLogin('test123@gmail.com', 'pa55w0rd');
+console.log(user, '<<< user in js land');
+
+// signUpNewUser('dave@dave.com', 'wiggles');
