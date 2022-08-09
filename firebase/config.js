@@ -14,8 +14,8 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   signInWithEmailAndPassword,
-  onAuthStateChanged,
 } from "firebase/auth";
+// import { useState } from "react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs",
@@ -30,7 +30,16 @@ export const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 export const auth = getAuth();
-// const [user, setUser] = useState(null);
+
+// const [loggedInUser, setLoggedInUser] = useState(null);
+
+auth.onAuthStateChanged(function (user) {
+  if (user) {
+    console.log(`${user.reloadUserInfo.email} is logged in`);
+  } else {
+    console.log("no one logged in :(");
+  }
+});
 
 //collection refs
 export const usersRef = collection(db, "users");
@@ -103,7 +112,7 @@ export function userLogout() {
 export function userLogin(email, password) {
   signInWithEmailAndPassword(auth, email, password)
     .then((cred) => {
-      console.log("user logged in", cred.user);
+      // console.log("user logged in", cred.user);
       return { msg: "working" };
     })
     .catch((err) => {
@@ -190,24 +199,21 @@ export function fetchErrands() {
     });
 }
 
-addErrand({
-  author: "christian",
-  description: "new description",
-  dueDate: "yesterday",
-  errandName: "really difficult task",
-  location: "liverpool",
-  requirements: "none",
-  timeframe: "2 days",
-  type: "easy work",
-});
-addErrand({
-  author: "jim",
-  description: "new description",
-  dueDate: "yesterday",
-  errandName: "really difficult task",
-  location: "liverpool",
-  requirements: "none",
-  timeframe: "2 days",
-  type: "easy work",
-});
-fetchErrands();
+//CHAT MESSAGES
+
+//add message to db
+export function addMessage(message, userId1, userId2) {
+  const errandRef = collection(db, "errands");
+
+  addDoc(errandRef, errandDetails)
+    .then((mystery) => {
+      // console.log(mystery._key.path.segments[1], '<<< errand doc number');
+      // console.log(mystery.firestore._firestoreClient.user.uid, '<<< users UID');
+      console.log("users table updated");
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
+userLogin("test123@gmail.com", "pa55w0rd");
