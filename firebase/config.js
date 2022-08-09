@@ -37,7 +37,7 @@ export const usersRef = collection(db, "users");
 export const errandsRef = collection(db, "errands");
 
 //get collection ref data
-export default function fetchUsers() {
+export function fetchUsers() {
   getDocs(usersRef)
     .then((snapshot) => {
       // console.log(snapshot.docs, "<<< snapshot");
@@ -174,3 +174,40 @@ export function deleteErrand(errandID) {
     console.log("errand deleted");
   });
 }
+
+//get all errands
+export function fetchErrands() {
+  getDocs(errandsRef)
+    .then((snapshot) => {
+      let errands = [];
+      snapshot.docs.forEach((doc) => {
+        errands.push({ ...doc.data(), id: doc.id });
+      });
+      console.log(errands, "<<< errands list");
+    })
+    .catch((err) => {
+      console.log(err.message, "<<< errands errors");
+    });
+}
+
+addErrand({
+  author: "christian",
+  description: "new description",
+  dueDate: "yesterday",
+  errandName: "really difficult task",
+  location: "liverpool",
+  requirements: "none",
+  timeframe: "2 days",
+  type: "easy work",
+});
+addErrand({
+  author: "jim",
+  description: "new description",
+  dueDate: "yesterday",
+  errandName: "really difficult task",
+  location: "liverpool",
+  requirements: "none",
+  timeframe: "2 days",
+  type: "easy work",
+});
+fetchErrands();
