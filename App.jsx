@@ -1,21 +1,37 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "./components/LoginScreen";
-import { useState } from "react";
+import LoginScreen from "./components/LoginScreen";
 import SignUpScreen from "./components/SignUpScreen";
 import SplashScreen from "./components/SplashScreen";
-
-const Stack = createNativeStackNavigator();
+import AddErrandScreen from "./components/AddErrandScreen";
 
 export default function App() {
+  const Stack = createNativeStackNavigator();
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={Login} options={{headerShown: false}} />
-        <Stack.Screen name="Sign Up" component={SignUpScreen} options={{headerShown: false}} />
-        <Stack.Screen name="Splash" component={SplashScreen} options={{headerShown: false}} />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Sign Up"
+          component={SignUpScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Add Errand"
+          component={AddErrandScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
