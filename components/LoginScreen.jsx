@@ -9,13 +9,17 @@ import {
 import { useState } from "react";
 import { userLogin, userLogout } from "../firebase/config";
 
-export default function Login() {
+export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
    function handleLoginPress() {
-     navigation.navigate("Splash");
+     navigation.navigate("Splash")
      userLogin(email, password);
+   }
+
+   function handleSignUpPress() {
+     navigation.navigate("Sign Up");
    }
 
   return (

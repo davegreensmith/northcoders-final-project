@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, addDoc, setDoc, doc } from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, collection, getDocs, addDoc, setDoc, doc, updateDoc } from 'firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs',
@@ -15,6 +15,13 @@ export const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 export const auth = getAuth();
+// const [user, setUser] = useState(null);
+
+useEffect(() => {
+  authContextProvider().then(({ user }) => {
+    console.log(user);
+  });
+}, []);
 
 //collection refs
 export const usersRef = collection(db, 'users');
@@ -66,8 +73,6 @@ export function signUpNewUser(email, password) {
     });
 }
 
-// signUpNewUser('test123@gmail.com', 'pa55w0rd');
-
 //logging in and out
 export function userLogout() {
   signOut(auth)
@@ -83,6 +88,7 @@ export function userLogin(email, password) {
   signInWithEmailAndPassword(auth, email, password)
     .then((cred) => {
       console.log('user logged in', cred.user);
+      return { msg: 'working' };
     })
     .catch((err) => {
       console.log(err.message);
@@ -106,13 +112,21 @@ export function addErrand(errandDetails) {
     });
 }
 
-addErrand({
-  author: 'Jon',
-  description: 'take a load of junk to the tip',
-  dueDate: '15/8/2022',
-  errandName: 'Tip run',
-  location: 'Macc',
-  requirements: 'No sense of smell',
-  timeframe: '1hr',
-  type: 'Heavy lifting',
-});
+//delete users
+export function deleteUser(id) {
+  const userRef = doc(db, 'users', id);
+  
+  deleteDoc(userRef).then(() => {
+    console.log('user deleted');
+
+//update user info
+export function updateUserInfo() {
+  const userRef = doc(db, 'users', auth.currentUser.reloadUserInfo.localId);
+
+  updateDoc(userRef, {
+    fname: 'Jan',
+  }).then(() => {
+    console.log('user updated');
+
+  });
+}
