@@ -2,7 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, addDoc, setDoc, doc, updateDoc } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
-
 const firebaseConfig = {
   apiKey: 'AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs',
   authDomain: 'chip-in-db.firebaseapp.com',
@@ -90,6 +89,23 @@ export function userLogin(email, password) {
     .then((cred) => {
       console.log('user logged in', cred.user);
       return { msg: 'working' };
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
+//add errands to database
+
+export function addErrand(errandDetails) {
+  const errandRef = collection(db, 'errands');
+  // const errandDetails = { id, description, dueDate, errandName, location, requirements, timeframe, type };
+
+  addDoc(errandRef, errandDetails)
+    .then((mystery) => {
+      // console.log(mystery._key.path.segments[1], '<<< errand doc number');
+      // console.log(mystery.firestore._firestoreClient.user.uid, '<<< users UID');
+      console.log('users table updated');
     })
     .catch((err) => {
       console.log(err.message);
