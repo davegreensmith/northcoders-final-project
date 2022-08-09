@@ -5,17 +5,16 @@ import {
   Text,
   View,
   Pressable,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import Header from "./Header";
 import NavBar from "./NavBar";
 
-
-
-export default function SplashScreen() {
-    return (
+export default function SplashScreen({navigation}) {
+  return (
+    <View>
+      <Header />
       <ScrollView>
-        <Header />
         <Text>SplashScreen</Text>
         <Text>SplashScreen</Text>
         <Text>SplashScreen</Text>
@@ -71,7 +70,28 @@ export default function SplashScreen() {
         <Text>SplashScreen</Text>
         <Text>SplashScreen</Text>
         <Text>SplashScreen</Text>
-        <NavBar />
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
+        <Text>SplashScreen</Text>
       </ScrollView>
-    );
+      <NavBar navigation={navigation}/>
+    </View>
+  );
 }
