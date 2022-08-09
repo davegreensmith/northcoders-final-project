@@ -13,9 +13,10 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleLogin() {
-    userLogin(email, password);
-  }
+   function handleLoginPress() {
+     navigation.navigate("Splash");
+     userLogin(email, password);
+   }
 
   return (
     <View style={styles.container}>
@@ -36,12 +37,9 @@ export default function Login() {
         onChangeText={setPassword}
         value={password}
       />
-      <Pressable
-        style={styles.loginButton}
-        onPress={() => {
-          handleLogin();
-        }}
-      >
+
+      <Pressable style={styles.loginButton} onPress={handleLoginPress}>
+
         <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
       </Pressable>
       <View style={styles.divideLine}></View>
