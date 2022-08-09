@@ -71,7 +71,6 @@ export default function SplashScreen() {
         <Text>SplashScreen</Text>
         <Text>SplashScreen</Text>
         <Text>SplashScreen</Text>
-
         <NavBar />
       </ScrollView>
     );

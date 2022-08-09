@@ -30,8 +30,5 @@ const styles = StyleSheet.create({
     top: 790,
     flex: 1,
     backgroundColor: "#fff",
-    
-
-
   }
 });
