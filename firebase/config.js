@@ -1,8 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, addDoc, setDoc, doc, updateDoc } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import { useState, useEffect } from 'react';
-import authContextProvider from '../context/authContext';
+
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs',
@@ -67,16 +66,13 @@ export function signUpNewUser(email, password) {
       return Promise.all([cred.user.reloadUserInfo.email, cred.user.reloadUserInfo.localId]);
     })
     .then(([email, id]) => {
-      console.log(user, '<<< stored user');
-      // console.log(email, '<<< email');
+      console.log(email, '<<< email');
       addUser(email, id);
     })
     .catch((err) => {
       console.log(err.message);
     });
 }
-
-// signUpNewUser('test123@gmail.com', 'pa55w0rd');
 
 //logging in and out
 export function userLogout() {
@@ -91,15 +87,21 @@ export function userLogout() {
 
 export function userLogin(email, password) {
   signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      console.log('user logged in');
-      console.log(user, '<<< user in async land');
+    .then((cred) => {
+      console.log('user logged in', cred.user);
       return { msg: 'working' };
     })
     .catch((err) => {
       console.log(err.message);
     });
 }
+
+//delete users
+export function deleteUser(id) {
+  const userRef = doc(db, 'users', id);
+  
+  deleteDoc(userRef).then(() => {
+    console.log('user deleted');
 
 //update user info
 export function updateUserInfo() {
@@ -109,10 +111,6 @@ export function updateUserInfo() {
     fname: 'Jan',
   }).then(() => {
     console.log('user updated');
+
   });
 }
-
-userLogin('test123@gmail.com', 'pa55w0rd');
-console.log(user, '<<< user in js land');
-
-// signUpNewUser('dave@dave.com', 'wiggles');
