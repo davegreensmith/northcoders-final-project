@@ -17,11 +17,11 @@ export const db = getFirestore();
 export const auth = getAuth();
 // const [user, setUser] = useState(null);
 
-useEffect(() => {
-  authContextProvider().then(({ user }) => {
-    console.log(user);
-  });
-}, []);
+// useEffect(() => {
+//   authContextProvider().then(({ user }) => {
+//     console.log(user);
+//   });
+// }, []);
 
 //collection refs
 export const usersRef = collection(db, 'users');
@@ -115,10 +115,11 @@ export function addErrand(errandDetails) {
 //delete users
 export function deleteUser(id) {
   const userRef = doc(db, 'users', id);
-  
+
   deleteDoc(userRef).then(() => {
     console.log('user deleted');
-
+  });
+}
 //update user info
 export function updateUserInfo() {
   const userRef = doc(db, 'users', auth.currentUser.reloadUserInfo.localId);
@@ -127,6 +128,5 @@ export function updateUserInfo() {
     fname: 'Jan',
   }).then(() => {
     console.log('user updated');
-
   });
 }
