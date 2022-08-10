@@ -11,10 +11,43 @@ import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
+import { addErrand, addErrandToUser, getUsername } from "../firebase/config";
 
 export default function AddErrandScreen({ navigation }) {
   const [timeFrame, setTimeFrame] = useState("- Select -");
   const [workType, setWorkType] = useState("- Select -");
+  const [errandName, setErrandName] = useState("");
+  const [description, setDescription] = useState("");
+  const [requirements, setRequirements] = useState("");
+  const [location, setLocation] = useState("");
+  const [date, setDate] = useState("");
+
+  function handleAddErrand() {
+    return getUsername()
+      .then((username) => {
+        const errandDetails = {
+          timeFrame,
+          workType,
+          errandName,
+          description,
+          requirements,
+          location,
+          date,
+          author: username,
+        };
+        return errandDetails;
+      })
+      .then((errand) => {
+        return addErrand(errand);
+      })
+      .then(({ errandID, errandUserId }) => {
+        addErrandToUser(errandID, errandUserId);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    navigation.navigate("Splash");
+  }
 
   return (
     <View style={{flex: 1}}>
@@ -30,22 +63,35 @@ export default function AddErrandScreen({ navigation }) {
         >
           What is it you would like help with?
         </Text>
-        <TextInput style={styles.titleField} placeholder="Errand Title" />
+        <TextInput
+          style={styles.titleField}
+          onChangeText={setErrandName}
+          value={errandName}
+          placeholder="Errand Title"
+        />
         <TextInput
           multiline={true}
           style={styles.descriptionField}
+          onChangeText={setDescription}
+          value={description}
           placeholder="Description of the work you need help with..."
         />
         <TextInput
           style={styles.genericInputField}
+          onChangeText={setRequirements}
+          value={requirements}
           placeholder="Requirements (optional)"
         />
         <TextInput
           style={styles.genericInputField}
+          onChangeText={setLocation}
+          value={location}
           placeholder="Location for the errand"
         />
         <TextInput
           style={styles.genericInputField}
+          onChangeText={setDate}
+          value={date}
           placeholder="Date (Format: August 9, 2022 at 12:00:00 AM UTC+1)"
         />
         <View style={styles.dropdownFlexTime}>
@@ -107,7 +153,7 @@ export default function AddErrandScreen({ navigation }) {
           </Text>
         </View>
         <View style={styles.submitButtonFlex}>
-          <Pressable style={styles.submitButton}>
+          <Pressable style={styles.submitButton} onPress={handleAddErrand}>
             <Text style={{ textAlign: "center", fontSize: 16 }}>
               Create Errand
             </Text>

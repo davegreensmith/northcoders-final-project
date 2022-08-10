@@ -3,11 +3,14 @@ import {
   getFirestore,
   collection,
   getDocs,
+  getDoc,
   addDoc,
   setDoc,
   doc,
   updateDoc,
   deleteDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -42,7 +45,19 @@ auth.onAuthStateChanged(function (user) {
 export const usersRef = collection(db, "users");
 export const errandsRef = collection(db, "errands");
 
-//get collection ref data
+//USER DATA
+//get logged in username
+export function getUsername() {
+  const userId = loggedInUser.uid;
+  const docRef = doc(db, "users", userId);
+
+  return getDoc(docRef).then((doc) => {
+    const user = doc.data();
+    return user.username;
+  });
+}
+
+//get all users
 export function fetchUsers() {
   getDocs(usersRef)
     .then((snapshot) => {
@@ -54,12 +69,11 @@ export function fetchUsers() {
     .catch((err) => {});
 }
 
-//USER DATA
 // write new user to the database
 export function addUser(email, id) {
   const userRef = doc(db, "users", id);
 
-  return Promise.all([setDoc(userRef, { email }), id])
+  return Promise.all([setDoc(userRef, { email, errands: [] }), id])
     .then(([undefined, id]) => {
       return { id };
     })
@@ -120,18 +134,25 @@ export function updateUserInfo(userId, userDetails) {
 export function addErrand(errandDetails) {
   const errandRef = collection(db, "errands");
 
-  addDoc(errandRef, errandDetails)
+  return addDoc(errandRef, errandDetails)
     .then((data) => {
-      const errandNum = data._key.path.segments[1];
-      const errandUid = data.firestore._firestoreClient.user.uid;
-      return { errandNum, errandUid };
+      const errandID = data._key.path.segments[1];
+      const errandUserId = data.firestore._firestoreClient.user.uid;
+      return { errandID, errandUserId };
     })
     .catch((err) => {
       console.log(err.message);
     });
 }
 
-//update errands
+//add errand to specfic user
+export function addErrandToUser(errandID, errandUserIdD) {
+  const user = doc(db, "users", errandUserIdD);
+  updateDoc(user, {
+    errands: arrayUnion(errandID),
+  });
+}
+
 export function updateErrand(errandID, updateBody) {
   const errandRef = doc(db, "errands", errandID);
   updateDoc(errandRef, updateBody);
