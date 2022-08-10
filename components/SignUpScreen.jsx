@@ -49,7 +49,7 @@ export default function SignUpScreen({ navigation }) {
     <View style={styles.container}>
       <Image
         style={styles.logo}
-        source={require("../assets/chip-in-logo.png")}
+        source={require("../assets/chip-in-logo-large.png")}
       />
       <Text style={styles.subtitle}>Tell us a little about youself...</Text>
       <TextInput
