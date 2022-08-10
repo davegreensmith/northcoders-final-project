@@ -78,7 +78,7 @@ export function addUser(email, id) {
       return { id };
     })
     .catch((err) => {
-      console.log(err.message);
+      console.log(err.message, "<<< in addUser");
     });
 }
 
@@ -93,9 +93,6 @@ export function signUpNewUser(email, password) {
     })
     .then(([email, id]) => {
       return addUser(email, id);
-    })
-    .catch((err) => {
-      console.log(err.message);
     });
 }
 
@@ -108,13 +105,7 @@ export function userLogout() {
 
 //logging in
 export function userLogin(email, password) {
-  signInWithEmailAndPassword(auth, email, password)
-    .then((cred) => {
-      console.log(`${cred.user.uid} logged in. <<< userLogin`);
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+  return signInWithEmailAndPassword(auth, email, password);
 }
 
 //delete users
@@ -178,6 +169,8 @@ export function fetchErrands() {
     });
 }
 
+//get errand by errandId
+
 //CHAT MESSAGES
 //add message to db
 export function addMessage(message, userId1, userId2) {
@@ -193,3 +186,20 @@ export function addMessage(message, userId1, userId2) {
       console.log(err.message);
     });
 }
+
+// fetch messages in realtime
+
+// export function fetchMessage(messageId) {}
+
+// export function fetchErrands() {
+//   getDocs(errandsRef)
+//     .then((snapshot) => {
+//       let errands = [];
+//       snapshot.docs.forEach((doc) => {
+//         errands.push({ ...doc.data(), id: doc.id });
+//       });
+//     })
+//     .catch((err) => {
+//       console.log(err.message, '<<< errands errors');
+//     });
+// }

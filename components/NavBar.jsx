@@ -5,16 +5,15 @@ import {
   Text,
   View,
   Pressable,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
-
-export default function NavBar({navigation}) {
+export default function NavBar({ navigation }) {
   function handleMapPress() {
-    navigation.navigate("Map")
+    navigation.navigate("Map");
   }
   function handleAddErrandPress() {
     navigation.navigate("Add Errand");

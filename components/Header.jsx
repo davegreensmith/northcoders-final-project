@@ -5,7 +5,7 @@ import {
   Text,
   View,
   Pressable,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#000",
     borderBottomWidth: 1,
     alignItems: "flex-end",
-    height: Platform.OS === 'android' ? 105 : 120,
+    height: Platform.OS === "android" ? 105 : 120,
   },
   icon: {
     marginRight: 30,
