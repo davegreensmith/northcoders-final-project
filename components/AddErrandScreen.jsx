@@ -17,7 +17,7 @@ export default function AddErrandScreen({ navigation }) {
   const [workType, setWorkType] = useState("- Select -");
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Header />
       <ScrollView contentContainerStyle={styles.pageView}>
         <Text
@@ -48,9 +48,10 @@ export default function AddErrandScreen({ navigation }) {
           style={styles.genericInputField}
           placeholder="Date (Format: August 9, 2022 at 12:00:00 AM UTC+1)"
         />
-        <View style={styles.dropdownFlex}>
+        <View style={styles.dropdownFlexTime}>
           <Picker
             style={styles.dropdownMenu}
+            itemStyle={{ fontSize: 16 }}
             selectedValue={timeFrame}
             prompt={"How long will it take?"}
             onValueChange={(itemValue) => {
@@ -65,13 +66,20 @@ export default function AddErrandScreen({ navigation }) {
             <Picker.Item label="Half a working day" value={4} />
             <Picker.Item label="A full day's work" value={8} />
           </Picker>
-          <Text style={{ fontSize: 20, flex: 1, marginLeft: 10 }}>
+          <Text
+            style={{
+              fontSize: Platform.OS === "android" ? 20 : 16,
+              flex: 1,
+              marginLeft: 10,
+            }}
+          >
             How long will it take?
           </Text>
         </View>
-        <View style={styles.dropdownFlex}>
+        <View style={styles.dropdownFlexWorkType}>
           <Picker
             style={styles.dropdownMenu}
+            itemStyle={{ fontSize: 16 }}
             selectedValue={workType}
             prompt={"Pick the most relevant type"}
             onValueChange={(itemValue) => {
@@ -88,7 +96,13 @@ export default function AddErrandScreen({ navigation }) {
             <Picker.Item label="Dog Walking" value={"dog walking"} />
             <Picker.Item label="Construction" value={"construction"} />
           </Picker>
-          <Text style={{ fontSize: 20, flex: 1, marginLeft: 10 }}>
+          <Text
+            style={{
+              fontSize: Platform.OS === "android" ? 20 : 16,
+              flex: 1,
+              marginLeft: 10,
+            }}
+          >
             What type of work is involved?
           </Text>
         </View>
@@ -100,7 +114,7 @@ export default function AddErrandScreen({ navigation }) {
           </Pressable>
         </View>
       </ScrollView>
-      <NavBar navigation={navigation}/>
+      <NavBar navigation={navigation} />
     </View>
   );
 }
@@ -110,11 +124,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   genericInputField: {
-    borderColor: "#000",
     backgroundColor: "#FFF",
-    borderWidth: 1,
+    borderWidth: 0.4,
     borderRadius: 5,
-    width: 375,
+    width: Platform.OS === "android" ? 375 : 355,
     height: 35,
     margin: 8,
     textAlign: "left",
@@ -122,34 +135,38 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   titleField: {
-    borderColor: "#000",
     backgroundColor: "#FFF",
-    borderWidth: 1,
+    borderWidth: 0.4,
     borderRadius: 5,
-    width: 250,
+    width: Platform.OS === "android" ? 250 : 225,
     height: 35,
     margin: 8,
     textAlign: "left",
     padding: 5,
     fontSize: 15,
   },
-  dropdownFlex: {
-    flexDirection: "row",
+  dropdownFlexTime: {
+    flexDirection: Platform.OS === "android" ? "row" : "column-reverse",
+    alignItems: "center",
+    marginBottom: Platform.OS === "android" ? 10 : 0,
+    marginTop: Platform.OS === "android" ? 10 : 25,
+  },
+  dropdownFlexWorkType: {
+    flexDirection: Platform.OS === "android" ? "row" : "column-reverse",
     alignItems: "center",
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: Platform.OS === "android" ? 10 : 0,
   },
   dropdownMenu: {
-    backgroundColor: "#FFF",
-    width: 200,
-    marginLeft: 9,
+    backgroundColor: Platform.OS === "android" ? "#FFF" : "#0000",
+    width: Platform.OS === "android" ? 200 : "70%",
+    marginLeft: Platform.OS === "android" ? 9 : 0,
   },
   descriptionField: {
-    borderColor: "#000",
     backgroundColor: "#FFF",
-    borderWidth: 1,
+    borderWidth: 0.4,
     borderRadius: 5,
-    width: 375,
+    width: Platform.OS === "android" ? 375 : 355,
     height: 80,
     margin: 8,
     textAlign: "left",
@@ -161,14 +178,16 @@ const styles = StyleSheet.create({
   submitButtonFlex: {
     flex: 1,
     flexDirection: "row",
-    marginTop: 40,
+    justifyContent: Platform.OS === "android" ? "flex-start" : "center",
+    marginTop: Platform.OS === "android" ? 40 : 0,
+    marginBottom: Platform.OS === "android" ? 0 : 150,
   },
   submitButton: {
     backgroundColor: "#47c9af",
     borderColor: "#000",
     borderWidth: 1,
     borderRadius: 5,
-    width: 125,
+    width: Platform.OS === "android" ? 125 : 150,
     margin: 10,
     padding: 10,
   },
