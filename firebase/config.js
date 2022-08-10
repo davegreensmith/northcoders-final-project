@@ -1,55 +1,67 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, addDoc, setDoc, doc, updateDoc } from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { initializeApp } from "firebase/app";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  setDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signOut,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs',
-  authDomain: 'chip-in-db.firebaseapp.com',
-  projectId: 'chip-in-db',
-  storageBucket: 'chip-in-db.appspot.com',
-  messagingSenderId: '871906630927',
-  appId: '1:871906630927:web:7f4fb5830005d79abaf27a',
+  apiKey: "AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs",
+  authDomain: "chip-in-db.firebaseapp.com",
+  projectId: "chip-in-db",
+  storageBucket: "chip-in-db.appspot.com",
+  messagingSenderId: "871906630927",
+  appId: "1:871906630927:web:7f4fb5830005d79abaf27a",
 };
 
 export const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 export const auth = getAuth();
-// const [user, setUser] = useState(null);
 
-// useEffect(() => {
-//   authContextProvider().then(({ user }) => {
-//     console.log(user);
-//   });
-// }, []);
+let loggedInUser = {};
+
+auth.onAuthStateChanged(function (user) {
+  if (user) {
+    loggedInUser = user;
+  }
+});
 
 //collection refs
-export const usersRef = collection(db, 'users');
-export const errandsRef = collection(db, 'errands');
+export const usersRef = collection(db, "users");
+export const errandsRef = collection(db, "errands");
 
 //get collection ref data
-export default function fetchUsers() {
+export function fetchUsers() {
   getDocs(usersRef)
     .then((snapshot) => {
-      // console.log(snapshot.docs, "<<< snapshot");
       let users = [];
       snapshot.docs.forEach((doc) => {
         users.push({ ...doc.data(), id: doc.id });
       });
-      console.log(users, '<<< users');
     })
-    .catch((err) => {
-      console.log(err.message, '<<< users errors');
-    });
+    .catch((err) => {});
 }
 
-// write new user to the databaseauth
+//USER DATA
+// write new user to the database
 export function addUser(email, id) {
-  const userRef = doc(db, 'users', id);
+  const userRef = doc(db, "users", id);
 
-  setDoc(userRef, { email })
-    .then(() => {
-      console.log('users table updated');
+  return Promise.all([setDoc(userRef, { email }), id])
+    .then(([undefined, id]) => {
+      return { id };
     })
     .catch((err) => {
       console.log(err.message);
@@ -58,54 +70,33 @@ export function addUser(email, id) {
 
 // create new user in firebase auth
 export function signUpNewUser(email, password) {
-  createUserWithEmailAndPassword(auth, email, password)
+  return createUserWithEmailAndPassword(auth, email, password)
     .then((cred) => {
-      console.log(cred.user.reloadUserInfo.email, '<<< createUserwithPass email');
-      console.log(cred.user.reloadUserInfo.localId, '<<< auth ID');
-      return Promise.all([cred.user.reloadUserInfo.email, cred.user.reloadUserInfo.localId]);
+      return Promise.all([
+        cred.user.reloadUserInfo.email,
+        cred.user.reloadUserInfo.localId,
+      ]);
     })
     .then(([email, id]) => {
-      console.log(email, '<<< email');
-      addUser(email, id);
+      return addUser(email, id);
     })
     .catch((err) => {
       console.log(err.message);
     });
 }
 
-//logging in and out
+//logging out
 export function userLogout() {
-  signOut(auth)
-    .then(() => {
-      console.log('the user logged out');
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+  signOut(auth).catch((err) => {
+    console.log(err.message);
+  });
 }
 
+//logging in
 export function userLogin(email, password) {
   signInWithEmailAndPassword(auth, email, password)
     .then((cred) => {
-      console.log('user logged in', cred.user);
-      return { msg: 'working' };
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
-}
-
-//add errands to database
-
-export function addErrand(errandDetails) {
-  const errandRef = collection(db, 'errands');
-  // const errandDetails = { id, description, dueDate, errandName, location, requirements, timeframe, type };
-
-  addDoc(errandRef, errandDetails)
-    .then((mystery) => {
-      // console.log(mystery._key.path.segments[1], '<<< errand doc number');
-      // console.log(mystery.firestore._firestoreClient.user.uid, '<<< users UID');
-      console.log('users table updated');
+      console.log(`${cred.user.uid} logged in. <<< userLogin`);
     })
     .catch((err) => {
       console.log(err.message);
@@ -114,19 +105,70 @@ export function addErrand(errandDetails) {
 
 //delete users
 export function deleteUser(id) {
-  const userRef = doc(db, 'users', id);
-
-  deleteDoc(userRef).then(() => {
-    console.log('user deleted');
-  });
+  const userRef = doc(db, "users", id);
+  deleteDoc(userRef);
 }
-//update user info
-export function updateUserInfo() {
-  const userRef = doc(db, 'users', auth.currentUser.reloadUserInfo.localId);
 
-  updateDoc(userRef, {
-    fname: 'Jan',
-  }).then(() => {
-    console.log('user updated');
-  });
+//update user info
+export function updateUserInfo(userId, userDetails) {
+  const userRef = doc(db, "users", userId);
+  updateDoc(userRef, userDetails);
+}
+
+//ERRANDS
+//add errands to database
+export function addErrand(errandDetails) {
+  const errandRef = collection(db, "errands");
+
+  addDoc(errandRef, errandDetails)
+    .then((data) => {
+      const errandNum = data._key.path.segments[1];
+      const errandUid = data.firestore._firestoreClient.user.uid;
+      return { errandNum, errandUid };
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
+//update errands
+export function updateErrand(errandID, updateBody) {
+  const errandRef = doc(db, "errands", errandID);
+  updateDoc(errandRef, updateBody);
+}
+
+//delete errands
+export function deleteErrand(errandID) {
+  const errandRef = doc(db, "errands", errandID);
+  deleteDoc(errandRef);
+}
+
+//get all errands
+export function fetchErrands() {
+  getDocs(errandsRef)
+    .then((snapshot) => {
+      let errands = [];
+      snapshot.docs.forEach((doc) => {
+        errands.push({ ...doc.data(), id: doc.id });
+      });
+    })
+    .catch((err) => {
+      console.log(err.message, "<<< errands errors");
+    });
+}
+
+//CHAT MESSAGES
+//add message to db
+export function addMessage(message, userId1, userId2) {
+  const messageObj = { message, userId1, userId2 };
+  const messageRef = collection(db, "messages");
+
+  addDoc(messageRef, messageObj)
+    .then((data) => {
+      // console.log(data._key.path.segments[1], '<<< errand doc number');
+      // console.log(data.firestore._firestoreClient.user.uid, '<<< users UID');
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 }
