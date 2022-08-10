@@ -14,9 +14,12 @@ import Header from "./Header";
 import NavBar from "./NavBar";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function ProfileScreen() {
-  function handleErrandsList() {
+export default function ProfileScreen({navigation}) {
+  function handleErrandsListPress() {
     navigation.navigate("Errands List");
+  }
+  function handleEditPress() {
+    navigation.navigate("Edit Profile");
   }
 
   return (
@@ -36,7 +39,7 @@ export default function ProfileScreen() {
           <Text
             style={{
               fontSize: Platform.OS === "android" ? 28 : 26,
-              color: "#B2B2B2"
+              color: "#B2B2B2",
             }}
           >
             Gatwick
@@ -46,7 +49,7 @@ export default function ProfileScreen() {
           <Text
             style={{
               fontSize: Platform.OS === "android" ? 16 : 14,
-              color: "#333333"
+              color: "#333333",
             }}
           >
             Hi my name is Jan, I'm pretty good at rowing so I can easily help
@@ -55,18 +58,21 @@ export default function ProfileScreen() {
           </Text>
         </View>
         <View style={styles.buttonsFlexBox}>
-          <Pressable style={styles.myErrandsButton}>
+          <Pressable
+            onPress={handleErrandsListPress}
+            style={styles.myErrandsButton}
+          >
             <Text style={{ marginRight: 10 }}>My Errands</Text>
             <Ionicons name="md-list-outline" size={24} color="black" />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-            <Pressable style={{marginLeft: 140}}>
+            <Pressable onPress={handleEditPress} style={{ marginLeft: 140 }}>
               <Ionicons name="cog-outline" size={47} color="black" />
             </Pressable>
           </View>
         </View>
       </View>
-      <NavBar />
+      <NavBar navigation={navigation}/>
     </View>
   );
 }
@@ -106,7 +112,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "flex-start",
     marginTop: 120,
-    
   },
   myErrandsButton: {
     backgroundColor: "#47c9af",
