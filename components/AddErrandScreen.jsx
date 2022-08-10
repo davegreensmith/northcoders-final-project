@@ -20,7 +20,16 @@ export default function AddErrandScreen({ navigation }) {
     <View>
       <Header />
       <ScrollView contentContainerStyle={styles.pageView}>
-        <Text style={{marginLeft: 8, marginBottom: 10, marginTop: 10, fontSize: 16}}>What is it you would like help with?</Text>
+        <Text
+          style={{
+            marginLeft: 8,
+            marginBottom: 10,
+            marginTop: 10,
+            fontSize: 16,
+          }}
+        >
+          What is it you would like help with?
+        </Text>
         <TextInput style={styles.titleField} placeholder="Errand Title" />
         <TextInput
           multiline={true}
@@ -48,13 +57,13 @@ export default function AddErrandScreen({ navigation }) {
               setTimeFrame(itemValue);
             }}
           >
-            <Picker.item label="- Select -" value={0} />
-            <Picker.item label="Less than half an hour" value={0.5} />
-            <Picker.item label="Around an hour" value={1} />
-            <Picker.item label="A couple of hours" value={2} />
-            <Picker.item label="A few hours" value={3} />
-            <Picker.item label="Half a working day" value={4} />
-            <Picker.item label="A full day's work" value={8} />
+            <Picker.Item label="- Select -" value={0} />
+            <Picker.Item label="Less than half an hour" value={0.5} />
+            <Picker.Item label="Around an hour" value={1} />
+            <Picker.Item label="A couple of hours" value={2} />
+            <Picker.Item label="A few hours" value={3} />
+            <Picker.Item label="Half a working day" value={4} />
+            <Picker.Item label="A full day's work" value={8} />
           </Picker>
           <Text style={{ fontSize: 20, flex: 1, marginLeft: 10 }}>
             How long will it take?
@@ -69,15 +78,15 @@ export default function AddErrandScreen({ navigation }) {
               setWorkType(itemValue);
             }}
           >
-            <Picker.item label="- Select -" value={"none"} />
-            <Picker.item label="Heavy Lifting" value={"heavy lifting"} />
-            <Picker.item label="Gardening" value={"gardening"} />
-            <Picker.item label="Shopping" value={"shopping"} />
-            <Picker.item label="Transportation" value={"transportation"} />
-            <Picker.item label="Entertainment" value={"entertainment"} />
-            <Picker.item label="Charity" value={"charity"} />
-            <Picker.item label="Dog Walking" value={"dog walking"} />
-            <Picker.item label="Construction" value={"construction"} />
+            <Picker.Item label="- Select -" value={"none"} />
+            <Picker.Item label="Heavy Lifting" value={"heavy lifting"} />
+            <Picker.Item label="Gardening" value={"gardening"} />
+            <Picker.Item label="Shopping" value={"shopping"} />
+            <Picker.Item label="Transportation" value={"transportation"} />
+            <Picker.Item label="Entertainment" value={"entertainment"} />
+            <Picker.Item label="Charity" value={"charity"} />
+            <Picker.Item label="Dog Walking" value={"dog walking"} />
+            <Picker.Item label="Construction" value={"construction"} />
           </Picker>
           <Text style={{ fontSize: 20, flex: 1, marginLeft: 10 }}>
             What type of work is involved?
@@ -91,7 +100,7 @@ export default function AddErrandScreen({ navigation }) {
           </Pressable>
         </View>
       </ScrollView>
-      <NavBar />
+      <NavBar navigation={navigation}/>
     </View>
   );
 }

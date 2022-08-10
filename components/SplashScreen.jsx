@@ -28,7 +28,7 @@ export default function SplashScreen({ navigation }) {
           </Text>
         </Pressable>
         <Pressable style={styles.helpButton} onPress={wantHelpPress}>
-          <Text style={{TextInput: "center", textAlign: "center", fontSize: 25 }}>Want help?</Text>
+          <Text style={{textAlign: "center", fontSize: 25 }}>Want help?</Text>
         </Pressable>
       </ScrollView>
       <NavBar navigation={navigation} />
