@@ -6,6 +6,8 @@ import SignUpScreen from "./components/SignUpScreen";
 import SplashScreen from "./components/SplashScreen";
 import AddErrandScreen from "./components/AddErrandScreen";
 import MyErrandsScreen from "./components/MyErrandsScreen";
+import ProfileScreen from "./components/ProfileScreen";
+
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -31,6 +33,11 @@ export default function App() {
         <Stack.Screen
           name="Add Errand"
           component={AddErrandScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
