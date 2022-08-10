@@ -16,7 +16,7 @@ export default function SignUpScreen() {
     <View style={styles.container}>
       <Image
         style={styles.logo}
-        source={require("../assets/chip-in-logo-1.png")}
+        source={require("../assets/chip-in-logo.png")}
       />
       <Text style={styles.subtitle}>Tell us a little about youself...</Text>
       <TextInput style={styles.textField} placeholder="First name" />
