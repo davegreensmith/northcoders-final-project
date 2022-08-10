@@ -1,101 +1,60 @@
-import {
-  StyleSheet,
-  TextInput,
-  Image,
-  Text,
-  View,
-  Pressable,
-  Switch,
-} from "react-native";
-import { useState } from "react";
-import { signUpNewUser, userLogout, updateUserInfo } from "../firebase/config";
+import { StyleSheet, TextInput, Image, Text, View, Pressable, Switch } from 'react-native';
+import { useEffect, useState } from 'react';
+import { signUpNewUser, userLogout, updateUserInfo } from '../firebase/config';
 
 export default function SignUpScreen({ navigation }) {
   const [canDrive, setCanDrive] = useState(false);
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [bio, setBio] = useState("");
-  const [location, setLocation] = useState("");
-  const [email, setEmail] = useState("");
+  const [fname, setFname] = useState(null);
+  const [lname, setLname] = useState(null);
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [bio, setBio] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [show, setShow] = useState(false);
 
   function handleSignUpPress() {
-    const userDetails = {
-      fname,
-      lname,
-      username,
-      bio,
-      location,
-      canDrive,
-      email,
-    };
+    if (!fname || !lname || !username || !password || !location || !email) {
+      setShow(true);
+    } else {
+      const userDetails = {
+        fname,
+        lname,
+        username,
+        bio,
+        location,
+        canDrive,
+        email,
+      };
 
-    userLogout();
-    signUpNewUser(email, password)
-      .then(({ id }) => {
-        return id;
-      })
-      .then((id) => {
-        updateUserInfo(id, userDetails);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-    navigation.navigate("Splash");
+      userLogout();
+      signUpNewUser(email, password)
+        .then(({ id }) => {
+          return id;
+        })
+        .then((id) => {
+          updateUserInfo(id, userDetails);
+        })
+        .catch(({ err }) => {
+          console.log(err, '<<< err om signUpScreen');
+          // console.log(err.message, '<<<sign up in signupscreen');
+        });
+      navigation.navigate('Splash');
+    }
   }
 
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require("../assets/chip-in-logo.png")}
-      />
-      <Text style={styles.subtitle}>Tell us a little about youself...</Text>
-      <TextInput
-        style={styles.textField}
-        onChangeText={setFname}
-        value={fname}
-        placeholder="First name"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setLname}
-        value={lname}
-        placeholder="Last name"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setUsername}
-        value={username}
-        placeholder="Username (What others will see)"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setEmail}
-        value={email}
-        placeholder="Email"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-        value={password}
-        placeholder="Password (Must be at least 8 characters)"
-      />
-      <TextInput
-        multiline={true}
-        style={styles.bio}
-        onChangeText={setBio}
-        value={bio}
-        placeholder="A brief description of your skills and abilities..."
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setLocation}
-        value={location}
-        placeholder="Your postcode"
-      />
+      <Image style={styles.logo} source={require('../assets/chip-in-logo.png')} />
+      <Text style={styles.subtitle}>Tell us a little about yourself...</Text>
+      <Text style={styles.requiredText}>* required fields</Text>
+      <TextInput style={styles.textField} onChangeText={setFname} value={fname} placeholder="* First name" />
+      <TextInput style={styles.textField} onChangeText={setLname} value={lname} placeholder="* Last name" />
+      <TextInput style={styles.textField} onChangeText={setUsername} value={username} placeholder="* Username (What others will see)" />
+      <TextInput style={styles.textField} onChangeText={setEmail} value={email} placeholder="* Email" />
+      <TextInput style={styles.textField} onChangeText={setPassword} secureTextEntry={true} value={password} placeholder="* Password (Must be at least 8 characters)" />
+      <TextInput multiline={true} style={styles.bio} onChangeText={setBio} value={bio} placeholder="A brief description of your skills and abilities..." />
+      <TextInput style={styles.textField} onChangeText={setLocation} value={location} placeholder="* Your postcode" />
       <View style={styles.doYouDrive}>
         <Text style={{ fontSize: 15 }}>Do you drive?</Text>
         <Switch
@@ -105,8 +64,15 @@ export default function SignUpScreen({ navigation }) {
           }}
         />
       </View>
+      {show ? (
+        <View>
+          <Text style={{ color: 'red' }}>Missing information, please check and try again</Text>
+        </View>
+      ) : (
+        <></>
+      )}
       <Pressable style={styles.signUpButton} onPress={handleSignUpPress}>
-        <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
+        <Text style={{ textAlign: 'center', fontSize: 16 }}>Sign Up!</Text>
       </Pressable>
     </View>
   );
@@ -115,41 +81,41 @@ export default function SignUpScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textField: {
-    borderColor: "#000",
+    borderColor: '#000',
     borderWidth: 1,
     width: 300,
     height: 35,
     margin: 8,
-    textAlign: "left",
+    textAlign: 'left',
     padding: 5,
     fontSize: 15,
   },
   bio: {
-    borderColor: "#000",
+    borderColor: '#000',
     borderWidth: 1,
     width: 300,
     height: 80,
     margin: 8,
-    textAlign: "left",
-    textAlignVertical: "top",
-    flexWrap: "wrap",
+    textAlign: 'left',
+    textAlignVertical: 'top',
+    flexWrap: 'wrap',
     padding: 5,
     fontSize: 15,
   },
   logo: {
-    resizeMode: "cover",
+    resizeMode: 'cover',
     height: 200,
     width: 200,
     margin: 5,
   },
   signUpButton: {
-    backgroundColor: "#47c9af",
-    borderColor: "#000",
+    backgroundColor: '#47c9af',
+    borderColor: '#000',
     borderWidth: 1,
     borderRadius: 5,
     width: 100,
@@ -162,9 +128,16 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   doYouDrive: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     right: 80,
+  },
+  requiredText: {
+    margin: 5,
+    marginBottom: 0,
+    right: 110,
+    fontSize: 12,
+    color: 'red',
   },
 });

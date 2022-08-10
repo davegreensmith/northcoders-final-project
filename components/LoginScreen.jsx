@@ -1,55 +1,39 @@
-import {
-  StyleSheet,
-  TextInput,
-  Image,
-  Text,
-  View,
-  Pressable,
-} from "react-native";
-import { useState } from "react";
-import { userLogin } from "../firebase/config";
+import { StyleSheet, TextInput, Image, Text, View, Pressable } from 'react-native';
+import { useState } from 'react';
+import { userLogin } from '../firebase/config';
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   function handleLoginPress() {
-    navigation.navigate("Splash");
-    userLogin(email, password);
+    return userLogin(email, password)
+      .then(() => {
+        navigation.navigate('Splash');
+      })
+      .catch((err) => {
+        console.log(err, '<<< Login screen error');
+      });
   }
 
   function handleSignUpPress() {
-    navigation.navigate("Sign Up");
+    navigation.navigate('Sign Up');
   }
 
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require("../assets/chip-in-logo.png")}
-      />
-      <TextInput
-        style={styles.textField}
-        placeholder="Email"
-        onChangeText={setEmail}
-        value={email}
-      />
-      <TextInput
-        style={styles.textField}
-        secureTextEntry={true}
-        placeholder="Password"
-        onChangeText={setPassword}
-        value={password}
-      />
+      <Image style={styles.logo} source={require('../assets/chip-in-logo.png')} />
+      <TextInput style={styles.textField} placeholder="Email" onChangeText={setEmail} value={email} />
+      <TextInput style={styles.textField} secureTextEntry={true} placeholder="Password" onChangeText={setPassword} value={password} />
 
       <Pressable style={styles.loginButton} onPress={handleLoginPress}>
-        <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
+        <Text style={{ textAlign: 'center', fontSize: 16 }}>Login</Text>
       </Pressable>
       <View style={styles.divideLine}></View>
       <View style={styles.viewRow}>
         <Text style={styles.signupText}>New to ChipIn?</Text>
         <Pressable style={styles.sigupButton} onPress={handleSignUpPress}>
-          <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up</Text>
+          <Text style={{ textAlign: 'center', fontSize: 16 }}>Sign Up</Text>
         </Pressable>
       </View>
     </View>
@@ -59,28 +43,28 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logo: {
-    resizeMode: "cover",
+    resizeMode: 'cover',
     height: 200,
     width: 200,
     margin: 10,
   },
   textField: {
-    borderColor: "#000",
+    borderColor: '#000',
     borderWidth: 1,
     width: 300,
     height: 50,
     margin: 8,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 15,
   },
   loginButton: {
-    backgroundColor: "#47c9af",
-    borderColor: "#000",
+    backgroundColor: '#47c9af',
+    borderColor: '#000',
     borderWidth: 1,
     borderRadius: 5,
     width: 90,
@@ -89,13 +73,13 @@ const styles = StyleSheet.create({
   },
   divideLine: {
     width: 350,
-    borderColor: "#000",
+    borderColor: '#000',
     borderWidth: 1,
     margin: 10,
   },
   viewRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     margin: 10,
   },
   signupText: {
@@ -103,8 +87,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   sigupButton: {
-    backgroundColor: "#47c9af",
-    borderColor: "#000",
+    backgroundColor: '#47c9af',
+    borderColor: '#000',
     borderWidth: 1,
     borderRadius: 5,
     width: 100,
