@@ -34,7 +34,6 @@ export default function SignUpScreen({ navigation }) {
     userLogout();
     signUpNewUser(email, password)
       .then(({ id }) => {
-        // console.log(id);
         return id;
       })
       .then((id) => {
@@ -50,7 +49,7 @@ export default function SignUpScreen({ navigation }) {
     <View style={styles.container}>
       <Image
         style={styles.logo}
-        source={require("../assets/chip-in-logo-1.png")}
+        source={require("../assets/chip-in-logo.png")}
       />
       <Text style={styles.subtitle}>Tell us a little about youself...</Text>
       <TextInput

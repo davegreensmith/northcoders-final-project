@@ -7,7 +7,6 @@ import {
   Pressable,
   SafeAreaView
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function Header() {
@@ -16,11 +15,10 @@ export default function Header() {
       <View style={styles.logoFlex}>
         <Image
           style={styles.logo}
-          source={require("../assets/chip-in-logo-1.png")}
+          source={require("../assets/chip-in-logo.png")}
         />
       </View>
       <View style={styles.icon}>
-        {/* <Ionicons name="notifications" size={30} color="black" /> */}
         <FontAwesome5 name="bell" size={35} color="black" />
       </View>
     </View>

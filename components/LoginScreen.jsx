@@ -26,7 +26,7 @@ export default function LoginScreen({ navigation }) {
     <View style={styles.container}>
       <Image
         style={styles.logo}
-        source={require("../assets/chip-in-logo-1.png")}
+        source={require("../assets/chip-in-logo.png")}
       />
       <TextInput
         style={styles.textField}

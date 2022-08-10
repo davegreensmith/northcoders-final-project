@@ -54,6 +54,7 @@ export function fetchUsers() {
     .catch((err) => {});
 }
 
+//USER DATA
 // write new user to the database
 export function addUser(email, id) {
   const userRef = doc(db, "users", id);
@@ -102,6 +103,19 @@ export function userLogin(email, password) {
     });
 }
 
+//delete users
+export function deleteUser(id) {
+  const userRef = doc(db, "users", id);
+  deleteDoc(userRef);
+}
+
+//update user info
+export function updateUserInfo(userId, userDetails) {
+  const userRef = doc(db, "users", userId);
+  updateDoc(userRef, userDetails);
+}
+
+//ERRANDS
 //add errands to database
 export function addErrand(errandDetails) {
   const errandRef = collection(db, "errands");
@@ -117,31 +131,15 @@ export function addErrand(errandDetails) {
     });
 }
 
-//delete users
-export function deleteUser(id) {
-  const userRef = doc(db, "users", id);
-
-  deleteDoc(userRef);
-}
-
-//update user info
-export function updateUserInfo(userId, userDetails) {
-  const userRef = doc(db, "users", userId);
-
-  updateDoc(userRef, userDetails);
-}
-
 //update errands
 export function updateErrand(errandID, updateBody) {
   const errandRef = doc(db, "errands", errandID);
-
   updateDoc(errandRef, updateBody);
 }
 
 //delete errands
 export function deleteErrand(errandID) {
   const errandRef = doc(db, "errands", errandID);
-
   deleteDoc(errandRef);
 }
 
@@ -160,7 +158,6 @@ export function fetchErrands() {
 }
 
 //CHAT MESSAGES
-
 //add message to db
 export function addMessage(message, userId1, userId2) {
   const messageObj = { message, userId1, userId2 };
@@ -175,5 +172,3 @@ export function addMessage(message, userId1, userId2) {
       console.log(err.message);
     });
 }
-
-userLogin("test123@gmail.com", "pa55w0rd");
