@@ -34,10 +34,7 @@ let loggedInUser = {};
 
 auth.onAuthStateChanged(function (user) {
   if (user) {
-    console.log(user.reloadUserInfo.localId, "<<< authState");
     loggedInUser = user;
-  } else {
-    console.log("no one logged in :(");
   }
 });
 
@@ -53,11 +50,8 @@ export function fetchUsers() {
       snapshot.docs.forEach((doc) => {
         users.push({ ...doc.data(), id: doc.id });
       });
-      console.log(users, "<<< users");
     })
-    .catch((err) => {
-      console.log(err.message, "<<< users errors");
-    });
+    .catch((err) => {});
 }
 
 // write new user to the database
@@ -66,8 +60,7 @@ export function addUser(email, id) {
 
   return Promise.all([setDoc(userRef, { email }), id])
     .then(([undefined, id]) => {
-      console.log(`new user with id ${id} has been added`);
-      return id;
+      return { id };
     })
     .catch((err) => {
       console.log(err.message);
@@ -76,19 +69,15 @@ export function addUser(email, id) {
 
 // create new user in firebase auth
 export function signUpNewUser(email, password) {
-  createUserWithEmailAndPassword(auth, email, password)
+  return createUserWithEmailAndPassword(auth, email, password)
     .then((cred) => {
-      console.log(
-        cred.user.reloadUserInfo.email,
-        "<<< createUserwithPass email"
-      );
       return Promise.all([
         cred.user.reloadUserInfo.email,
         cred.user.reloadUserInfo.localId,
       ]);
     })
     .then(([email, id]) => {
-      addUser(email, id);
+      return addUser(email, id);
     })
     .catch((err) => {
       console.log(err.message);
@@ -97,13 +86,9 @@ export function signUpNewUser(email, password) {
 
 //logging out
 export function userLogout() {
-  signOut(auth)
-    .then(() => {
-      console.log("the user logged out");
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+  signOut(auth).catch((err) => {
+    console.log(err.message);
+  });
 }
 
 //logging in
@@ -122,10 +107,10 @@ export function addErrand(errandDetails) {
   const errandRef = collection(db, "errands");
 
   addDoc(errandRef, errandDetails)
-    .then((mystery) => {
-      // console.log(mystery._key.path.segments[1], '<<< errand doc number');
-      // console.log(mystery.firestore._firestoreClient.user.uid, '<<< users UID');
-      console.log("users table updated");
+    .then((data) => {
+      const errandNum = data._key.path.segments[1];
+      const errandUid = data.firestore._firestoreClient.user.uid;
+      return { errandNum, errandUid };
     })
     .catch((err) => {
       console.log(err.message);
@@ -136,38 +121,28 @@ export function addErrand(errandDetails) {
 export function deleteUser(id) {
   const userRef = doc(db, "users", id);
 
-  deleteDoc(userRef).then(() => {
-    console.log("user deleted");
-  });
+  deleteDoc(userRef);
 }
 
 //update user info
-export function updateUserInfo(userId) {
+export function updateUserInfo(userId, userDetails) {
   const userRef = doc(db, "users", userId);
 
-  updateDoc(userRef, {
-    fname: "Jan",
-  }).then(() => {
-    console.log("user updated");
-  });
+  updateDoc(userRef, userDetails);
 }
 
 //update errands
 export function updateErrand(errandID, updateBody) {
   const errandRef = doc(db, "errands", errandID);
 
-  updateDoc(errandRef, updateBody).then(() => {
-    console.log("errand updated");
-  });
+  updateDoc(errandRef, updateBody);
 }
 
 //delete errands
 export function deleteErrand(errandID) {
   const errandRef = doc(db, "errands", errandID);
 
-  deleteDoc(errandRef).then(() => {
-    console.log("errand deleted");
-  });
+  deleteDoc(errandRef);
 }
 
 //get all errands
@@ -178,7 +153,6 @@ export function fetchErrands() {
       snapshot.docs.forEach((doc) => {
         errands.push({ ...doc.data(), id: doc.id });
       });
-      console.log(errands, "<<< errands list");
     })
     .catch((err) => {
       console.log(err.message, "<<< errands errors");
@@ -189,13 +163,13 @@ export function fetchErrands() {
 
 //add message to db
 export function addMessage(message, userId1, userId2) {
-  const errandRef = collection(db, "errands");
+  const messageObj = { message, userId1, userId2 };
+  const messageRef = collection(db, "messages");
 
-  addDoc(errandRef, errandDetails)
-    .then((mystery) => {
-      // console.log(mystery._key.path.segments[1], '<<< errand doc number');
-      // console.log(mystery.firestore._firestoreClient.user.uid, '<<< users UID');
-      console.log("users table updated");
+  addDoc(messageRef, messageObj)
+    .then((data) => {
+      // console.log(data._key.path.segments[1], '<<< errand doc number');
+      // console.log(data.firestore._firestoreClient.user.uid, '<<< users UID');
     })
     .catch((err) => {
       console.log(err.message);

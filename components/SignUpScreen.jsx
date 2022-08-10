@@ -18,15 +18,31 @@ export default function SignUpScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [bio, setBio] = useState("");
   const [location, setLocation] = useState("");
-  const [drive, setDrive] = useState(false);
   const [email, setEmail] = useState("");
 
   function handleSignUpPress() {
+    const userDetails = {
+      fname,
+      lname,
+      username,
+      bio,
+      location,
+      canDrive,
+      email,
+    };
+
     userLogout();
-    signUpNewUser(email, password).then((id) => {
-      // console.log(id);
-      // updateUserInfo(id);
-    });
+    signUpNewUser(email, password)
+      .then(({ id }) => {
+        // console.log(id);
+        return id;
+      })
+      .then((id) => {
+        updateUserInfo(id, userDetails);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
     navigation.navigate("Splash");
   }
 
@@ -81,7 +97,7 @@ export default function SignUpScreen({ navigation }) {
         value={location}
         placeholder="Your postcode"
       />
-      <View style={styles.doYouDrive} onChange={setDrive} value={!drive}>
+      <View style={styles.doYouDrive}>
         <Text style={{ fontSize: 15 }}>Do you drive?</Text>
         <Switch
           value={canDrive}
