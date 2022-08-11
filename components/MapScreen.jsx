@@ -71,16 +71,6 @@ export default function MapScreen({ navigation }) {
               );
             })
           ) : (
-            //   <Marker
-            //   coordinate={{
-            //     latitude: 53.2587,
-            //     longitude: -2.1193,
-            //   }}
-            // >
-            //   <Callout>
-            //     <Text>This is Macc</Text>
-            //   </Callout>
-            // </Marker>
             <></>
           )}
         </MapView>

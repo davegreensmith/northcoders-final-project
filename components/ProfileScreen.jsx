@@ -5,7 +5,7 @@ import NavBar from './NavBar';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function ProfileScreen() {
-  function handleErrandsList() {
+  function handleErrandsListPress() {
     navigation.navigate('Errands List');
   }
 
