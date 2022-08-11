@@ -120,8 +120,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   textField: {
-    borderColor: "#000",
-    borderWidth: 1,
+    borderWidth: 0.7,
+    borderRadius: 5,
     width: 300,
     height: 35,
     margin: 8,
@@ -130,8 +130,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   bio: {
-    borderColor: "#000",
-    borderWidth: 1,
+    borderWidth: 0.7,
+    borderRadius: 5,
     width: 300,
     height: 80,
     margin: 8,

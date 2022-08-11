@@ -7,14 +7,14 @@ import {
   Pressable,
   StyleSheet,
   Image,
-  Platform
+  Platform,
 } from "react-native";
 import { useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function ProfileScreen({navigation}) {
+export default function ProfileScreen({ navigation }) {
   function handleErrandsListPress() {
     navigation.navigate("Errands List");
   }
@@ -23,7 +23,7 @@ export default function ProfileScreen({navigation}) {
   }
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Header />
       <View style={styles.pageContent}>
         <View style={styles.avatarFlexBox}>
@@ -62,68 +62,70 @@ export default function ProfileScreen({navigation}) {
             onPress={handleErrandsListPress}
             style={styles.myErrandsButton}
           >
-            <Text style={{ marginRight: 10 }}>My Errands</Text>
+            <Text>My Errands</Text>
             <Ionicons name="md-list-outline" size={24} color="black" />
           </Pressable>
-          <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-            <Pressable onPress={handleEditPress} style={{ marginLeft: 140 }}>
-              <Ionicons name="cog-outline" size={47} color="black" />
-            </Pressable>
-          </View>
+          <Pressable onPress={handleEditPress} style={styles.cogButton}>
+            <Ionicons name="cog-outline" size={47} color="black" />
+          </Pressable>
         </View>
       </View>
-      <NavBar navigation={navigation}/>
+      <NavBar navigation={navigation} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   pageContent: {
-    flexDirection: "column"
+    flex: 1,
   },
   avatarFlexBox: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 25
+    marginTop: 25,
   },
   avatar: {
     position: "relative",
     borderRadius: 500,
     height: 175,
-    width: 175
+    width: 175,
   },
   userDetailsFlexBox: {
     flexDirection: "column",
     alignItems: "center",
-    marginTop: 10
+    marginTop: 10,
   },
   bioContainer: {
-    borderWidth: 0.4,
+    borderWidth: 0.6,
     borderRadius: 30,
     backgroundColor: "#FFF",
     paddingTop: 22,
     paddingBottom: 22,
     paddingLeft: 8,
     paddingRight: 8,
-    margin: 10
+    margin: 15,
   },
   buttonsFlexBox: {
+    flex: 1,
     flexDirection: "row",
-    alignItems: "center",
-    alignContent: "flex-start",
-    marginTop: 120,
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    marginBottom: 15,
   },
   myErrandsButton: {
     backgroundColor: "#47c9af",
-    borderColor: "#000",
     borderWidth: 1,
     borderRadius: 5,
-    height: 60,
-    width: 170,
-    padding: 15,
+    height: 45,
+    width: 140,
+    padding: 5,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    marginLeft: 15
-  }
+    marginLeft: 15,
+  },
+  cogButton: {
+    marginRight: 15,
+    top: 2,
+  },
 });

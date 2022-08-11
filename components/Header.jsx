@@ -12,44 +12,49 @@ import { FontAwesome5 } from "@expo/vector-icons";
 export default function Header() {
   return (
     <View style={styles.headerFlex}>
+      <View style={styles.whiteSpace}></View>
       <View style={styles.logoFlex}>
         <Image
           style={styles.logo}
           source={require("../assets/chip-in-logo.png")}
         />
       </View>
-      <View style={styles.icon}>
-        <FontAwesome5 name="bell" size={35} color="black" />
+      <View style={styles.iconFlex}>
+        <Pressable style={styles.iconButton}>
+          <FontAwesome5 name="bell" size={35} color="black" />
+        </Pressable>
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
-  logo: {
-    resizeMode: "cover",
-    height: 75,
-    width: 75,
-    margin: 0,
-    left: 50,
+  headerFlex: {
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "flex-end",
+    borderBottomWidth: 0.7,
+    height: Platform.OS === "android" ? 110 : 125,
+  },
+  whiteSpace: {
+    flex: 1,
   },
   logoFlex: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "center",
   },
-  headerFlex: {
-    backgroundColor: "#fff",
-    flexDirection: "row",
-    borderBottomColor: "#000",
-    borderBottomWidth: 1,
-    alignItems: "flex-end",
-    height: Platform.OS === 'android' ? 105 : 120,
+  logo: {
+    resizeMode: "contain",
+    height: 75,
+    width: 75,
   },
-  icon: {
-    marginRight: 30,
-    marginBottom: 20,
+  iconFlex: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
+  iconButton: {
+    marginRight: 20,
+    marginBottom: 12,
+  }
 });

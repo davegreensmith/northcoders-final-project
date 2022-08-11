@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   textField: {
-    borderColor: "#000",
-    borderWidth: 1,
+    borderWidth: 0.5,
+    borderRadius: 5,
     width: 300,
     height: 50,
     margin: 8,
@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: "#47c9af",
-    borderColor: "#000",
     borderWidth: 1,
     borderRadius: 5,
     width: 90,
@@ -89,7 +88,6 @@ const styles = StyleSheet.create({
   },
   divideLine: {
     width: 350,
-    borderColor: "#000",
     borderWidth: 1,
     margin: 10,
   },
@@ -99,12 +97,11 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   signupText: {
-    fontSize: 20,
+    fontSize: 18,
     marginRight: 10,
   },
   sigupButton: {
     backgroundColor: "#47c9af",
-    borderColor: "#000",
     borderWidth: 1,
     borderRadius: 5,
     width: 100,
