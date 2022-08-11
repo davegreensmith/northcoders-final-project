@@ -1,17 +1,42 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, Image, Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
-import MapView, { Callout, Circle, Marker } from 'react-native-maps';
-import Header from './Header';
-import NavBar from './NavBar';
-import { fetchLatLongs } from '../firebase/config.js';
+import { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  TextInput,
+  Image,
+  Text,
+  View,
+  Pressable,
+  ScrollView,
+  Dimensions,
+} from "react-native";
+import MapView, { Callout, Circle, Marker } from "react-native-maps";
+import Header from "./Header";
+import NavBar from "./NavBar";
+import {
+  fetchLatLongs,
+  getUsername,
+  getUsersLatLong,
+} from "../firebase/config.js";
 
 export default function MapScreen({ navigation }) {
   const [latLongArray, setLatLongArray] = useState(false);
+  const [usersLong, setUsersLong] = useState("-2.1193");
+  const [usersLat, setUsersLat] = useState("53.2587");
+
   function handleGiveHelpPress() {
-    navigation.navigate('Map');
+    navigation.navigate("Map");
   }
 
   useEffect(() => {
+    getUsersLatLong()
+      .then((data) => {
+        setUsersLong(data.longitude);
+        setUsersLat(data.latitude);
+      })
+      .catch((err) => {
+        console.log(err, "erro in MapScreen.jsx");
+      });
+
     fetchLatLongs()
       .then(({ latLongs }) => {
         setLatLongArray([...latLongs]);
@@ -28,29 +53,19 @@ export default function MapScreen({ navigation }) {
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: 53.2587,
-            longitude: -2.1193,
+            latitude: usersLat,
+            longitude: usersLong,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
         >
-          <Marker
-            coordinate={{
-              latitude: 53.2587,
-              longitude: -2.1193,
-            }}
-          >
-            <Callout>
-              <Text>This is Macc</Text>
-            </Callout>
-          </Marker>
           <Circle
             center={{
-              latitude: 53.2587,
-              longitude: -2.1193,
+              latitude: usersLat,
+              longitude: usersLong,
             }}
             radius={2000}
-            fillColor={'rgba(27.8, 78.8, 68.6, 0.3)'}
+            fillColor={"rgba(27.8, 78.8, 68.6, 0.3)"}
           ></Circle>
           {latLongArray ? (
             latLongArray.map((errand) => {
@@ -82,8 +97,8 @@ export default function MapScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   volunteerButton: {
-    backgroundColor: '#47c9af',
-    borderColor: '#000',
+    backgroundColor: "#47c9af",
+    borderColor: "#000",
     borderWidth: 1,
     borderRadius: 5,
     width: 270,
@@ -92,8 +107,8 @@ const styles = StyleSheet.create({
     marginBottom: 90,
   },
   helpButton: {
-    backgroundColor: '#47c9af',
-    borderColor: '#000',
+    backgroundColor: "#47c9af",
+    borderColor: "#000",
     borderWidth: 1,
     borderRadius: 5,
     width: 270,
@@ -101,12 +116,15 @@ const styles = StyleSheet.create({
     margin: 20,
     padding: 10,
     marginTop: 20,
-    textAlignVertical: 'center',
+    textAlignVertical: "center",
   },
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 150,
   },
-  map: { height: Dimensions.get('window').height, width: Dimensions.get('window').width },
+  map: {
+    height: Dimensions.get("window").height,
+    width: Dimensions.get("window").width,
+  },
 });

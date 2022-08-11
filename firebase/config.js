@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, getDoc, addDoc, setDoc, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword } from 'firebase/auth';
+import { convertLocationToLatLong } from '../utils/api';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs',
@@ -38,6 +39,17 @@ export function getUsername() {
   return getDoc(docRef).then((doc) => {
     const user = doc.data();
     return user.username;
+  });
+}
+
+export function getUsersLatLong() {
+  const userId = loggedInUser.uid;
+  const docRef = doc(db, 'users', userId);
+
+  return getDoc(docRef).then((doc) => {
+    const user = doc.data();
+
+    return user.longLatData;
   });
 }
 
@@ -98,7 +110,10 @@ export function deleteUser(id) {
 //update user info
 export function updateUserInfo(userId, userDetails) {
   const userRef = doc(db, 'users', userId);
-  updateDoc(userRef, userDetails);
+  return Promise.all([convertLocationToLatLong(userDetails.location), userRef, userDetails]).then(([{ longLatData }, userRef, userDetails]) => {
+    const addDetail = { ...userDetails, longLatData };
+    updateDoc(userRef, addDetail);
+  });
 }
 
 //ERRANDS

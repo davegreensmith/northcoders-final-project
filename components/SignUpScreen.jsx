@@ -1,6 +1,15 @@
-import { StyleSheet, TextInput, Image, Text, View, Pressable, Switch } from 'react-native';
-import { useEffect, useState } from 'react';
-import { signUpNewUser, userLogout, updateUserInfo } from '../firebase/config';
+import {
+  StyleSheet,
+  TextInput,
+  Image,
+  Text,
+  View,
+  Pressable,
+  Switch,
+} from "react-native";
+import { useEffect, useState } from "react";
+import { signUpNewUser, userLogout, updateUserInfo } from "../firebase/config";
+import { convertLocationToLatLong } from "../utils/api";
 
 export default function SignUpScreen({ navigation }) {
   const [canDrive, setCanDrive] = useState(false);
@@ -21,6 +30,7 @@ export default function SignUpScreen({ navigation }) {
     } else if (error) {
       setShow(true);
     } else {
+      // const latLong = convertLocationToLatLong(location);
       const userDetails = {
         fname,
         lname,
@@ -37,21 +47,25 @@ export default function SignUpScreen({ navigation }) {
           return id;
         })
         .then((id) => {
+          console.log(id, "<<< id");
+          console.log(userDetails, "<<< user details");
           updateUserInfo(id, userDetails);
         })
         .then(() => {
-          navigation.navigate('Splash');
+          navigation.navigate("Splash");
         })
         .catch((err) => {
           console.log(err.code);
-          if (err.code === 'auth/invalid-email') {
-            setError('Invalid email format');
+          if (err.code === "auth/invalid-email") {
+            setError("Invalid email format");
           }
-          if (err.code === 'auth/weak-password') {
-            setError('Weak password. Password must be at least 6 characters long');
+          if (err.code === "auth/weak-password") {
+            setError(
+              "Weak password. Password must be at least 6 characters long"
+            );
           }
-          if (err.code === 'auth/email-already-in-use') {
-            setError('Email already exists. Please log in');
+          if (err.code === "auth/email-already-in-use") {
+            setError("Email already exists. Please log in");
           }
         });
     }
@@ -59,16 +73,56 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.logo} source={require('../assets/chip-in-logo-large.png')} />
+      <Image
+        style={styles.logo}
+        source={require("../assets/chip-in-logo-large.png")}
+      />
       <Text style={styles.subtitle}>Tell us a little about yourself...</Text>
       <Text style={styles.requiredText}>* required fields</Text>
-      <TextInput style={styles.textField} onChangeText={setFname} value={fname} placeholder="* First name" />
-      <TextInput style={styles.textField} onChangeText={setLname} value={lname} placeholder="* Last name" />
-      <TextInput style={styles.textField} onChangeText={setUsername} value={username} placeholder="* Username (What others will see)" />
-      <TextInput style={styles.textField} onChangeText={setEmail} value={email} placeholder="* Email" />
-      <TextInput style={styles.textField} onChangeText={setPassword} secureTextEntry={true} value={password} placeholder="* Password (Must be at least 6 characters)" />
-      <TextInput multiline={true} style={styles.bio} onChangeText={setBio} value={bio} placeholder="A brief description of your skills and abilities..." />
-      <TextInput style={styles.textField} onChangeText={setLocation} value={location} placeholder="* Your postcode" />
+      <TextInput
+        style={styles.textField}
+        onChangeText={setFname}
+        value={fname}
+        placeholder="* First name"
+      />
+      <TextInput
+        style={styles.textField}
+        onChangeText={setLname}
+        value={lname}
+        placeholder="* Last name"
+      />
+      <TextInput
+        style={styles.textField}
+        onChangeText={setUsername}
+        value={username}
+        placeholder="* Username (What others will see)"
+      />
+      <TextInput
+        style={styles.textField}
+        onChangeText={setEmail}
+        value={email}
+        placeholder="* Email"
+      />
+      <TextInput
+        style={styles.textField}
+        onChangeText={setPassword}
+        secureTextEntry={true}
+        value={password}
+        placeholder="* Password (Must be at least 6 characters)"
+      />
+      <TextInput
+        multiline={true}
+        style={styles.bio}
+        onChangeText={setBio}
+        value={bio}
+        placeholder="A brief description of your skills and abilities..."
+      />
+      <TextInput
+        style={styles.textField}
+        onChangeText={setLocation}
+        value={location}
+        placeholder="* Your postcode"
+      />
       <View style={styles.doYouDrive}>
         <Text style={{ fontSize: 15 }}>Do you drive?</Text>
         <Switch
@@ -80,20 +134,22 @@ export default function SignUpScreen({ navigation }) {
       </View>
       {show ? (
         <View>
-          <Text style={{ color: 'red' }}>Missing information, please check and try again</Text>
+          <Text style={{ color: "red" }}>
+            Missing information, please check and try again
+          </Text>
         </View>
       ) : (
         <></>
       )}
       {error ? (
         <View>
-          <Text style={{ color: 'red' }}>{error}</Text>
+          <Text style={{ color: "red" }}>{error}</Text>
         </View>
       ) : (
         <></>
       )}
       <Pressable style={styles.signUpButton} onPress={handleSignUpPress}>
-        <Text style={{ textAlign: 'center', fontSize: 16 }}>Sign Up!</Text>
+        <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
       </Pressable>
     </View>
   );
@@ -102,9 +158,9 @@ export default function SignUpScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   textField: {
     borderWidth: 0.7,
@@ -112,7 +168,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 35,
     margin: 8,
-    textAlign: 'left',
+    textAlign: "left",
     padding: 5,
     fontSize: 15,
   },
@@ -122,21 +178,21 @@ const styles = StyleSheet.create({
     width: 300,
     height: 80,
     margin: 8,
-    textAlign: 'left',
-    textAlignVertical: 'top',
-    flexWrap: 'wrap',
+    textAlign: "left",
+    textAlignVertical: "top",
+    flexWrap: "wrap",
     padding: 5,
     fontSize: 15,
   },
   logo: {
-    resizeMode: 'cover',
+    resizeMode: "cover",
     height: 200,
     width: 200,
     margin: 5,
   },
   signUpButton: {
-    backgroundColor: '#47c9af',
-    borderColor: '#000',
+    backgroundColor: "#47c9af",
+    borderColor: "#000",
     borderWidth: 1,
     borderRadius: 5,
     width: 100,
@@ -149,9 +205,9 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   doYouDrive: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
     right: 80,
   },
   requiredText: {
@@ -159,6 +215,6 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     right: 110,
     fontSize: 12,
-    color: 'red',
+    color: "red",
   },
 });
