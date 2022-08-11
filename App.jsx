@@ -7,7 +7,7 @@ import SplashScreen from "./components/SplashScreen";
 import AddErrandScreen from "./components/AddErrandScreen";
 import MyErrandsScreen from "./components/MyErrandsScreen";
 import ProfileScreen from "./components/ProfileScreen";
-
+import SingleErrandScreen from "./components/SingleErrandScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -15,6 +15,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Single Errand"
+          component={SingleErrandScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Login"
           component={LoginScreen}
