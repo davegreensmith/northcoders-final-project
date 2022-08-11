@@ -1,12 +1,29 @@
+import { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, Image, Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Callout, Circle, Marker } from 'react-native-maps';
 import Header from './Header';
 import NavBar from './NavBar';
+import { fetchLatLongs } from '../firebase/config.js';
 
 export default function MapScreen({ navigation }) {
+  const [latLongArray, setLatLongArray] = useState(false);
   function handleGiveHelpPress() {
     navigation.navigate('Map');
   }
+
+  useEffect(() => {
+    fetchLatLongs()
+      .then(({ latLongs }) => {
+        console.log(latLongs, '<<< latlongs in SpikeMaps');
+        // setLatLongArray(latLongs);
+        setLatLongArray([...latLongs]);
+        // latLongArray = [...latLongs];
+        console.log(latLongArray, '<<< lat long array');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <View>
@@ -20,7 +37,57 @@ export default function MapScreen({ navigation }) {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
-        />
+        >
+          <Marker
+            coordinate={{
+              latitude: 53.2587,
+              longitude: -2.1193,
+            }}
+          >
+            <Callout>
+              <Text>This is Macc</Text>
+            </Callout>
+          </Marker>
+          <Circle
+            center={{
+              latitude: 53.2587,
+              longitude: -2.1193,
+            }}
+            radius={2000}
+            fillColor={'rgba(27.8, 78.8, 68.6, 0.3)'}
+          ></Circle>
+          {latLongArray ? (
+            latLongArray.map((errand) => {
+              const latitude = errand.latitude;
+              const longitude = errand.longitude;
+              return (
+                <Marker
+                  coordinate={{
+                    latitude,
+                    longitude,
+                  }}
+                  key={errand.errandId}
+                >
+                  <Callout>
+                    <Text>{errand.errandId}</Text>
+                  </Callout>
+                </Marker>
+              );
+            })
+          ) : (
+            //   <Marker
+            //   coordinate={{
+            //     latitude: 53.2587,
+            //     longitude: -2.1193,
+            //   }}
+            // >
+            //   <Callout>
+            //     <Text>This is Macc</Text>
+            //   </Callout>
+            // </Marker>
+            <></>
+          )}
+        </MapView>
       </View>
       <NavBar navigation={navigation} />
     </View>
