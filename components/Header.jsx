@@ -56,5 +56,5 @@ const styles = StyleSheet.create({
   iconButton: {
     marginRight: 20,
     marginBottom: 12,
-  }
+  },
 });
