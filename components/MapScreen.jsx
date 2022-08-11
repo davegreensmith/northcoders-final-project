@@ -3,15 +3,27 @@ import { StyleSheet, TextInput, Image, Text, View, Pressable, ScrollView, Dimens
 import MapView, { Callout, Circle, Marker } from 'react-native-maps';
 import Header from './Header';
 import NavBar from './NavBar';
-import { fetchLatLongs } from '../firebase/config.js';
+import { fetchLatLongs, getUsername, getUsersLatLong } from '../firebase/config.js';
 
 export default function MapScreen({ navigation }) {
   const [latLongArray, setLatLongArray] = useState(false);
+  const [usersLong, setUsersLong] = useState('-2.1193');
+  const [usersLat, setUsersLat] = useState('53.2587');
+
   function handleGiveHelpPress() {
     navigation.navigate('Map');
   }
 
   useEffect(() => {
+    getUsersLatLong()
+      .then((data) => {
+        setUsersLong(data.longitude);
+        setUsersLat(data.latitude);
+      })
+      .catch((err) => {
+        console.log(err, 'erro in MapScreen.jsx');
+      });
+
     fetchLatLongs()
       .then(({ latLongs }) => {
         setLatLongArray([...latLongs]);
@@ -28,26 +40,16 @@ export default function MapScreen({ navigation }) {
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: 53.2587,
-            longitude: -2.1193,
+            latitude: usersLat,
+            longitude: usersLong,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
         >
-          <Marker
-            coordinate={{
-              latitude: 53.2587,
-              longitude: -2.1193,
-            }}
-          >
-            <Callout>
-              <Text>This is Macc</Text>
-            </Callout>
-          </Marker>
           <Circle
             center={{
-              latitude: 53.2587,
-              longitude: -2.1193,
+              latitude: usersLat,
+              longitude: usersLong,
             }}
             radius={2000}
             fillColor={'rgba(27.8, 78.8, 68.6, 0.3)'}

@@ -1,6 +1,7 @@
 import { StyleSheet, TextInput, Image, Text, View, Pressable, Switch } from 'react-native';
 import { useEffect, useState } from 'react';
 import { signUpNewUser, userLogout, updateUserInfo } from '../firebase/config';
+import { convertLocationToLatLong } from '../utils/api';
 
 export default function SignUpScreen({ navigation }) {
   const [canDrive, setCanDrive] = useState(false);
@@ -21,6 +22,7 @@ export default function SignUpScreen({ navigation }) {
     } else if (error) {
       setShow(true);
     } else {
+      // const latLong = convertLocationToLatLong(location);
       const userDetails = {
         fname,
         lname,
@@ -37,6 +39,8 @@ export default function SignUpScreen({ navigation }) {
           return id;
         })
         .then((id) => {
+          console.log(id, '<<< id');
+          console.log(userDetails, '<<< user details');
           updateUserInfo(id, userDetails);
         })
         .then(() => {
