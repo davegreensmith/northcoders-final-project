@@ -11,7 +11,13 @@ import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
-import { addErrand, addErrandToUser, getUsername } from "../firebase/config";
+import {
+  addErrand,
+  addErrandToUser,
+  addLatLong,
+  getUsername,
+} from "../firebase/config";
+import { convertLocationToLatLong } from "../utils/api";
 
 export default function AddErrandScreen({ navigation }) {
   const [timeFrame, setTimeFrame] = useState("- Select -");
@@ -51,10 +57,16 @@ export default function AddErrandScreen({ navigation }) {
         return errandDetails;
       })
       .then((errand) => {
-        return addErrand(errand);
+        return Promise.all([addErrand(errand), errand.location]);
       })
-      .then(({ errandID, errandUserId }) => {
+      .then(([{ errandID, errandUserId }, location]) => {
         addErrandToUser(errandID, errandUserId);
+        return Promise.all([convertLocationToLatLong(location), errandID]).then(
+          ([{ longLatData }, errandID]) => {
+            const body = { ...longLatData, errandID };
+            addLatLong(body);
+          }
+        );
       })
       .catch((err) => {
         console.log(err);
