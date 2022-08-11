@@ -7,42 +7,64 @@ import {
   Pressable,
   Switch,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signUpNewUser, userLogout, updateUserInfo } from "../firebase/config";
 
 export default function SignUpScreen({ navigation }) {
   const [canDrive, setCanDrive] = useState(false);
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [bio, setBio] = useState("");
-  const [location, setLocation] = useState("");
-  const [email, setEmail] = useState("");
+  const [fname, setFname] = useState(null);
+  const [lname, setLname] = useState(null);
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [bio, setBio] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [show, setShow] = useState(false);
+
+  const [error, setError] = useState(false);
 
   function handleSignUpPress() {
-    const userDetails = {
-      fname,
-      lname,
-      username,
-      bio,
-      location,
-      canDrive,
-      email,
-    };
+    if (!fname || !lname || !username || !password || !location || !email) {
+      setShow(true);
+    } else if (error) {
+      setShow(true);
+    } else {
+      const userDetails = {
+        fname,
+        lname,
+        username,
+        bio,
+        location,
+        canDrive,
+        email,
+      };
 
-    userLogout();
-    signUpNewUser(email, password)
-      .then(({ id }) => {
-        return id;
-      })
-      .then((id) => {
-        updateUserInfo(id, userDetails);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-    navigation.navigate("Splash");
+      userLogout();
+      signUpNewUser(email, password)
+        .then(({ id }) => {
+          return id;
+        })
+        .then((id) => {
+          updateUserInfo(id, userDetails);
+        })
+        .then(() => {
+          navigation.navigate("Splash");
+        })
+        .catch((err) => {
+          console.log(err.code);
+          if (err.code === "auth/invalid-email") {
+            setError("Invalid email format");
+          }
+          if (err.code === "auth/weak-password") {
+            setError(
+              "Weak password. Password must be at least 6 characters long"
+            );
+          }
+          if (err.code === "auth/email-already-exists") {
+            setError("Email already exists. Please log in");
+          }
+        });
+    }
   }
 
   return (
@@ -51,37 +73,38 @@ export default function SignUpScreen({ navigation }) {
         style={styles.logo}
         source={require("../assets/chip-in-logo-large.png")}
       />
-      <Text style={styles.subtitle}>Tell us a little about youself...</Text>
+      <Text style={styles.subtitle}>Tell us a little about yourself...</Text>
+      <Text style={styles.requiredText}>* required fields</Text>
       <TextInput
         style={styles.textField}
         onChangeText={setFname}
         value={fname}
-        placeholder="First name"
+        placeholder="* First name"
       />
       <TextInput
         style={styles.textField}
         onChangeText={setLname}
         value={lname}
-        placeholder="Last name"
+        placeholder="* Last name"
       />
       <TextInput
         style={styles.textField}
         onChangeText={setUsername}
         value={username}
-        placeholder="Username (What others will see)"
+        placeholder="* Username (What others will see)"
       />
       <TextInput
         style={styles.textField}
         onChangeText={setEmail}
         value={email}
-        placeholder="Email"
+        placeholder="* Email"
       />
       <TextInput
         style={styles.textField}
         onChangeText={setPassword}
         secureTextEntry={true}
         value={password}
-        placeholder="Password (Must be at least 8 characters)"
+        placeholder="* Password (Must be at least 6 characters)"
       />
       <TextInput
         multiline={true}
@@ -94,7 +117,7 @@ export default function SignUpScreen({ navigation }) {
         style={styles.textField}
         onChangeText={setLocation}
         value={location}
-        placeholder="Your postcode"
+        placeholder="* Your postcode"
       />
       <View style={styles.doYouDrive}>
         <Text style={{ fontSize: 15 }}>Do you drive?</Text>
@@ -105,6 +128,22 @@ export default function SignUpScreen({ navigation }) {
           }}
         />
       </View>
+      {show ? (
+        <View>
+          <Text style={{ color: "red" }}>
+            Missing information, please check and try again
+          </Text>
+        </View>
+      ) : (
+        <></>
+      )}
+      {error ? (
+        <View>
+          <Text style={{ color: "red" }}>{error}</Text>
+        </View>
+      ) : (
+        <></>
+      )}
       <Pressable style={styles.signUpButton} onPress={handleSignUpPress}>
         <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
       </Pressable>
@@ -166,5 +205,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     right: 80,
+  },
+  requiredText: {
+    margin: 5,
+    marginBottom: 0,
+    right: 110,
+    fontSize: 12,
+    color: "red",
   },
 });

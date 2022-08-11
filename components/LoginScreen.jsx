@@ -12,10 +12,21 @@ import { userLogin } from "../firebase/config";
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
   function handleLoginPress() {
-    navigation.navigate("Splash");
-    userLogin(email, password);
+    return userLogin(email, password)
+      .then(() => {
+        navigation.navigate("Splash");
+      })
+      .catch((err) => {
+        if (err.code === "auth/invalid-email") {
+          setError("Email not found");
+        }
+        if (err.code === "auth/wrong-password") {
+          setError("Wrong password");
+        }
+      });
   }
 
   function handleSignUpPress() {
@@ -42,6 +53,13 @@ export default function LoginScreen({ navigation }) {
         value={password}
       />
 
+      {error ? (
+        <View>
+          <Text style={{ color: "red" }}>{error}</Text>
+        </View>
+      ) : (
+        <></>
+      )}
       <Pressable style={styles.loginButton} onPress={handleLoginPress}>
         <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
       </Pressable>

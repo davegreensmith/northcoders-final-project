@@ -16,13 +16,26 @@ import { addErrand, addErrandToUser, getUsername } from "../firebase/config";
 export default function AddErrandScreen({ navigation }) {
   const [timeFrame, setTimeFrame] = useState("- Select -");
   const [workType, setWorkType] = useState("- Select -");
-  const [errandName, setErrandName] = useState("");
-  const [description, setDescription] = useState("");
+  const [errandName, setErrandName] = useState(null);
+  const [description, setDescription] = useState(null);
   const [requirements, setRequirements] = useState("");
-  const [location, setLocation] = useState("");
-  const [date, setDate] = useState("");
+  const [location, setLocation] = useState(null);
+  const [date, setDate] = useState(null);
+
+  const [error, setError] = useState(false);
 
   function handleAddErrand() {
+    if (
+      !errandName ||
+      !description ||
+      !location ||
+      !date ||
+      timeFrame === "- Select -" ||
+      workType === "- Select -"
+    ) {
+      setError("Information missing. Please fill in all required fields");
+    }
+
     return getUsername()
       .then((username) => {
         const errandDetails = {
@@ -50,7 +63,7 @@ export default function AddErrandScreen({ navigation }) {
   }
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Header />
       <ScrollView contentContainerStyle={styles.pageView}>
         <Text
@@ -63,18 +76,19 @@ export default function AddErrandScreen({ navigation }) {
         >
           What is it you would like help with?
         </Text>
+        <Text style={styles.requiredText}>* required fields</Text>
         <TextInput
           style={styles.titleField}
           onChangeText={setErrandName}
           value={errandName}
-          placeholder="Errand Title"
+          placeholder="* Errand Title"
         />
         <TextInput
           multiline={true}
           style={styles.descriptionField}
           onChangeText={setDescription}
           value={description}
-          placeholder="Description of the work you need help with..."
+          placeholder="* Description of the work you need help with..."
         />
         <TextInput
           style={styles.genericInputField}
@@ -86,13 +100,13 @@ export default function AddErrandScreen({ navigation }) {
           style={styles.genericInputField}
           onChangeText={setLocation}
           value={location}
-          placeholder="Location for the errand"
+          placeholder="* Location for the errand"
         />
         <TextInput
           style={styles.genericInputField}
           onChangeText={setDate}
           value={date}
-          placeholder="Date (Format: August 9, 2022 at 12:00:00 AM UTC+1)"
+          placeholder="* Date (DD/MM/YYYY)"
         />
         <View style={styles.dropdownFlexTime}>
           <Picker
@@ -152,6 +166,13 @@ export default function AddErrandScreen({ navigation }) {
             What type of work is involved?
           </Text>
         </View>
+        {error ? (
+          <View>
+            <Text style={{ color: "red" }}>{error}</Text>
+          </View>
+        ) : (
+          <></>
+        )}
         <View style={styles.submitButtonFlex}>
           <Pressable style={styles.submitButton} onPress={handleAddErrand}>
             <Text style={{ textAlign: "center", fontSize: 16 }}>
@@ -204,6 +225,7 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "android" ? 10 : 0,
   },
   dropdownMenu: {
+    margin: 5,
     backgroundColor: Platform.OS === "android" ? "#FFF" : "#0000",
     width: Platform.OS === "android" ? 200 : "70%",
     marginLeft: Platform.OS === "android" ? 9 : 0,
@@ -236,5 +258,12 @@ const styles = StyleSheet.create({
     width: Platform.OS === "android" ? 125 : 150,
     margin: 10,
     padding: 10,
+  },
+  requiredText: {
+    margin: 5,
+    marginBottom: 0,
+    right: 110,
+    fontSize: 12,
+    color: "red",
   },
 });
