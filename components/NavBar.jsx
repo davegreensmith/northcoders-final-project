@@ -45,10 +45,10 @@ export default function NavBar({ navigation }) {
 
 const styles = StyleSheet.create({
   navBarContainer: {
-    position: "absolute",
+    position: "relative",
     flexDirection: "row",
     justifyContent: "center",
-    top: Platform.OS === "android" ? 749 : 757,
+    bottom: 0,
     backgroundColor: "#fff",
   },
   navBarIcon: {
@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === "android" ? 15 : 35,
     flexDirection: "row",
     justifyContent: "center",
-    borderTopColor: "#000",
-    borderTopWidth: 1,
+    borderTopWidth: 0.7,
   },
 });

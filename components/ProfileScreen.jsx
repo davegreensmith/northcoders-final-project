@@ -4,13 +4,13 @@ import Header from './Header';
 import NavBar from './NavBar';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function ProfileScreen({ navigation }) {
+export default function ProfileScreen() {
   function handleErrandsList() {
     navigation.navigate('Errands List');
   }
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Header />
       <View style={styles.pageContent}>
         <View style={styles.avatarFlexBox}>
@@ -38,8 +38,8 @@ export default function ProfileScreen({ navigation }) {
           </Text>
         </View>
         <View style={styles.buttonsFlexBox}>
-          <Pressable style={styles.myErrandsButton}>
-            <Text style={{ marginRight: 10 }}>My Errands</Text>
+          <Pressable onPress={handleErrandsListPress} style={styles.myErrandsButton}>
+            <Text>My Errands</Text>
             <Ionicons name="md-list-outline" size={24} color="black" />
           </Pressable>
           <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
@@ -49,7 +49,7 @@ export default function ProfileScreen({ navigation }) {
           </View>
         </View>
       </View>
-      <NavBar navigation={navigation} />
+      <NavBar />
     </View>
   );
 }
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   bioContainer: {
-    borderWidth: 0.4,
+    borderWidth: 0.6,
     borderRadius: 30,
     backgroundColor: '#FFF',
     paddingTop: 22,
