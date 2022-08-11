@@ -157,14 +157,18 @@ export function fetchLatLongs() {
     snapshot.docs.forEach((doc) => {
       latLongs.push({ ...doc.data() });
     });
-    console.log(latLongs, '<<< latlongs in config.js');
     return { latLongs };
   });
 }
 
-// fetchLatLongs();
+export function addLatLong(latlongDetails) {
+  return addDoc(latlongsRef, latlongDetails);
+}
 
 //get errand by errandId
+export function fetchErrandByErrandID() {
+  return getDoc(errandsRef, errandID).then((mystery) => {});
+}
 
 //CHAT MESSAGES
 //add message to db

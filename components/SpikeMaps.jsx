@@ -14,11 +14,7 @@ export default function MapScreen({ navigation }) {
   useEffect(() => {
     fetchLatLongs()
       .then(({ latLongs }) => {
-        console.log(latLongs, '<<< latlongs in SpikeMaps');
-        // setLatLongArray(latLongs);
         setLatLongArray([...latLongs]);
-        // latLongArray = [...latLongs];
-        console.log(latLongArray, '<<< lat long array');
       })
       .catch((err) => {
         console.log(err);
@@ -66,10 +62,10 @@ export default function MapScreen({ navigation }) {
                     latitude,
                     longitude,
                   }}
-                  key={errand.errandId}
+                  key={errand.errandID}
                 >
                   <Callout>
-                    <Text>{errand.errandId}</Text>
+                    <Text>{errand.errandID}</Text>
                   </Callout>
                 </Marker>
               );
