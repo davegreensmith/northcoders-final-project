@@ -8,6 +8,7 @@ import AddErrandScreen from "./components/AddErrandScreen";
 import MyErrandsScreen from "./components/MyErrandsScreen";
 import ProfileScreen from "./components/ProfileScreen";
 import MapScreen from "./components/MapScreen";
+import ProfileSettingsScreen from "./components/ProfileSettingsScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -17,7 +18,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen
           name="Profile Settings"
-          component={ProfileScreen}
+          component={ProfileSettingsScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
