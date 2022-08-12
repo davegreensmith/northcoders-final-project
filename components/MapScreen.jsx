@@ -74,6 +74,7 @@ export default function MapScreen({ navigation }) {
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
+            dropDownContainerStyle={{ marginLeft: 10, width: 200 }}
             style={styles.dropdown}
           />
         </View>
