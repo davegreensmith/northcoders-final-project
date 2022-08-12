@@ -40,38 +40,40 @@ export default function AddErrandScreen({ navigation }) {
       workType === "- Select -"
     ) {
       setError("Information missing. Please fill in all required fields");
-    }
-
-    return getUsername()
-      .then((username) => {
-        const errandDetails = {
-          timeFrame,
-          workType,
-          errandName,
-          description,
-          requirements,
-          location,
-          date,
-          author: username,
-        };
-        return errandDetails;
-      })
-      .then((errand) => {
-        return Promise.all([addErrand(errand), errand.location]);
-      })
-      .then(([{ errandID, errandUserId }, location]) => {
-        addErrandToUser(errandID, errandUserId);
-        return Promise.all([convertLocationToLatLong(location), errandID]).then(
-          ([{ longLatData }, errandID]) => {
+    } else {
+      return getUsername()
+        .then((username) => {
+          const errandDetails = {
+            timeFrame,
+            workType,
+            errandName,
+            description,
+            requirements,
+            location,
+            date,
+            author: username,
+          };
+          return errandDetails;
+        })
+        .then((errand) => {
+          return Promise.all([addErrand(errand), errand.location]);
+        })
+        .then(([{ errandID, errandUserId }, location]) => {
+          addErrandToUser(errandID, errandUserId);
+          return Promise.all([
+            convertLocationToLatLong(location),
+            errandID,
+          ]).then(([{ longLatData }, errandID]) => {
             const body = { ...longLatData, errandID };
-            addLatLong(body);
-          }
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    navigation.navigate("Splash");
+            addLatLong(body).then(() => {
+              navigation.navigate("Splash");
+            });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   return (
