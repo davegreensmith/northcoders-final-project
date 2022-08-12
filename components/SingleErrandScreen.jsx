@@ -52,6 +52,25 @@ export default function SingleErrandScreen({ navigation }) {
         <View style={styles.descriptionBubble}>
           <Text>{singleErrand.description}</Text>
         </View>
+        <View style={{ flex: 1, justifyContent: "space-around" }}>
+          <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            On: {singleErrand.date}
+          </Text>
+          <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            For: {singleErrand.timeFrame}
+          </Text>
+          <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            What you will need: {singleErrand.requirements}
+          </Text>
+          <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            Type of job: {singleErrand.jobType}
+          </Text>
+        </View>
+        <View>
+          <Pressable style={styles.chipInButton}>
+            <Text style={{ textAlign: "center", fontSize: 18 }}>Chip In</Text>
+          </Pressable>
+        </View>
       </View>
       <NavBar navigation={navigation} />
     </View>
@@ -67,7 +86,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-",
     paddingTop: 10,
-    backgroundColor: "#fff",
   },
   titleHeaderText: {
     justifyContent: "space-around",
@@ -77,7 +95,6 @@ const styles = StyleSheet.create({
   avatarFlexBox: {
     flex: 0.33,
     alignItems: "center",
-    backgroundColor: "#ddd",
   },
   avatar: {
     borderRadius: 100,
@@ -89,7 +106,19 @@ const styles = StyleSheet.create({
   },
   descriptionBubble: {
     backgroundColor: "#fff",
-    borderRadius: 10,
-    borderWidth: 0.4,
+    borderRadius: 6,
+    borderWidth: 0.7,
+    width: "90%",
+    marginTop: 20,
+    marginBottom: 40,
+    padding: 10,
+  },
+  chipInButton: {
+    backgroundColor: "#47c9af",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 90,
+    margin: 20,
+    padding: 10,
   },
 });

@@ -8,7 +8,10 @@ import {
   Pressable,
   ScrollView,
   Dimensions,
+  Button,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import DropDownPicker from "react-native-dropdown-picker";
 import MapView, { Callout, Circle, Marker } from "react-native-maps";
 import Header from "./Header";
 import NavBar from "./NavBar";
@@ -23,6 +26,18 @@ export default function MapScreen({ navigation }) {
   const [usersLong, setUsersLong] = useState(-2.1193);
   const [usersLat, setUsersLat] = useState(53.2587);
 
+  //Radius picker
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(800);
+  const [items, setItems] = useState([
+    { label: "0.5 miles", value: 800 },
+    { label: "1 mile", value: 1600 },
+    { label: "2 miles", value: 3200 },
+    { label: "5 miles", value: 8000 },
+    { label: "10 miles", value: 16000 },
+  ]);
+  // const [radius, setRadius] = useState(1000)
+
   function handleGiveHelpPress() {
     navigation.navigate("Map");
   }
@@ -32,11 +47,9 @@ export default function MapScreen({ navigation }) {
       .then((data) => {
         setUsersLong(data.longitude);
         setUsersLat(data.latitude);
-        console.log(typeof usersLong, "<<< users Longitude");
-        console.log(typeof usersLat, "<<< users Latitude");
       })
       .catch((err) => {
-        console.log(err, "erro in MapScreen.jsx");
+        console.log(err, "error in MapScreen.jsx");
       });
 
     fetchLatLongs()
@@ -49,9 +62,22 @@ export default function MapScreen({ navigation }) {
   }, [usersLong]);
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Header />
-      <View contentContainerStyle={styles.container}>
+      <View style={styles.pageContent}>
+        <View style={styles.radius}>
+          <Text>Select your travel distance: </Text>
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            dropDownContainerStyle={{ marginLeft: 10, width: 200 }}
+            style={styles.dropdown}
+          />
+        </View>
         <MapView
           style={styles.map}
           initialRegion={{
@@ -72,7 +98,7 @@ export default function MapScreen({ navigation }) {
               latitude: usersLat,
               longitude: usersLong,
             }}
-            radius={1000}
+            radius={value}
             fillColor={"rgba(27.8, 78.8, 68.6, 0.3)"}
           ></Circle>
           {latLongArray ? (
@@ -104,35 +130,22 @@ export default function MapScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  volunteerButton: {
-    backgroundColor: "#47c9af",
-    borderColor: "#000",
-    borderWidth: 1,
-    borderRadius: 5,
-    width: 270,
-    margin: 20,
-    padding: 10,
-    marginBottom: 90,
-  },
-  helpButton: {
-    backgroundColor: "#47c9af",
-    borderColor: "#000",
-    borderWidth: 1,
-    borderRadius: 5,
-    width: 270,
-    height: 100,
-    margin: 20,
-    padding: 10,
-    marginTop: 20,
-    textAlignVertical: "center",
-  },
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 150,
+  pageContent: {
+    flex: 1,
   },
   map: {
     height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
+  },
+  radius: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+    zIndex: "1",
+  },
+  dropdown: {
+    marginLeft: 10,
+    width: 200,
   },
 });
