@@ -1,15 +1,32 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, getDoc, addDoc, setDoc, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword } from 'firebase/auth';
-import { convertLocationToLatLong } from '../utils/api';
+import { initializeApp } from "firebase/app";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  getDoc,
+  addDoc,
+  setDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signOut,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { convertLocationToLatLong } from "../utils/api";
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs',
-  authDomain: 'chip-in-db.firebaseapp.com',
-  projectId: 'chip-in-db',
-  storageBucket: 'chip-in-db.appspot.com',
-  messagingSenderId: '871906630927',
-  appId: '1:871906630927:web:7f4fb5830005d79abaf27a',
+  apiKey: "AIzaSyCl97mht3QLs6YOeh9ugsWba0cFE5PhFhs",
+  authDomain: "chip-in-db.firebaseapp.com",
+  projectId: "chip-in-db",
+  storageBucket: "chip-in-db.appspot.com",
+  messagingSenderId: "871906630927",
+  appId: "1:871906630927:web:7f4fb5830005d79abaf27a",
 };
 
 export const app = initializeApp(firebaseConfig);
@@ -26,15 +43,15 @@ auth.onAuthStateChanged(function (user) {
 });
 
 //collection refs
-export const usersRef = collection(db, 'users');
-export const errandsRef = collection(db, 'errands');
-export const latlongsRef = collection(db, 'latlongs');
+export const usersRef = collection(db, "users");
+export const errandsRef = collection(db, "errands");
+export const latlongsRef = collection(db, "latlongs");
 
 //USER DATA
 //get logged in username
 export function getUsername() {
   const userId = loggedInUser.uid;
-  const docRef = doc(db, 'users', userId);
+  const docRef = doc(db, "users", userId);
 
   return getDoc(docRef).then((doc) => {
     const user = doc.data();
@@ -44,7 +61,7 @@ export function getUsername() {
 
 export function getUsersLatLong() {
   const userId = loggedInUser.uid;
-  const docRef = doc(db, 'users', userId);
+  const docRef = doc(db, "users", userId);
 
   return getDoc(docRef).then((doc) => {
     const user = doc.data();
@@ -67,14 +84,14 @@ export function fetchUsers() {
 
 // write new user to the database
 export function addUser(email, id) {
-  const userRef = doc(db, 'users', id);
+  const userRef = doc(db, "users", id);
 
   return Promise.all([setDoc(userRef, { email, errands: [] }), id])
     .then(([undefined, id]) => {
       return { id };
     })
     .catch((err) => {
-      console.log(err.message, '<<< in addUser');
+      console.log(err.message, "<<< in addUser");
     });
 }
 
@@ -82,7 +99,10 @@ export function addUser(email, id) {
 export function signUpNewUser(email, password) {
   return createUserWithEmailAndPassword(auth, email, password)
     .then((cred) => {
-      return Promise.all([cred.user.reloadUserInfo.email, cred.user.reloadUserInfo.localId]);
+      return Promise.all([
+        cred.user.reloadUserInfo.email,
+        cred.user.reloadUserInfo.localId,
+      ]);
     })
     .then(([email, id]) => {
       return addUser(email, id);
@@ -103,23 +123,35 @@ export function userLogin(email, password) {
 
 //delete users
 export function deleteUser(id) {
-  const userRef = doc(db, 'users', id);
+  const userRef = doc(db, "users", id);
   deleteDoc(userRef);
 }
 
 //update user info
 export function updateUserInfo(userId, userDetails) {
-  const userRef = doc(db, 'users', userId);
-  return Promise.all([convertLocationToLatLong(userDetails.location), userRef, userDetails]).then(([{ longLatData }, userRef, userDetails]) => {
+  const userRef = doc(db, "users", userId);
+  return Promise.all([
+    convertLocationToLatLong(userDetails.location),
+    userRef,
+    userDetails,
+  ]).then(([{ longLatData }, userRef, userDetails]) => {
     const addDetail = { ...userDetails, longLatData };
     updateDoc(userRef, addDetail);
+  });
+}
+
+//get logged in user info
+export function getUserInfo() {
+  const userRef = doc(db, "users", loggedInUser.uid);
+  return getDoc(userRef).then((data) => {
+    return data;
   });
 }
 
 //ERRANDS
 //add errands to database
 export function addErrand(errandDetails) {
-  const errandRef = collection(db, 'errands');
+  const errandRef = collection(db, "errands");
 
   return addDoc(errandRef, errandDetails)
     .then((data) => {
@@ -134,22 +166,27 @@ export function addErrand(errandDetails) {
 
 //add errand to specfic user
 export function addErrandToUser(errandID, errandUserIdD) {
-  const user = doc(db, 'users', errandUserIdD);
+  const user = doc(db, "users", errandUserIdD);
   updateDoc(user, {
     errands: arrayUnion(errandID),
   });
 }
 
 export function updateErrand(errandID, updateBody) {
-  const errandRef = doc(db, 'errands', errandID);
+  const errandRef = doc(db, "errands", errandID);
   updateDoc(errandRef, updateBody);
 }
 
 //delete errands
 export function deleteErrand(errandID) {
-  const errandRef = doc(db, 'errands', errandID);
+  const errandRef = doc(db, "errands", errandID);
   deleteDoc(errandRef);
+  getUserInfo().then((data) => {
+    console.log(data);
+  });
 }
+
+deleteErrand();
 
 //get all errands
 export function fetchErrands() {
@@ -161,7 +198,7 @@ export function fetchErrands() {
       });
     })
     .catch((err) => {
-      console.log(err.message, '<<< errands errors');
+      console.log(err.message, "<<< errands errors");
     });
 }
 
@@ -189,7 +226,7 @@ export function fetchErrandByErrandID() {
 //add message to db
 export function addMessage(message, userId1, userId2) {
   const messageObj = { message, userId1, userId2 };
-  const messageRef = collection(db, 'messages');
+  const messageRef = collection(db, "messages");
 
   addDoc(messageRef, messageObj)
     .then((data) => {
