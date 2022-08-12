@@ -20,7 +20,7 @@ export default function SplashScreen({ navigation }) {
   }
   return (
     <View style={{ flex: 1 }}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={{ flex: 1, alignItems: "center" }}>
         <Text style={styles.introText}>What are you looking for...</Text>
         <View style={styles.pageContent}>

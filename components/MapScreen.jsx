@@ -63,7 +63,7 @@ export default function MapScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <View style={styles.radius}>
           <Text>Select your travel distance: </Text>
