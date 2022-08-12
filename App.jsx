@@ -17,11 +17,6 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Single Errand"
-          component={SingleErrandScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{ headerShown: false }}
@@ -54,6 +49,11 @@ export default function App() {
         <Stack.Screen
           name="Map"
           component={MapScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Single Errand"
+          component={SingleErrandScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
