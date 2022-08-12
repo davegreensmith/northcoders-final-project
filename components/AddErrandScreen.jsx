@@ -29,6 +29,7 @@ export default function AddErrandScreen({ navigation }) {
   const [requirements, setRequirements] = useState("");
   const [location, setLocation] = useState(null);
   const [date, setDate] = useState(null);
+  const [error, setError] = useState;
 
   const [error, setError] = useState(false);
 
