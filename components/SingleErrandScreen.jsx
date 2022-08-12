@@ -15,7 +15,8 @@ import NavBar from "./NavBar";
 export default function SingleErrandScreen({ navigation }) {
   const [singleErrand, setSingleErrand] = useState({
     title: "Chop some trees",
-    location: "M16 3EF",
+    admin_ward: "Chorlton",
+    location: "M16 0AW",
     image: "../assets/placeholder-avatar.png",
     description:
       "Need some help chopping down all the trees in my garden, they're literally everywhere and the squirrels are taking over, I've tried to get rid of them but they just keep  laughing at me.",
@@ -36,7 +37,7 @@ export default function SingleErrandScreen({ navigation }) {
             </View>
             <View>
               <Text style={{ fontSize: 20, color: "gray" }}>
-                {singleErrand.jobType}
+                {singleErrand.admin_ward}
               </Text>
             </View>
           </View>
@@ -48,6 +49,9 @@ export default function SingleErrandScreen({ navigation }) {
           </View>
         </View>
         <View style={styles.dividerLine}></View>
+        <View style={styles.descriptionBubble}>
+          <Text>{singleErrand.description}</Text>
+        </View>
       </View>
       <NavBar navigation={navigation} />
     </View>
@@ -82,5 +86,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     paddingTop: 5,
     width: "90%",
+  },
+  descriptionBubble: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    borderWidth: 0.4,
   },
 });
