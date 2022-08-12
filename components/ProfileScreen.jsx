@@ -21,7 +21,7 @@ export default function ProfileScreen({ navigation }) {
     bio: "",
     canDrive: true,
     email: "",
-    errands: [],
+    errands: [], 
     fname: "",
     lname: "",
     location: "",
