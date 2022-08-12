@@ -20,8 +20,8 @@ import {
 
 export default function MapScreen({ navigation }) {
   const [latLongArray, setLatLongArray] = useState(false);
-  const [usersLong, setUsersLong] = useState("-2.1193");
-  const [usersLat, setUsersLat] = useState("53.2587");
+  const [usersLong, setUsersLong] = useState(-2.1193);
+  const [usersLat, setUsersLat] = useState(53.2587);
 
   function handleGiveHelpPress() {
     navigation.navigate("Map");
@@ -32,6 +32,8 @@ export default function MapScreen({ navigation }) {
       .then((data) => {
         setUsersLong(data.longitude);
         setUsersLat(data.latitude);
+        console.log(typeof usersLong, "<<< users Longitude");
+        console.log(typeof usersLat, "<<< users Latitude");
       })
       .catch((err) => {
         console.log(err, "erro in MapScreen.jsx");
@@ -44,7 +46,7 @@ export default function MapScreen({ navigation }) {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [usersLong]);
 
   return (
     <View>
@@ -53,10 +55,16 @@ export default function MapScreen({ navigation }) {
         <MapView
           style={styles.map}
           initialRegion={{
+            latitude: -2.1193,
+            longitude: 53.2587,
+            latitudeDelta: 0.5,
+            longitudeDelta: 0.5,
+          }}
+          region={{
             latitude: usersLat,
             longitude: usersLong,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
           }}
         >
           <Circle
@@ -64,7 +72,7 @@ export default function MapScreen({ navigation }) {
               latitude: usersLat,
               longitude: usersLong,
             }}
-            radius={2000}
+            radius={1000}
             fillColor={"rgba(27.8, 78.8, 68.6, 0.3)"}
           ></Circle>
           {latLongArray ? (
