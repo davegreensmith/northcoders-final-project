@@ -113,8 +113,10 @@ export default function MapScreen({ navigation }) {
                   }}
                   key={errand.errandID}
                 >
-                  <Callout>
-                    <Text>{errand.errandID}</Text>
+                  <Callout style={styles.callout}>
+                    <Text style={styles.heading}>{errand.errandName}</Text>
+                    <Text style={styles.paragraph}>{errand.author}</Text>
+                    <Text style={styles.date}>{errand.date}</Text>
                   </Callout>
                 </Marker>
               );
@@ -147,5 +149,26 @@ const styles = StyleSheet.create({
   dropdown: {
     marginLeft: 10,
     width: 200,
+  },
+  callout: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  heading: {
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  paragraph: {
+    textAlign: "center",
+    // marginLeft: 10,
+    marginTop: 5,
+    fontSize: 14,
+  },
+  date: {
+    textAlign: "center",
+    // marginLeft: 10,
+    marginTop: 5,
+    fontSize: 14,
   },
 });

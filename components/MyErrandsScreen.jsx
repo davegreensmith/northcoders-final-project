@@ -50,7 +50,7 @@ export default function MyErrandsScreen({ navigation }) {
                   <Text>Job Type: {errand.workType}</Text>
                 </View>
                 <View style={styles.locationField}>
-                  <Text>Location: {errand.location}</Text>
+                  <Text>Location: {errand.area}</Text>
                 </View>
                 <View style={styles.dateField}>
                   <Text>Date: {errand.date}</Text>
