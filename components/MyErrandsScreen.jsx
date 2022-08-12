@@ -31,10 +31,8 @@ export default function MyErrandsScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-
       <Header navigation={navigation} />
-      <View style={stlyes.pageContent}>
-
+      <View style={styles.pageContent}>
         <ScrollView>
           {myErrands.map((errand) => {
             return (

@@ -81,16 +81,16 @@ export default function MapScreen({ navigation }) {
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: -2.1193,
-            longitude: 53.2587,
-            latitudeDelta: 0.5,
-            longitudeDelta: 0.5,
+            latitude: usersLat,
+            longitude: usersLong,
+            latitudeDelta: value / 30000,
+            longitudeDelta: value / 30000,
           }}
           region={{
             latitude: usersLat,
             longitude: usersLong,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
+            latitudeDelta: value / 30000,
+            longitudeDelta: value / 30000,
           }}
         >
           <Circle

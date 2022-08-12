@@ -6,7 +6,7 @@ import {
   TextInput,
   FlatList,
   Pressable,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import { useState } from "react";
 import Header from "./Header";
@@ -14,10 +14,10 @@ import NavBar from "./NavBar";
 
 export default function NotificationsScreen({ navigation }) {
   const [notificationsList, setNotificationsList] = useState([
-    "Someone has offered to help",
-    "You have a new review",
-    "You have an errand update",
-    "You have been reported for spitting"
+    { message: "Someone has offered to help", id: 1 },
+    { message: "You have a new review", id: 2 },
+    { message: "You have an errand update", id: 3 },
+    { message: "You have been reported for spitting", id: 4 },
   ]);
 
   return (
@@ -26,8 +26,8 @@ export default function NotificationsScreen({ navigation }) {
       <View style={styles.pageContent}>
         {notificationsList.map((notification) => {
           return (
-            <View style={styles.notificationContainer}>
-              <Text style={{ fontSize: 20 }}>{notification}</Text>
+            <View key={notification.id} style={styles.notificationContainer}>
+              <Text style={{ fontSize: 20 }}>{notification.message}</Text>
             </View>
           );
         })}
@@ -40,7 +40,7 @@ export default function NotificationsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flex: 1
+    flex: 1,
   },
   notificationContainer: {
     width: "85%",
@@ -54,6 +54,6 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     margin: 25,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
