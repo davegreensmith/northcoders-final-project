@@ -7,7 +7,7 @@ import {
   Pressable,
   StyleSheet,
   Image,
-  Platform
+  Platform,
 } from "react-native";
 import { useEffect, useState } from "react";
 import Header from "./Header";
@@ -28,9 +28,9 @@ export default function ProfileScreen({ navigation }) {
     longLatData: {
       area: "",
       latitude: 0,
-      longitude: 0
+      longitude: 0,
     },
-    username: ""
+    username: "",
   });
 
   function handleErrandsListPress() {
@@ -45,7 +45,7 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <View style={styles.avatarFlexBox}>
           <Text style={styles.avatarInitials}>{profileInfo.avatar}</Text>
@@ -61,7 +61,7 @@ export default function ProfileScreen({ navigation }) {
           <Text
             style={{
               fontSize: Platform.OS === "android" ? 28 : 26,
-              color: "#B2B2B2"
+              color: "#B2B2B2",
             }}
           >
             {profileInfo.longLatData.area}
@@ -71,7 +71,7 @@ export default function ProfileScreen({ navigation }) {
           <Text
             style={{
               fontSize: Platform.OS === "android" ? 16 : 14,
-              color: "#333333"
+              color: "#333333",
             }}
           >
             {profileInfo.bio}
@@ -100,7 +100,7 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   pageContent: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   avatarFlexBox: {
     flexDirection: "row",
@@ -113,18 +113,18 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     borderWidth: 5,
     borderStyle: "solid",
-    borderColor: "#212121"
+    borderColor: "#212121",
   },
   avatar: {
     position: "relative",
     borderRadius: 500,
     height: 175,
-    width: 175
+    width: 175,
   },
   userDetailsFlexBox: {
     flexDirection: "column",
     alignItems: "center",
-    marginTop: 10
+    marginTop: 10,
   },
   bioContainer: {
     width: "90%",
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     paddingBottom: 22,
     paddingLeft: 8,
     paddingRight: 8,
-    margin: 10
+    margin: 10,
   },
   buttonsFlexBox: {
     flex: 1,
@@ -156,15 +156,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-   
   },
   iconFlexBox: {
     marginLeft: 1,
-    top: 5
+    top: 5,
   },
   avatarInitials: {
     color: "#FFFAF0",
     padding: 10,
-    fontSize: 80
-  }
+    fontSize: 80,
+  },
 });
