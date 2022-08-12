@@ -70,7 +70,7 @@ export default function MyErrandsScreen({ navigation }) {
                 </View>
                 <View style={stlyes.buttonsFlexBox}>
                   <Pressable style={stlyes.editButton}>
-                    <Text>Edit Details</Text>
+                    <Text>Edit</Text>
                     <Feather name="edit" size={18} color="black" />
                   </Pressable>
                   <Pressable style={stlyes.deleteButton}>

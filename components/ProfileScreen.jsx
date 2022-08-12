@@ -18,9 +18,6 @@ export default function ProfileScreen({ navigation }) {
   function handleErrandsListPress() {
     navigation.navigate("Errands List");
   }
-  function handleEditPress() {
-    navigation.navigate("Edit Profile");
-  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -65,9 +62,11 @@ export default function ProfileScreen({ navigation }) {
             <Text>My Errands</Text>
             <Ionicons name="md-list-outline" size={24} color="black" />
           </Pressable>
-          <Pressable onPress={handleEditPress} style={styles.cogButton}>
-            <Ionicons name="cog-outline" size={47} color="black" />
-          </Pressable>
+          <View style={styles.iconFlexBox}>
+            <Pressable>
+              <Ionicons name="cog-outline" size={47} color="black" />
+            </Pressable>
+          </View>
         </View>
       </View>
       <NavBar navigation={navigation} />
@@ -103,29 +102,29 @@ const styles = StyleSheet.create({
     paddingBottom: 22,
     paddingLeft: 8,
     paddingRight: 8,
-    margin: 15,
+    margin: 10,
   },
   buttonsFlexBox: {
     flex: 1,
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",
-    marginBottom: 15,
+    marginBottom: 10,
   },
   myErrandsButton: {
     backgroundColor: "#47c9af",
     borderWidth: 1,
     borderRadius: 5,
-    height: 45,
-    width: 140,
+    height: 40,
+    width: 130,
     padding: 5,
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     marginLeft: 15,
   },
-  cogButton: {
-    marginRight: 15,
-    top: 2,
+  iconFlexBox: {
+    marginRight: 10,
+    top: 5,
   },
 });
