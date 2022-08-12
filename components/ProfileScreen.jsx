@@ -19,6 +19,10 @@ export default function ProfileScreen({ navigation }) {
     navigation.navigate("Errands List");
   }
 
+  function handleSettingsPress() {
+    navigation.navigate("Profile Settings");
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <Header />
@@ -63,7 +67,7 @@ export default function ProfileScreen({ navigation }) {
             <Ionicons name="md-list-outline" size={24} color="black" />
           </Pressable>
           <View style={styles.iconFlexBox}>
-            <Pressable>
+            <Pressable onPress={handleSettingsPress}>
               <Ionicons name="cog-outline" size={47} color="black" />
             </Pressable>
           </View>
