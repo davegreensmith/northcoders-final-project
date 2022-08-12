@@ -26,7 +26,7 @@ export default function ProfileSettingsScreen({ navigation }) {
   });
   return (
     <View style={{ flex: 1 }}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <View style={styles.changeUsername}>
           <Text style={styles.fieldLabel}>Username:</Text>

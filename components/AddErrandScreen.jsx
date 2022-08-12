@@ -78,7 +78,7 @@ export default function AddErrandScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <ScrollView>
           <Text

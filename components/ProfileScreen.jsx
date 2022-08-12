@@ -49,7 +49,7 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <View style={styles.avatarFlexBox}>
           <Text style={styles.avatarInitials}>{profileInfo.avatar}</Text>

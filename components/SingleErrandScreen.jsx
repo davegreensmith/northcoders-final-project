@@ -28,7 +28,7 @@ export default function SingleErrandScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <View style={styles.titleHeader}>
           <View style={styles.titleHeaderText}>
