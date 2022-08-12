@@ -8,6 +8,7 @@ import {
   Pressable,
   ScrollView,
   Dimensions,
+  Button,
 } from "react-native";
 import MapView, { Callout, Circle, Marker } from "react-native-maps";
 import Header from "./Header";
@@ -52,6 +53,14 @@ export default function MapScreen({ navigation }) {
     <View>
       <Header />
       <View contentContainerStyle={styles.container}>
+        <Picker
+          selectedValue={selectedValue}
+          style={{ height: 50, width: 150 }}
+          onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+        >
+          <Picker.Item label="Java" value="java" />
+          <Picker.Item label="JavaScript" value="js" />
+        </Picker>
         <MapView
           style={styles.map}
           initialRegion={{
