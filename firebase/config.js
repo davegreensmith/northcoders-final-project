@@ -144,9 +144,28 @@ export function updateUserInfo(userId, userDetails) {
 export function getUserInfo() {
   const userRef = doc(db, "users", loggedInUser.uid);
   return getDoc(userRef).then((data) => {
-    return data;
+    const userData = { ...data.data() };
+    return { userData };
   });
+  // const userFields = data.value.mapValue.userFields;
+  // console.log(userFields);
+  // return data;
 }
+
+// PASTED FOR REFERENCE...
+// -----------------------
+// export function fetchErrands() {
+//   getDocs(errandsRef)
+//     .then((snapshot) => {
+//       let errands = [];
+//       snapshot.docs.forEach((doc) => {
+//         errands.push({ ...doc.data(), id: doc.id });
+//       });
+//     })
+//     .catch((err) => {
+//       console.log(err.message, "<<< errands errors");
+//     });
+// }
 
 //ERRANDS
 //add errands to database
@@ -185,8 +204,6 @@ export function deleteErrand(errandID) {
     console.log(data);
   });
 }
-
-deleteErrand();
 
 //get all errands
 export function fetchErrands() {

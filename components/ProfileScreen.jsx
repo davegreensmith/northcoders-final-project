@@ -9,15 +9,23 @@ import {
   Image,
   Platform,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import { Ionicons } from "@expo/vector-icons";
+import { getUserInfo } from "../firebase/config";
 
 export default function ProfileScreen({ navigation }) {
+  const [profileInfo, setProfileInfo] = useState({});
   function handleErrandsListPress() {
     navigation.navigate("Errands List");
   }
+
+  useEffect(() => {
+    getUserInfo().then(({ userData }) => {
+      console.log(userData, "<<< User data");
+    });
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
