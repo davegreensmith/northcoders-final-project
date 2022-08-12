@@ -9,7 +9,7 @@ import MyErrandsScreen from "./components/MyErrandsScreen";
 import ProfileScreen from "./components/ProfileScreen";
 import MapScreen from "./components/MapScreen";
 import SingleErrandScreen from "./components/SingleErrandScreen";
-import NotificationScreen from "./components/NotficationScreen";
+import NotificationsScreen from "./components/NotficationsScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -58,8 +58,8 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Notification"
-          component={NotificationScreen}
+          name="Notifications"
+          component={NotificationsScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

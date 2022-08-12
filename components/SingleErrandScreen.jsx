@@ -6,7 +6,7 @@ import {
   TextInput,
   FlatList,
   Pressable,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import { useState } from "react";
 import Header from "./Header";
@@ -23,12 +23,12 @@ export default function SingleErrandScreen({ navigation }) {
     date: "12/08/2022",
     timeFrame: "About 3 hours",
     requirements: "Chainsaw, Axe, Grenades, RPG",
-    jobType: "Gardening"
+    jobType: "Gardening",
   });
 
   return (
     <View style={{ flex: 1 }}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <View style={styles.titleHeader}>
           <View style={styles.titleHeaderText}>
@@ -80,29 +80,29 @@ export default function SingleErrandScreen({ navigation }) {
 const styles = StyleSheet.create({
   pageContent: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   titleHeader: {
     flexDirection: "row",
     justifyContent: "space-",
-    paddingTop: 10
+    paddingTop: 10,
   },
   titleHeaderText: {
     justifyContent: "space-around",
     flex: 0.66,
-    marginLeft: 25
+    marginLeft: 25,
   },
   avatarFlexBox: {
     flex: 0.33,
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
-    borderRadius: 100
+    borderRadius: 100,
   },
   dividerLine: {
     borderBottomWidth: 2,
     paddingTop: 5,
-    width: "90%"
+    width: "90%",
   },
   descriptionBubble: {
     backgroundColor: "#fff",
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     width: "90%",
     marginTop: 20,
     marginBottom: 40,
-    padding: 10
+    padding: 10,
   },
   chipInButton: {
     backgroundColor: "#47c9af",
@@ -119,6 +119,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: 90,
     margin: 20,
-    padding: 10
-  }
+    padding: 10,
+  },
 });
