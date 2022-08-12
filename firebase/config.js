@@ -41,6 +41,7 @@ auth.onAuthStateChanged(function (user) {
     loggedInUser = user;
   }
 });
+export const loggedInUserId = loggedInUser.uid;
 
 //collection refs
 export const usersRef = collection(db, "users");
@@ -150,6 +151,12 @@ export function getUserInfo() {
   });
 }
 
+export function updateUserErrandList(userId, addDetail) {
+  const userRef = doc(db, "users", userId);
+
+  return updateDoc(userRef, addDetail);
+}
+
 //ERRANDS
 //add errands to database
 export function addErrand(errandDetails) {
@@ -181,11 +188,12 @@ export function updateErrand(errandID, updateBody) {
 
 //delete errands
 export function deleteErrand(errandID) {
+  const userId = loggedInUser.uid;
+  console.log(userId, "<<< user id in config");
+
   const errandRef = doc(db, "errands", errandID);
-  deleteDoc(errandRef);
-  getUserInfo().then((data) => {
-    console.log(data);
-  });
+
+  return Promise.all([deleteDoc(errandRef), errandID, userId]);
 }
 
 //get all errands

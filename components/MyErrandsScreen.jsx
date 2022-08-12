@@ -12,10 +12,34 @@ import Header from "./Header";
 import NavBar from "./NavBar";
 import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { fetchErrandByErrandID, getUserInfo } from "../firebase/config";
+import {
+  deleteErrand,
+  fetchErrandByErrandID,
+  getUserInfo,
+  loggedInUserId,
+  updateUserErrandList,
+} from "../firebase/config";
 
 export default function MyErrandsScreen({ navigation }) {
   const [myErrands, setMyErrands] = useState([]);
+  const [refreshPage, setRefreshPage] = useState(true);
+
+  function handleDeleteErrand(errandID) {
+    deleteErrand(errandID).then(([undefined, errandID, userId]) => {
+      return Promise.all([getUserInfo(), errandID, userId]).then(
+        ([{ userData }, errandID, userId]) => {
+          const userErrands = userData.errands;
+          const newErrandList = userErrands.filter((errand) => {
+            return errand !== errandID;
+          });
+          const body = { errands: newErrandList };
+          updateUserErrandList(userId, body).then(() => {
+            setRefreshPage(!refreshPage);
+          });
+        }
+      );
+    });
+  }
 
   useEffect(() => {
     getUserInfo().then(({ userData }) => {
@@ -27,7 +51,7 @@ export default function MyErrandsScreen({ navigation }) {
         setMyErrands([...fulfilledPromises]);
       });
     });
-  }, []);
+  }, [refreshPage]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -63,7 +87,12 @@ export default function MyErrandsScreen({ navigation }) {
                     <Text>Edit</Text>
                     <Feather name="edit" size={18} color="black" />
                   </Pressable>
-                  <Pressable style={styles.deleteButton}>
+                  <Pressable
+                    onPress={(e) => {
+                      handleDeleteErrand(errand.errandID);
+                    }}
+                    style={styles.deleteButton}
+                  >
                     <Text>Delete</Text>
                     <MaterialIcons
                       name="delete-outline"
