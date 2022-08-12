@@ -9,29 +9,54 @@ import {
   Image,
   Platform,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import { Ionicons } from "@expo/vector-icons";
+import { getUserInfo } from "../firebase/config";
 
 export default function ProfileScreen({ navigation }) {
+  const [profileInfo, setProfileInfo] = useState({
+    avatar: "",
+    bio: "",
+    canDrive: true,
+    email: "",
+    errands: [],
+    fname: "",
+    lname: "",
+    location: "",
+    longLatData: {
+      area: "",
+      latitude: 0,
+      longitude: 0,
+    },
+    username: "",
+  });
+
   function handleErrandsListPress() {
     navigation.navigate("Errands List");
   }
+
+  useEffect(() => {
+    getUserInfo().then(({ userData }) => {
+      setProfileInfo(userData);
+    });
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
       <Header />
       <View style={styles.pageContent}>
         <View style={styles.avatarFlexBox}>
-          <Image
+          <Text style={styles.avatarInitials}>{profileInfo.avatar}</Text>
+          {/* <Image
             style={styles.avatar}
             source={require("../assets/jan-profile-avatar.png")}
-          />
+          /> */}
         </View>
         <View style={styles.userDetailsFlexBox}>
           <Text style={{ fontSize: Platform.OS === "android" ? 35 : 25 }}>
-            jan_the_boatman
+            {profileInfo.username}
           </Text>
           <Text
             style={{
@@ -39,7 +64,7 @@ export default function ProfileScreen({ navigation }) {
               color: "#B2B2B2",
             }}
           >
-            Gatwick
+            {profileInfo.longLatData.area}
           </Text>
         </View>
         <View style={styles.bioContainer}>
@@ -49,9 +74,7 @@ export default function ProfileScreen({ navigation }) {
               color: "#333333",
             }}
           >
-            Hi my name is Jan, I'm pretty good at rowing so I can easily help
-            out with heavy lifting jobs! *Only interested in jobs where I'm
-            allowed to spit.*
+            {profileInfo.bio}
           </Text>
         </View>
         <View style={styles.buttonsFlexBox}>
@@ -77,11 +100,20 @@ export default function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   pageContent: {
     flex: 1,
+    alignItems: "center",
   },
   avatarFlexBox: {
     flexDirection: "row",
     justifyContent: "center",
+    alignItems: "center",
     marginTop: 25,
+    height: 150,
+    width: 150,
+    backgroundColor: "#47C9AF",
+    borderRadius: 75,
+    borderWidth: 5,
+    borderStyle: "solid",
+    borderColor: "#212121",
   },
   avatar: {
     position: "relative",
@@ -126,5 +158,10 @@ const styles = StyleSheet.create({
   iconFlexBox: {
     marginRight: 10,
     top: 5,
+  },
+  avatarInitials: {
+    color: "#FFFAF0",
+    padding: 10,
+    fontSize: 80,
   },
 });

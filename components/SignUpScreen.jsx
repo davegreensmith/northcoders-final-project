@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { signUpNewUser, userLogout, updateUserInfo } from "../firebase/config";
 import { convertLocationToLatLong } from "../utils/api";
+import { getInitials } from "../firebase/functions";
 
 export default function SignUpScreen({ navigation }) {
   const [canDrive, setCanDrive] = useState(false);
@@ -31,7 +32,9 @@ export default function SignUpScreen({ navigation }) {
       setShow(true);
     } else {
       // const latLong = convertLocationToLatLong(location);
+      const avatar = getInitials(fname, lname);
       const userDetails = {
+        avatar,
         fname,
         lname,
         username,
@@ -47,8 +50,6 @@ export default function SignUpScreen({ navigation }) {
           return id;
         })
         .then((id) => {
-          console.log(id, "<<< id");
-          console.log(userDetails, "<<< user details");
           updateUserInfo(id, userDetails);
         })
         .then(() => {
