@@ -6,7 +6,7 @@ import {
   TextInput,
   FlatList,
   Pressable,
-  StyleSheet,
+  StyleSheet
 } from "react-native";
 import { useState } from "react";
 import Header from "./Header";
@@ -23,7 +23,7 @@ export default function SingleErrandScreen({ navigation }) {
     date: "12/08/2022",
     timeFrame: "About 3 hours",
     requirements: "Chainsaw, Axe, Grenades, RPG",
-    jobType: "Gardening",
+    jobType: "Gardening"
   });
 
   return (
@@ -52,6 +52,25 @@ export default function SingleErrandScreen({ navigation }) {
         <View style={styles.descriptionBubble}>
           <Text>{singleErrand.description}</Text>
         </View>
+        <View style={{ flex: 1, justifyContent: "space-around" }}>
+          <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            On: {singleErrand.date}
+          </Text>
+          <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            For: {singleErrand.timeFrame}
+          </Text>
+          <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            What you will need: {singleErrand.requirements}
+          </Text>
+          <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            Type of job: {singleErrand.jobType}
+          </Text>
+        </View>
+        <View>
+          <Pressable style={styles.chipInButton}>
+            <Text style={{ textAlign: "center", fontSize: 18 }}>Chip In</Text>
+          </Pressable>
+        </View>
       </View>
       <NavBar navigation={navigation} />
     </View>
@@ -61,35 +80,45 @@ export default function SingleErrandScreen({ navigation }) {
 const styles = StyleSheet.create({
   pageContent: {
     flex: 1,
-    alignItems: "center",
+    alignItems: "center"
   },
   titleHeader: {
     flexDirection: "row",
     justifyContent: "space-",
-    paddingTop: 10,
-    backgroundColor: "#fff",
+    paddingTop: 10
   },
   titleHeaderText: {
     justifyContent: "space-around",
     flex: 0.66,
-    marginLeft: 25,
+    marginLeft: 25
   },
   avatarFlexBox: {
     flex: 0.33,
-    alignItems: "center",
-    backgroundColor: "#ddd",
+    alignItems: "center"
   },
   avatar: {
-    borderRadius: 100,
+    borderRadius: 100
   },
   dividerLine: {
     borderBottomWidth: 2,
     paddingTop: 5,
-    width: "90%",
+    width: "90%"
   },
   descriptionBubble: {
     backgroundColor: "#fff",
-    borderRadius: 10,
-    borderWidth: 0.4,
+    borderRadius: 6,
+    borderWidth: 0.7,
+    width: "90%",
+    marginTop: 20,
+    marginBottom: 40,
+    padding: 10
   },
+  chipInButton: {
+    backgroundColor: "#47c9af",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 90,
+    margin: 20,
+    padding: 10
+  }
 });
