@@ -29,7 +29,6 @@ export default function AddErrandScreen({ navigation }) {
   const [requirements, setRequirements] = useState("");
   const [location, setLocation] = useState(null);
   const [date, setDate] = useState(null);
-  const [error, setError] = useState;
 
   const [error, setError] = useState(false);
 
@@ -88,6 +87,8 @@ export default function AddErrandScreen({ navigation }) {
         })
         .catch((err) => {
           console.log(err);
+          if (err.message === "Request failed with status code 404")
+            setError("Invalid postcode, please check and try again");
         });
     }
   }
