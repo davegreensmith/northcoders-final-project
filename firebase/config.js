@@ -144,6 +144,7 @@ export function updateUserInfo(userId, userDetails) {
 export function getUserInfo() {
   const userRef = doc(db, "users", loggedInUser.uid);
   return getDoc(userRef).then((data) => {
+    // console.log(data.data(), "<<< get user data");
     const userData = { ...data.data() };
     return { userData };
   });
@@ -201,6 +202,9 @@ export function fetchErrands() {
     });
 }
 
+//get all errands for the logged in user
+export function getUserErrands() {}
+
 //get all latlongs for errands
 export function fetchLatLongs() {
   return getDocs(latlongsRef).then((snapshot) => {
@@ -216,10 +220,21 @@ export function addLatLong(latlongDetails) {
   return addDoc(latlongsRef, latlongDetails);
 }
 
-//get errand by errandId
-export function fetchErrandByErrandID() {
-  return getDoc(errandsRef, errandID).then((mystery) => {});
+export function fetchErrandByErrandID(errandID) {
+  const errandRef = doc(db, "errands", errandID);
+  return Promise.all([getDoc(errandRef, errandID), errandID]).then(
+    ([data, errandID]) => {
+      const errandData = { ...data.data(), errandID };
+      return errandData;
+    }
+  );
 }
+
+// return getDoc(userRef).then((data) => {
+//   // console.log(data.data(), "<<< get user data");
+//   const userData = { ...data.data() };
+//   return { userData };
+// });
 
 //CHAT MESSAGES
 //add message to db
