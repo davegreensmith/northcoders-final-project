@@ -49,9 +49,9 @@ export default function MapScreen({ navigation }) {
   }, [usersLong]);
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Header />
-      <View contentContainerStyle={styles.container}>
+      <View style={styles.pageContent}>
         <MapView
           style={styles.map}
           initialRegion={{
@@ -104,32 +104,8 @@ export default function MapScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  volunteerButton: {
-    backgroundColor: "#47c9af",
-    borderColor: "#000",
-    borderWidth: 1,
-    borderRadius: 5,
-    width: 270,
-    margin: 20,
-    padding: 10,
-    marginBottom: 90,
-  },
-  helpButton: {
-    backgroundColor: "#47c9af",
-    borderColor: "#000",
-    borderWidth: 1,
-    borderRadius: 5,
-    width: 270,
-    height: 100,
-    margin: 20,
-    padding: 10,
-    marginTop: 20,
-    textAlignVertical: "center",
-  },
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 150,
+  pageContent: {
+    flex: 1,
   },
   map: {
     height: Dimensions.get("window").height,
