@@ -7,8 +7,9 @@ import {
   FlatList,
   Pressable,
   StyleSheet,
+  KeyboardAvoidingView,
 } from "react-native";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import { SimpleLineIcons } from "@expo/vector-icons";
@@ -24,14 +25,32 @@ export default function ProfileSettingsScreen({ navigation }) {
     firstName: "Mitch",
     lastName: "Please",
   });
+
+  const [isUsernameEdit, setIsUsernameEdit] = useState(false);
+  const username = useRef();
+
+  function handleUsernameEditPress() {
+    setIsUsernameEdit(true);
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <View style={styles.pageContent}>
+      <KeyboardAvoidingView style={styles.pageContent}>
         <View style={styles.changeUsername}>
           <Text style={styles.fieldLabel}>Username:</Text>
-          <Text style={styles.fieldValue}>{profileDetails.username}</Text>
-          <Pressable style={styles.editFieldButton}>
+          {isUsernameEdit ? (
+            <TextInput
+              style={styles.editFieldValue}
+              defaultValue={profileDetails.username}
+            />
+          ) : (
+            <Text style={styles.fieldValue}>{profileDetails.username}</Text>
+          )}
+          <Pressable
+            onPress={handleUsernameEditPress}
+            style={styles.editFieldButton}
+          >
             <Feather name="edit" size={24} color="black" />
           </Pressable>
         </View>
@@ -99,7 +118,7 @@ export default function ProfileSettingsScreen({ navigation }) {
             <AntDesign name="deleteuser" size={24} color="black" />
           </Pressable>
         </View>
-      </View>
+      </KeyboardAvoidingView>
       <NavBar />
     </View>
   );
@@ -116,6 +135,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   fieldValue: {
+    fontSize: 16,
+    marginRight: 15,
+    borderRadius: 10,
+    padding: 8,
+    width: 220,
+    backgroundColor: "white",
+    textAlign: "center",
+  },
+  editFieldValue: {
     fontSize: 16,
     marginRight: 15,
     borderRadius: 10,
