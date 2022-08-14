@@ -14,6 +14,7 @@ import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   deleteErrand,
+  deleteLatLongByErrandId,
   fetchErrandByErrandID,
   getUserInfo,
   loggedInUserId,
@@ -25,20 +26,21 @@ export default function MyErrandsScreen({ navigation }) {
   const [refreshPage, setRefreshPage] = useState(true);
 
   function handleDeleteErrand(errandID) {
-    deleteErrand(errandID).then(([undefined, errandID, userId]) => {
-      return Promise.all([getUserInfo(), errandID, userId]).then(
-        ([{ userData }, errandID, userId]) => {
-          const userErrands = userData.errands;
-          const newErrandList = userErrands.filter((errand) => {
-            return errand !== errandID;
-          });
-          const body = { errands: newErrandList };
-          updateUserErrandList(userId, body).then(() => {
-            setRefreshPage(!refreshPage);
-          });
-        }
-      );
-    });
+    // deleteErrand(errandID).then(([undefined, errandID, userId]) => {
+    //   return Promise.all([getUserInfo(), errandID, userId]).then(
+    //     ([{ userData }, errandID, userId]) => {
+    //       const userErrands = userData.errands;
+    //       const newErrandList = userErrands.filter((errand) => {
+    //         return errand !== errandID;
+    //       });
+    //       const body = { errands: newErrandList };
+    //       updateUserErrandList(userId, body).then(() => {
+    //         setRefreshPage(!refreshPage);
+    //       });
+    //     }
+    //   );
+    // });
+    deleteLatLongByErrandId(errandID);
   }
 
   useEffect(() => {

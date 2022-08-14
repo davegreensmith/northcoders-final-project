@@ -238,6 +238,15 @@ export function fetchErrandByErrandID(errandID) {
   );
 }
 
+// export function deleteLatLongByErrandId(errandID) {
+//   return Promise.all([fetchLatLongs(), errandID]).then(
+//     ([{ latLongs }, errandID]) => {
+//       console.log(latLongs, "<<< latLongs in config.js");
+//       console.log(errandID, "<<< errandID in config.js");
+//     }
+//   );
+// }
+
 // return getDoc(userRef).then((data) => {
 //   // console.log(data.data(), "<<< get user data");
 //   const userData = { ...data.data() };
