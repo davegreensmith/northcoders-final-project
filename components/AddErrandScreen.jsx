@@ -17,6 +17,8 @@ import {
   addLatLong,
   getUserInfo,
   getUsername,
+  updateLatLong,
+  updateErrand,
 } from "../firebase/config";
 import { convertLocationToLatLong } from "../utils/api";
 
@@ -79,9 +81,14 @@ export default function AddErrandScreen({ navigation }) {
                 date,
                 errandName,
               };
-              addLatLong(body).then(({ latLongID }) => {
-                navigation.navigate("Splash");
-              });
+
+              return Promise.all([addLatLong(body), errandID]).then(
+                ([{ latLongID }, errandID]) => {
+                  const body = { latLongID };
+                  updateErrand(errandID, body);
+                  navigation.navigate("Splash");
+                }
+              );
             }
           );
         })

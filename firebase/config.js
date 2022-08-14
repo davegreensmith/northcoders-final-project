@@ -182,6 +182,8 @@ export function addErrandToUser(errandID, errandUserIdD) {
 }
 
 export function updateErrand(errandID, updateBody) {
+  console.log(errandID, "<<< errandID in config");
+  console.log(updateBody, "<<< updateBody in config");
   const errandRef = doc(db, "errands", errandID);
   updateDoc(errandRef, updateBody);
 }
@@ -216,7 +218,6 @@ export function getUserErrands() {}
 //get all latlongs for errands
 export function fetchLatLongs() {
   return getDocs(latlongsRef).then((snapshot) => {
-    console.log(snapshot, "<<< data from getDocs on latlongs");
     let latLongs = [];
     snapshot.docs.forEach((doc) => {
       latLongs.push({ ...doc.data() });
@@ -228,8 +229,14 @@ export function fetchLatLongs() {
 export function addLatLong(latlongDetails) {
   return addDoc(latlongsRef, latlongDetails).then((mystery) => {
     const latLongID = mystery._key.path.segments[1];
+    console.log(latLongID, "<<< latlongID in config");
     return { latLongID };
   });
+}
+
+export function updateLatLong(latLongID, updateBody) {
+  const latLongRef = doc(db, "latlongs", latLongID);
+  updateDoc(latLongRef, updateBody);
 }
 
 export function fetchErrandByErrandID(errandID) {
@@ -243,26 +250,25 @@ export function fetchErrandByErrandID(errandID) {
 }
 
 export function deleteLatLongByErrandId(errandID) {
-  return Promise.all([fetchLatLongs(), errandID]).then(
-    ([{ latLongs }, errandID]) => {
-      console.log(latLongs, "<<< latLongs in config.js");
-      console.log(errandID, "<<< errandID in config.js");
-      const origLatLongs = [...latLongs];
-      const newLatLongs = origLatLongs.filter((latlong) => {
-        return latlong.errandID !== errandID;
+  return fetchErrandByErrandID(errandID)
+    .then((errandData) => {
+      console.log(errandData, "<<<Errand data in config");
+      console.log(errandData.latLongID, "<<< latLongId in config");
+      const latlongID = errandData.latLongID;
+      return deleteFoundLatLong(latlongID).then((undefined) => {
+        console.log("Deleted LatLong in db!!!");
       });
-      console.log(newLatLongs, "<<< newLatLongs");
-    }
-  );
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
-export function updateLatLongCollection() {}
+function deleteFoundLatLong(latlongID) {
+  const latLongRef = doc(db, "latlongs", latlongID);
 
-// return getDoc(userRef).then((data) => {
-//   // console.log(data.data(), "<<< get user data");
-//   const userData = { ...data.data() };
-//   return { userData };
-// });
+  deleteDoc(latLongRef);
+}
 
 //CHAT MESSAGES
 //add message to db

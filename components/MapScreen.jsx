@@ -111,7 +111,7 @@ export default function MapScreen({ navigation }) {
                     latitude,
                     longitude,
                   }}
-                  key={errand.errandID}
+                  key={errand.latLongID}
                 >
                   <Callout style={styles.callout}>
                     <Text style={styles.heading}>{errand.errandName}</Text>

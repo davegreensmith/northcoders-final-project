@@ -25,22 +25,31 @@ export default function MyErrandsScreen({ navigation }) {
   const [myErrands, setMyErrands] = useState([]);
   const [refreshPage, setRefreshPage] = useState(true);
 
+  function handleEditErrand(errandID) {
+    fetchErrandByErrandID(errandID).then((errandData) => {
+      console.log(errandData, "errand data in MyErrandsScreen edit button");
+    });
+  }
+
   function handleDeleteErrand(errandID) {
-    // deleteErrand(errandID).then(([undefined, errandID, userId]) => {
-    //   return Promise.all([getUserInfo(), errandID, userId]).then(
-    //     ([{ userData }, errandID, userId]) => {
-    //       const userErrands = userData.errands;
-    //       const newErrandList = userErrands.filter((errand) => {
-    //         return errand !== errandID;
-    //       });
-    //       const body = { errands: newErrandList };
-    //       updateUserErrandList(userId, body).then(() => {
-    //         setRefreshPage(!refreshPage);
-    //       });
-    //     }
-    //   );
-    // });
-    deleteLatLongByErrandId(errandID);
+    return Promise.all([deleteLatLongByErrandId(errandID), errandID]).then(
+      ([undefined, errandID]) => {
+        return deleteErrand(errandID).then(([undefined, errandID, userId]) => {
+          return Promise.all([getUserInfo(), errandID, userId]).then(
+            ([{ userData }, errandID, userId]) => {
+              const userErrands = userData.errands;
+              const newErrandList = userErrands.filter((errand) => {
+                return errand !== errandID;
+              });
+              const body = { errands: newErrandList };
+              updateUserErrandList(userId, body).then(() => {
+                setRefreshPage(!refreshPage);
+              });
+            }
+          );
+        });
+      }
+    );
   }
 
   useEffect(() => {
@@ -85,7 +94,12 @@ export default function MyErrandsScreen({ navigation }) {
                   <Text>Job length: {errand.timeFrame}</Text>
                 </View>
                 <View style={styles.buttonsFlexBox}>
-                  <Pressable style={styles.editButton}>
+                  <Pressable
+                    onPress={(e) => {
+                      handleEditErrand(errand.errandID);
+                    }}
+                    style={styles.editButton}
+                  >
                     <Text>Edit</Text>
                     <Feather name="edit" size={18} color="black" />
                   </Pressable>
