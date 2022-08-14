@@ -216,6 +216,7 @@ export function getUserErrands() {}
 //get all latlongs for errands
 export function fetchLatLongs() {
   return getDocs(latlongsRef).then((snapshot) => {
+    console.log(snapshot, "<<< data from getDocs on latlongs");
     let latLongs = [];
     snapshot.docs.forEach((doc) => {
       latLongs.push({ ...doc.data() });
@@ -225,7 +226,10 @@ export function fetchLatLongs() {
 }
 
 export function addLatLong(latlongDetails) {
-  return addDoc(latlongsRef, latlongDetails);
+  return addDoc(latlongsRef, latlongDetails).then((mystery) => {
+    const latLongID = mystery._key.path.segments[1];
+    return { latLongID };
+  });
 }
 
 export function fetchErrandByErrandID(errandID) {
@@ -238,14 +242,21 @@ export function fetchErrandByErrandID(errandID) {
   );
 }
 
-// export function deleteLatLongByErrandId(errandID) {
-//   return Promise.all([fetchLatLongs(), errandID]).then(
-//     ([{ latLongs }, errandID]) => {
-//       console.log(latLongs, "<<< latLongs in config.js");
-//       console.log(errandID, "<<< errandID in config.js");
-//     }
-//   );
-// }
+export function deleteLatLongByErrandId(errandID) {
+  return Promise.all([fetchLatLongs(), errandID]).then(
+    ([{ latLongs }, errandID]) => {
+      console.log(latLongs, "<<< latLongs in config.js");
+      console.log(errandID, "<<< errandID in config.js");
+      const origLatLongs = [...latLongs];
+      const newLatLongs = origLatLongs.filter((latlong) => {
+        return latlong.errandID !== errandID;
+      });
+      console.log(newLatLongs, "<<< newLatLongs");
+    }
+  );
+}
+
+export function updateLatLongCollection() {}
 
 // return getDoc(userRef).then((data) => {
 //   // console.log(data.data(), "<<< get user data");

@@ -79,7 +79,7 @@ export default function AddErrandScreen({ navigation }) {
                 date,
                 errandName,
               };
-              addLatLong(body).then(() => {
+              addLatLong(body).then(({ latLongID }) => {
                 navigation.navigate("Splash");
               });
             }
