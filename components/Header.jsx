@@ -9,7 +9,10 @@ import {
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-export default function Header() {
+export default function Header({ navigation }) {
+  function handleBellPress() {
+    navigation.navigate("Notifications");
+  }
   return (
     <View style={styles.headerFlex}>
       <View style={styles.whiteSpace}></View>
@@ -20,7 +23,7 @@ export default function Header() {
         />
       </View>
       <View style={styles.iconFlex}>
-        <Pressable style={styles.iconButton}>
+        <Pressable onPress={handleBellPress} style={styles.iconButton}>
           <FontAwesome5 name="bell" size={35} color="black" />
         </Pressable>
       </View>

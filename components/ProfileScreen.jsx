@@ -131,6 +131,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   bioContainer: {
+    width: "90%",
+    flex: 1,
     borderWidth: 0.6,
     borderRadius: 30,
     backgroundColor: "#FFF",
@@ -144,8 +146,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "flex-end",
-    justifyContent: "space-between",
-    marginBottom: 10,
+    justifyContent: "space-around",
+    marginBottom: 20,
+    width: "100%",
   },
   myErrandsButton: {
     backgroundColor: "#47c9af",
@@ -157,10 +160,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    marginLeft: 15,
   },
   iconFlexBox: {
-    marginRight: 10,
+    marginLeft: 1,
     top: 5,
   },
   avatarInitials: {

@@ -7,73 +7,108 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import {
+  deleteErrand,
+  deleteLatLongByErrandId,
+  fetchErrandByErrandID,
+  getUserInfo,
+  loggedInUserId,
+  updateUserErrandList,
+} from "../firebase/config";
 
 export default function MyErrandsScreen({ navigation }) {
-  const [myErrands, setMyErrands] = useState([
-    {
-      errand_id: 1,
-      title: "Example Title",
-      description:
-        "this is my job description, it's not the best job in the world but it's mine.",
-      requirements: "None",
-      location: "M1 4DH",
-      date: "10/08/2022",
-      timeFrame: "1 Hour",
-      jobType: "Gardening",
-    },
-    {
-      errand_id: 2,
-      title: "Example Title",
-      description:
-        "this is my job description, it's not the best job in the world but it's mine.",
-      requirements: "None",
-      location: "M1 4DH",
-      date: "10/08/2022",
-      timeFrame: "1 Hour",
-      jobType: "Gardening",
-    },
-  ]); // this is a placeholder for functionality to "get" the list of errands attached to the user profile and store as an array of objects, for the purposes of display
+  const [myErrands, setMyErrands] = useState([]);
+  const [refreshPage, setRefreshPage] = useState(true);
+
+  function handleEditErrand(errandID) {
+    fetchErrandByErrandID(errandID).then((errandData) => {
+      console.log(errandData, "errand data in MyErrandsScreen edit button");
+    });
+  }
+
+  function handleDeleteErrand(errandID) {
+    return Promise.all([deleteLatLongByErrandId(errandID), errandID]).then(
+      ([undefined, errandID]) => {
+        return deleteErrand(errandID).then(([undefined, errandID, userId]) => {
+          return Promise.all([getUserInfo(), errandID, userId]).then(
+            ([{ userData }, errandID, userId]) => {
+              const userErrands = userData.errands;
+              const newErrandList = userErrands.filter((errand) => {
+                return errand !== errandID;
+              });
+              const body = { errands: newErrandList };
+              updateUserErrandList(userId, body).then(() => {
+                setRefreshPage(!refreshPage);
+              });
+            }
+          );
+        });
+      }
+    );
+  }
+
+  useEffect(() => {
+    getUserInfo().then(({ userData }) => {
+      const userErrands = userData.errands;
+      const errandPromises = userErrands.map((errandID) => {
+        return fetchErrandByErrandID(errandID);
+      });
+      return Promise.all(errandPromises).then((fulfilledPromises) => {
+        setMyErrands([...fulfilledPromises]);
+      });
+    });
+  }, [refreshPage]);
 
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <View style={stlyes.pageContent}>
+      <View style={styles.pageContent}>
         <ScrollView>
           {myErrands.map((errand) => {
             return (
-              <View key={errand.errand_id} style={stlyes.listItem}>
-                <View style={stlyes.titleField}>
+              <View key={errand.errandID} style={styles.listItem}>
+                <View style={styles.titleField}>
                   <Text style={{ fontSize: 22 }}>{errand.title}</Text>
                 </View>
-                <View style={stlyes.descriptionField}>
+                <View style={styles.descriptionField}>
                   <Text>{errand.description}</Text>
                 </View>
-                <View style={stlyes.requirementsField}>
+                <View style={styles.requirementsField}>
                   <Text>Helper Requirements: {errand.requirements}</Text>
                 </View>
-                <View style={stlyes.jobTypeField}>
-                  <Text>Job Type: {errand.jobType}</Text>
+                <View style={styles.jobTypeField}>
+                  <Text>Job Type: {errand.workType}</Text>
                 </View>
-                <View style={stlyes.locationField}>
-                  <Text>Location: {errand.location}</Text>
+                <View style={styles.locationField}>
+                  <Text>Location: {errand.area}</Text>
                 </View>
-                <View style={stlyes.dateField}>
+                <View style={styles.dateField}>
                   <Text>Date: {errand.date}</Text>
                 </View>
-                <View style={stlyes.jobLengthField}>
+                <View style={styles.jobLengthField}>
                   <Text>Job length: {errand.timeFrame}</Text>
                 </View>
-                <View style={stlyes.buttonsFlexBox}>
-                  <Pressable style={stlyes.editButton}>
+                <View style={styles.buttonsFlexBox}>
+                  <Pressable
+                    onPress={(e) => {
+                      handleEditErrand(errand.errandID);
+                    }}
+                    style={styles.editButton}
+                  >
                     <Text>Edit</Text>
                     <Feather name="edit" size={18} color="black" />
                   </Pressable>
-                  <Pressable style={stlyes.deleteButton}>
+                  <Pressable
+                    onPress={(e) => {
+                      handleDeleteErrand(errand.errandID);
+                    }}
+                    style={styles.deleteButton}
+                  >
                     <Text>Delete</Text>
                     <MaterialIcons
                       name="delete-outline"
@@ -92,7 +127,7 @@ export default function MyErrandsScreen({ navigation }) {
   );
 }
 
-const stlyes = StyleSheet.create({
+const styles = StyleSheet.create({
   pageContent: {
     flex: 1,
   },

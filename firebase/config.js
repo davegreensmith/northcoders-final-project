@@ -17,6 +17,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { convertLocationToLatLong } from "../utils/api";
 
@@ -41,6 +42,19 @@ auth.onAuthStateChanged(function (user) {
     loggedInUser = user;
   }
 });
+export const loggedInUserId = loggedInUser.uid;
+
+export function sendResetPasswordEmail(email) {
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      console.log("password email sent!");
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // ..
+    });
+}
 
 //collection refs
 export const usersRef = collection(db, "users");
@@ -149,6 +163,12 @@ export function getUserInfo() {
   });
 }
 
+export function updateUserErrandList(userId, addDetail) {
+  const userRef = doc(db, "users", userId);
+
+  return updateDoc(userRef, addDetail);
+}
+
 //ERRANDS
 //add errands to database
 export function addErrand(errandDetails) {
@@ -180,11 +200,11 @@ export function updateErrand(errandID, updateBody) {
 
 //delete errands
 export function deleteErrand(errandID) {
+  const userId = loggedInUser.uid;
+
   const errandRef = doc(db, "errands", errandID);
-  deleteDoc(errandRef);
-  getUserInfo().then((data) => {
-    console.log(data);
-  });
+
+  return Promise.all([deleteDoc(errandRef), errandID, userId]);
 }
 
 //get all errands
@@ -201,6 +221,9 @@ export function fetchErrands() {
     });
 }
 
+//get all errands for the logged in user
+export function getUserErrands() {}
+
 //get all latlongs for errands
 export function fetchLatLongs() {
   return getDocs(latlongsRef).then((snapshot) => {
@@ -213,12 +236,42 @@ export function fetchLatLongs() {
 }
 
 export function addLatLong(latlongDetails) {
-  return addDoc(latlongsRef, latlongDetails);
+  return addDoc(latlongsRef, latlongDetails).then((mystery) => {
+    const latLongID = mystery._key.path.segments[1];
+    return { latLongID };
+  });
 }
 
-//get errand by errandId
-export function fetchErrandByErrandID() {
-  return getDoc(errandsRef, errandID).then((mystery) => {});
+export function updateLatLong(latLongID, updateBody) {
+  const latLongRef = doc(db, "latlongs", latLongID);
+  updateDoc(latLongRef, updateBody);
+}
+
+export function fetchErrandByErrandID(errandID) {
+  const errandRef = doc(db, "errands", errandID);
+  return Promise.all([getDoc(errandRef, errandID), errandID]).then(
+    ([data, errandID]) => {
+      const errandData = { ...data.data(), errandID };
+      return errandData;
+    }
+  );
+}
+
+export function deleteLatLongByErrandId(errandID) {
+  return fetchErrandByErrandID(errandID)
+    .then((errandData) => {
+      const latlongID = errandData.latLongID;
+      return deleteFoundLatLong(latlongID).then((undefined) => {});
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+function deleteFoundLatLong(latlongID) {
+  const latLongRef = doc(db, "latlongs", latlongID);
+
+  deleteDoc(latLongRef);
 }
 
 //CHAT MESSAGES

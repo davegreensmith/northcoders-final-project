@@ -8,18 +8,22 @@ import {
   StyleSheet,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import {
   addErrand,
   addErrandToUser,
   addLatLong,
+  getUserInfo,
   getUsername,
+  updateLatLong,
+  updateErrand,
 } from "../firebase/config";
 import { convertLocationToLatLong } from "../utils/api";
 
 export default function AddErrandScreen({ navigation }) {
+  const [defaultLocation, setDefaultLocation] = useState(null);
   const [timeFrame, setTimeFrame] = useState("- Select -");
   const [workType, setWorkType] = useState("- Select -");
   const [errandName, setErrandName] = useState(null);
@@ -41,9 +45,13 @@ export default function AddErrandScreen({ navigation }) {
     ) {
       setError("Information missing. Please fill in all required fields");
     } else {
-      return getUsername()
-        .then((username) => {
+      return convertLocationToLatLong(location)
+        .then(({ longLatData }) => {
+          return Promise.all([getUsername(), longLatData]);
+        })
+        .then(([username, longLatData]) => {
           const errandDetails = {
+            ...longLatData,
             timeFrame,
             workType,
             errandName,
@@ -56,25 +64,47 @@ export default function AddErrandScreen({ navigation }) {
           return errandDetails;
         })
         .then((errand) => {
-          return Promise.all([addErrand(errand), errand.location]);
+          return Promise.all([addErrand(errand), errand]);
         })
-        .then(([{ errandID, errandUserId }, location]) => {
+        .then(([{ errandID, errandUserId }, errand]) => {
           addErrandToUser(errandID, errandUserId);
           return Promise.all([
-            convertLocationToLatLong(location),
+            convertLocationToLatLong(errand.location),
             errandID,
-          ]).then(([{ longLatData }, errandID]) => {
-            const body = { ...longLatData, errandID };
-            addLatLong(body).then(() => {
-              navigation.navigate("Splash");
-            });
-          });
+            errand,
+          ]).then(
+            ([{ longLatData }, errandID, { author, date, errandName }]) => {
+              const body = {
+                ...longLatData,
+                errandID,
+                author,
+                date,
+                errandName,
+              };
+
+              return Promise.all([addLatLong(body), errandID]).then(
+                ([{ latLongID }, errandID]) => {
+                  const body = { latLongID };
+                  updateErrand(errandID, body);
+                  navigation.navigate("Splash");
+                }
+              );
+            }
+          );
         })
         .catch((err) => {
           console.log(err);
+          if (err.message === "Request failed with status code 404")
+            setError("Invalid postcode, please check and try again");
         });
     }
   }
+
+  useEffect(() => {
+    getUserInfo().then(({ userData }) => {
+      setDefaultLocation(userData.location);
+    });
+  });
 
   return (
     <View style={{ flex: 1 }}>
@@ -115,7 +145,7 @@ export default function AddErrandScreen({ navigation }) {
             style={styles.genericInputField}
             onChangeText={setLocation}
             value={location}
-            placeholder="* Location for the errand"
+            placeholder={"* Post code of errand"}
           />
           <TextInput
             style={styles.genericInputField}
