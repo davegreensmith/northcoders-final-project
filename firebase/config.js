@@ -203,6 +203,17 @@ export function removeUserFromErrand(errandID) {
   });
 }
 
+//add user to errand
+export function addChipperToErrand(errandID) {
+  getUsername().then((username) => {
+    const errand = doc(db, "errands", errandID);
+    updateDoc(errand, {
+      chippers: arrayUnion(username),
+    });
+    console.log(username, "<<< should be added to the list");
+  });
+}
+
 export function updateErrand(errandID, updateBody) {
   const errandRef = doc(db, "errands", errandID);
   updateDoc(errandRef, updateBody);

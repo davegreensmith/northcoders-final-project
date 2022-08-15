@@ -11,69 +11,102 @@ import {
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
-import { fetchErrandByErrandID } from "../firebase/config";
+import {
+  fetchErrandByErrandID,
+  getUsername,
+  updateErrand,
+  addChipperToErrand,
+} from "../firebase/config";
 
 export default function SingleErrandScreen({ route, navigation }) {
   const { id } = route.params;
 
   const [singleErrand, setSingleErrand] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasChippedIn, setHasChippedIn] = useState(false);
+
+  function handleChipIn() {
+    addChipperToErrand(id);
+    setHasChippedIn(true);
+  }
 
   useEffect(() => {
     fetchErrandByErrandID(id).then((errandData) => {
-      setSingleErrand({ ...errandData });
+      return getUsername().then((username) => {
+        const user = username;
+        if (errandData.chippers.includes(`${user}`)) {
+          setHasChippedIn(true);
+        }
+        setSingleErrand({ ...errandData });
+        setIsLoading(false);
+      });
     });
-  }, []);
+  }, [hasChippedIn]);
 
-  return (
-    <View style={{ flex: 1 }}>
-      <Header navigation={navigation} />
-      <View style={styles.pageContent}>
-        <View style={styles.titleHeader}>
-          <View style={styles.titleHeaderText}>
-            <View>
-              <Text style={{ fontSize: 26 }}>{singleErrand.errandName}</Text>
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  } else {
+    return (
+      <View style={{ flex: 1 }}>
+        <Header navigation={navigation} />
+        <View style={styles.pageContent}>
+          <View style={styles.titleHeader}>
+            <View style={styles.titleHeaderText}>
+              <View>
+                <Text style={{ fontSize: 26 }}>{singleErrand.errandName}</Text>
+              </View>
+              <View>
+                <Text style={{ fontSize: 20, color: "gray" }}>
+                  {singleErrand.area}
+                </Text>
+              </View>
             </View>
-            <View>
-              <Text style={{ fontSize: 20, color: "gray" }}>
-                {singleErrand.area}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.avatarFlexBox}>
-            {/* <Image
+            <View style={styles.avatarFlexBox}>
+              {/* <Image
               style={styles.avatar}
               source={require("../assets/placeholder-avatar.png")}
             /> */}
-            <Text>{singleErrand.author}</Text>
+              <Text>{singleErrand.author}</Text>
+            </View>
           </View>
+          <View style={styles.dividerLine}></View>
+          <View style={styles.descriptionBubble}>
+            <Text>{singleErrand.description}</Text>
+          </View>
+          <View style={{ flex: 1, justifyContent: "space-around" }}>
+            <Text style={{ fontSize: 14, marginLeft: 17 }}>
+              On: {singleErrand.date}
+            </Text>
+            <Text style={{ fontSize: 14, marginLeft: 17 }}>
+              For: {singleErrand.timeFrame} hours
+            </Text>
+            <Text style={{ fontSize: 14, marginLeft: 17 }}>
+              What you will need: {singleErrand.requirements}
+            </Text>
+            <Text style={{ fontSize: 14, marginLeft: 17 }}>
+              Type of job: {singleErrand.workType}
+            </Text>
+            <Text style={{ fontSize: 14, marginLeft: 17 }}>
+              How many have already volunteered to Chip In:{" "}
+              {singleErrand.chippers.length}
+            </Text>
+          </View>
+          {hasChippedIn ? (
+            <Text>You've Chipped In!</Text>
+          ) : (
+            <View>
+              <Pressable style={styles.chipInButton} onPress={handleChipIn}>
+                <Text style={{ textAlign: "center", fontSize: 18 }}>
+                  Chip In
+                </Text>
+              </Pressable>
+            </View>
+          )}
         </View>
-        <View style={styles.dividerLine}></View>
-        <View style={styles.descriptionBubble}>
-          <Text>{singleErrand.description}</Text>
-        </View>
-        <View style={{ flex: 1, justifyContent: "space-around" }}>
-          <Text style={{ fontSize: 14, marginLeft: 17 }}>
-            On: {singleErrand.date}
-          </Text>
-          <Text style={{ fontSize: 14, marginLeft: 17 }}>
-            For: {singleErrand.timeFrame} hours
-          </Text>
-          <Text style={{ fontSize: 14, marginLeft: 17 }}>
-            What you will need: {singleErrand.requirements}
-          </Text>
-          <Text style={{ fontSize: 14, marginLeft: 17 }}>
-            Type of job: {singleErrand.workType}
-          </Text>
-        </View>
-        <View>
-          <Pressable style={styles.chipInButton}>
-            <Text style={{ textAlign: "center", fontSize: 18 }}>Chip In</Text>
-          </Pressable>
-        </View>
+        <NavBar navigation={navigation} />
       </View>
-      <NavBar navigation={navigation} />
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({
