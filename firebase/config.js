@@ -186,10 +186,21 @@ export function addErrand(errandDetails) {
 }
 
 //add errand to specfic user
-export function addErrandToUser(errandID, errandUserIdD) {
-  const user = doc(db, "users", errandUserIdD);
+export function addErrandToUser(errandID, errandUserID) {
+  const user = doc(db, "users", errandUserID);
   updateDoc(user, {
     errands: arrayUnion(errandID),
+  });
+}
+
+//add user to errand
+export function addChipperToErrand(errandID) {
+  getUsername().then((username) => {
+    const errand = doc(db, "errands", errandID);
+    updateDoc(errand, {
+      chippers: arrayUnion(username),
+    });
+    console.log(username, "<<< should be added to the list");
   });
 }
 
