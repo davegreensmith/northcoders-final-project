@@ -5,7 +5,7 @@ import {
   TextInput,
   FlatList,
   Pressable,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import { useState, useEffect } from "react";
 import Header from "./Header";
@@ -18,7 +18,7 @@ import {
   fetchErrandByErrandID,
   getUserInfo,
   loggedInUserId,
-  updateUserErrandList
+  updateUserErrandList,
 } from "../firebase/config";
 
 export default function MyErrandsScreen({ navigation }) {
@@ -50,6 +50,11 @@ export default function MyErrandsScreen({ navigation }) {
         });
       }
     );
+    const errandsArray = [...myErrands];
+    const newArray = errandsArray.filter((errand) => {
+      return errand.id !== errandID;
+    });
+    setMyErrands(newArray);
   }
 
   useEffect(() => {
@@ -143,16 +148,16 @@ export default function MyErrandsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flex: 1
+    flex: 1,
   },
   listItem: {
     justifyContent: "space-evenly",
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   titleField: {
     justifyContent: "center",
 
-    padding: 15
+    padding: 15,
   },
   descriptionField: {
     justifyContent: "center",
@@ -160,7 +165,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     borderRadius: 5,
-    padding: 10
+    padding: 10,
   },
   requirementsField: {
     justifyContent: "center",
@@ -169,7 +174,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     borderRadius: 5,
-    padding: 10
+    padding: 10,
   },
   jobTypeField: {
     justifyContent: "center",
@@ -178,7 +183,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     borderRadius: 5,
-    padding: 10
+    padding: 10,
   },
   locationField: {
     justifyContent: "center",
@@ -187,7 +192,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     borderRadius: 5,
-    padding: 10
+    padding: 10,
   },
   dateField: {
     justifyContent: "center",
@@ -196,7 +201,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     borderRadius: 5,
-    padding: 10
+    padding: 10,
   },
   jobLengthField: {
     justifyContent: "center",
@@ -205,14 +210,14 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     borderRadius: 5,
-    padding: 10
+    padding: 10,
   },
   buttonsFlexBox: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   editButton: {
     flexDirection: "row",
@@ -223,7 +228,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 110,
-    padding: 5
+    padding: 5,
   },
   deleteButton: {
     flexDirection: "row",
@@ -234,7 +239,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 100,
-    padding: 5
+    padding: 5,
   },
   completeButton: {
     flexDirection: "row",
@@ -245,6 +250,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 125,
-    padding: 5
-  }
+    padding: 5,
+  },
 });
