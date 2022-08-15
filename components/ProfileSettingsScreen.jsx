@@ -31,22 +31,60 @@ export default function ProfileSettingsScreen({ navigation }) {
 
   function handleUsernameEditPress() {
     setIsUsernameEdit(true);
+    username.current.focus();
+  }
+  function handleUsernameChange() {
+    setIsUsernameEdit(false);
+  }
+
+  const [isLocationEdit, setIsLocationEdit] = useState(false);
+  const location = useRef();
+
+  function handleLocationEditPress() {
+    setIsLocationEdit(true);
+    location.current.focus();
+  }
+  function handleLocationChange() {
+    setIsLocationEdit(false);
+  }
+
+  const [isFirstNameEdit, setIsFirstNameEdit] = useState(false);
+  const firstName = useRef();
+
+  function handleFirstNameEditPress() {
+    setIsFirstNameEdit(true);
+    firstName.current.focus();
+  }
+  function handleFirstNameChange() {
+    setIsFirstNameEdit(false);
+  }
+
+  const [isLastNameEdit, setIsLastNameEdit] = useState(false);
+  const lastName = useRef();
+
+  function handleLastNameEditPress() {
+    setIsLastNameEdit(true);
+    lastName.current.focus();
+  }
+  function handleLastNameChange() {
+    setIsLastNameEdit(false);
   }
 
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <KeyboardAvoidingView style={styles.pageContent}>
+      <ScrollView contentContainerStyle={styles.pageContent} bounces={false}>
         <View style={styles.changeUsername}>
           <Text style={styles.fieldLabel}>Username:</Text>
-          {isUsernameEdit ? (
-            <TextInput
-              style={styles.editFieldValue}
-              defaultValue={profileDetails.username}
-            />
-          ) : (
-            <Text style={styles.fieldValue}>{profileDetails.username}</Text>
-          )}
+          <TextInput
+            ref={username}
+            style={isUsernameEdit ? styles.editFieldValue : styles.fieldValue}
+            defaultValue={profileDetails.username}
+            onFocus={() => {
+              setIsUsernameEdit(true);
+            }}
+            onBlur={handleUsernameChange}
+          />
           <Pressable
             onPress={handleUsernameEditPress}
             style={styles.editFieldButton}
@@ -56,22 +94,55 @@ export default function ProfileSettingsScreen({ navigation }) {
         </View>
         <View style={styles.changeLocation}>
           <Text style={styles.fieldLabel}>Your Location:</Text>
-          <Text style={styles.fieldValue}>{profileDetails.location}</Text>
-          <Pressable style={styles.editFieldButton}>
+          <TextInput
+            ref={location}
+            style={isLocationEdit ? styles.editFieldValue : styles.fieldValue}
+            defaultValue={profileDetails.location}
+            onFocus={() => {
+              setIsLocationEdit(true);
+            }}
+            onBlur={handleLocationChange}
+          />
+          <Pressable
+            onPress={handleLocationEditPress}
+            style={styles.editFieldButton}
+          >
             <Feather name="edit" size={24} color="black" />
           </Pressable>
         </View>
         <View style={styles.changeFirstname}>
           <Text style={styles.fieldLabel}>First Name:</Text>
-          <Text style={styles.fieldValue}>{profileDetails.firstName}</Text>
-          <Pressable style={styles.editFieldButton}>
+          <TextInput
+            ref={firstName}
+            style={isFirstNameEdit ? styles.editFieldValue : styles.fieldValue}
+            defaultValue={profileDetails.firstName}
+            onFocus={() => {
+              setIsFirstNameEdit(true);
+            }}
+            onBlur={handleFirstNameChange}
+          />
+          <Pressable
+            onPress={handleFirstNameEditPress}
+            style={styles.editFieldButton}
+          >
             <Feather name="edit" size={24} color="black" />
           </Pressable>
         </View>
         <View style={styles.changeLastname}>
           <Text style={styles.fieldLabel}>Last Name:</Text>
-          <Text style={styles.fieldValue}>{profileDetails.lastName}</Text>
-          <Pressable style={styles.editFieldButton}>
+          <TextInput
+            ref={lastName}
+            style={isLastNameEdit ? styles.editFieldValue : styles.fieldValue}
+            defaultValue={profileDetails.lastName}
+            onFocus={() => {
+              setIsLastNameEdit(true);
+            }}
+            onBlur={handleLastNameChange}
+          />
+          <Pressable
+            onPress={handleLastNameEditPress}
+            style={styles.editFieldButton}
+          >
             <Feather name="edit" size={24} color="black" />
           </Pressable>
         </View>
@@ -118,8 +189,8 @@ export default function ProfileSettingsScreen({ navigation }) {
             <AntDesign name="deleteuser" size={24} color="black" />
           </Pressable>
         </View>
-      </KeyboardAvoidingView>
-      <NavBar />
+      </ScrollView>
+      <NavBar navigation={navigation} />
     </View>
   );
 }
@@ -140,6 +211,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 8,
     width: 220,
+    color: "black",
     backgroundColor: "white",
     textAlign: "center",
   },
@@ -149,6 +221,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 8,
     width: 220,
+    borderColor: "#47c9af",
+    borderWidth: 1,
     backgroundColor: "white",
     textAlign: "center",
   },
