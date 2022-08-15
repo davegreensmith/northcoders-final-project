@@ -20,10 +20,15 @@ export default function MyChipInsScreen({ navigation }) {
 
   function handleRemoveName(errandID) {
     removeUserFromErrand(errandID);
+    const chipInArray = [...myChipIns];
+    const newArray = chipInArray.filter((errand) => {
+      return errand.id !== errandID;
+    });
+    setMyChipIns(newArray);
   }
 
   useEffect(() => {
-    fetchErrandsByUserID().then((data) => {
+    return fetchErrandsByUserID().then((data) => {
       setMyChipIns([...data]);
     });
   }, [refreshPage]);
@@ -35,7 +40,7 @@ export default function MyChipInsScreen({ navigation }) {
         <ScrollView>
           {myChipIns.map((errand) => {
             return (
-              <View key={errand.errandID} style={styles.listItem}>
+              <View key={errand.id} style={styles.listItem}>
                 <View style={styles.titleField}>
                   <Text style={{ fontSize: 22 }}>{errand.errandName}</Text>
                 </View>
@@ -59,9 +64,8 @@ export default function MyChipInsScreen({ navigation }) {
                 </View>
                 <View style={styles.buttonsFlexBox}>
                   <Pressable
-                    onPress={(e) => {
-                      console.log(e.target);
-                      //   handleRemoveName(errand.errandID);
+                    onPress={() => {
+                      handleRemoveName(errand.id);
                     }}
                     style={styles.editButton}
                   >

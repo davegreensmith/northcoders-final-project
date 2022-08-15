@@ -15,7 +15,6 @@ import { fetchErrandByErrandID } from "../firebase/config";
 
 export default function SingleErrandScreen({ route, navigation }) {
   const { id } = route.params;
-  console.log(id, "<<< inside single errand screen");
 
   const [singleErrand, setSingleErrand] = useState({});
 
