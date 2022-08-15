@@ -60,6 +60,7 @@ export default function AddErrandScreen({ navigation }) {
             location,
             date,
             author: username,
+            chippers: [],
           };
           return errandDetails;
         })

@@ -93,6 +93,12 @@ export default function MyErrandsScreen({ navigation }) {
                 <View style={styles.jobLengthField}>
                   <Text>Job length: {errand.timeFrame}</Text>
                 </View>
+                <View style={styles.jobLengthField}>
+                  <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
+                  {errand.chippers.map((chipper) => {
+                    return <Text>{chipper}</Text>;
+                  })}
+                </View>
                 <View style={styles.buttonsFlexBox}>
                   <Pressable style={styles.completeButton}>
                     <Text>Completed</Text>
