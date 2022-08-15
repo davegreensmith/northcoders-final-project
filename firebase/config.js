@@ -17,6 +17,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { convertLocationToLatLong } from "../utils/api";
 
@@ -41,6 +42,18 @@ auth.onAuthStateChanged(function (user) {
     loggedInUser = user;
   }
 });
+
+export function sendResetPasswordEmail(email) {
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      console.log("password email sent!");
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // ..
+    });
+}
 
 //collection refs
 export const usersRef = collection(db, "users");
