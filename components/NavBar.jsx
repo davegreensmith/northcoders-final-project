@@ -24,6 +24,7 @@ export default function NavBar({ navigation }) {
   function handleProfilePress() {
     navigation.navigate("Profile");
   }
+ 
 
   return (
     <View style={styles.navBarContainer}>
