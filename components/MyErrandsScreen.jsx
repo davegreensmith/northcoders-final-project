@@ -12,10 +12,45 @@ import Header from "./Header";
 import NavBar from "./NavBar";
 import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { fetchErrandByErrandID, getUserInfo } from "../firebase/config";
+import {
+  deleteErrand,
+  deleteLatLongByErrandId,
+  fetchErrandByErrandID,
+  getUserInfo,
+  loggedInUserId,
+  updateUserErrandList,
+} from "../firebase/config";
 
 export default function MyErrandsScreen({ navigation }) {
   const [myErrands, setMyErrands] = useState([]);
+  const [refreshPage, setRefreshPage] = useState(true);
+
+  function handleEditErrand(errandID) {
+    fetchErrandByErrandID(errandID).then((errandData) => {
+      console.log(errandData, "errand data in MyErrandsScreen edit button");
+    });
+  }
+
+  function handleDeleteErrand(errandID) {
+    return Promise.all([deleteLatLongByErrandId(errandID), errandID]).then(
+      ([undefined, errandID]) => {
+        return deleteErrand(errandID).then(([undefined, errandID, userId]) => {
+          return Promise.all([getUserInfo(), errandID, userId]).then(
+            ([{ userData }, errandID, userId]) => {
+              const userErrands = userData.errands;
+              const newErrandList = userErrands.filter((errand) => {
+                return errand !== errandID;
+              });
+              const body = { errands: newErrandList };
+              updateUserErrandList(userId, body).then(() => {
+                setRefreshPage(!refreshPage);
+              });
+            }
+          );
+        });
+      }
+    );
+  }
 
   useEffect(() => {
     getUserInfo().then(({ userData }) => {
@@ -27,14 +62,12 @@ export default function MyErrandsScreen({ navigation }) {
         setMyErrands([...fulfilledPromises]);
       });
     });
-  }, []);
+  }, [refreshPage]);
 
   return (
     <View style={{ flex: 1 }}>
-
       <Header navigation={navigation} />
       <View style={styles.pageContent}>
-
         <ScrollView>
           {myErrands.map((errand) => {
             return (
@@ -52,7 +85,7 @@ export default function MyErrandsScreen({ navigation }) {
                   <Text>Job Type: {errand.workType}</Text>
                 </View>
                 <View style={styles.locationField}>
-                  <Text>Location: {errand.location}</Text>
+                  <Text>Location: {errand.area}</Text>
                 </View>
                 <View style={styles.dateField}>
                   <Text>Date: {errand.date}</Text>
@@ -61,11 +94,21 @@ export default function MyErrandsScreen({ navigation }) {
                   <Text>Job length: {errand.timeFrame}</Text>
                 </View>
                 <View style={styles.buttonsFlexBox}>
-                  <Pressable style={styles.editButton}>
+                  <Pressable
+                    onPress={(e) => {
+                      handleEditErrand(errand.errandID);
+                    }}
+                    style={styles.editButton}
+                  >
                     <Text>Edit</Text>
                     <Feather name="edit" size={18} color="black" />
                   </Pressable>
-                  <Pressable style={styles.deleteButton}>
+                  <Pressable
+                    onPress={(e) => {
+                      handleDeleteErrand(errand.errandID);
+                    }}
+                    style={styles.deleteButton}
+                  >
                     <Text>Delete</Text>
                     <MaterialIcons
                       name="delete-outline"

@@ -10,8 +10,5 @@ export function convertLocationToLatLong(location) {
         latitude: data.result.latitude,
       };
       return { longLatData };
-    })
-    .catch((err) => {
-      console.log(err, "<<< axios error");
     });
 }

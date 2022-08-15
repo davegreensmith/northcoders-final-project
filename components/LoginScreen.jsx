@@ -7,12 +7,17 @@ import {
   Pressable,
 } from "react-native";
 import { useState } from "react";
-import { userLogin } from "../firebase/config";
+import { sendResetPasswordEmail, userLogin } from "../firebase/config";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+
+  function handleEmailResetLink() {
+    sendResetPasswordEmail(email);
+    setError("Please check your email for link to reset password");
+  }
 
   function handleLoginPress() {
     return userLogin(email, password)
@@ -56,6 +61,13 @@ export default function LoginScreen({ navigation }) {
       {error ? (
         <View>
           <Text style={{ color: "red" }}>{error}</Text>
+          {error === "Wrong password" ? (
+            <Pressable onPress={handleEmailResetLink}>
+              <Text>Send password Reset Link</Text>
+            </Pressable>
+          ) : (
+            <></>
+          )}
         </View>
       ) : (
         <></>
