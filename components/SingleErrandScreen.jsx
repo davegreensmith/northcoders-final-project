@@ -74,19 +74,19 @@ export default function SingleErrandScreen({ route, navigation }) {
             <Text>{singleErrand.description}</Text>
           </View>
           <View style={{ flex: 1, justifyContent: "space-around" }}>
-            <Text style={{ fontSize: 14, marginLeft: 17 }}>
-              On: {singleErrand.date}
+            <Text style={{ fontSize: 16, marginLeft: 17 }}>
+              chip-in on: {singleErrand.date}
             </Text>
-            <Text style={{ fontSize: 14, marginLeft: 17 }}>
-              For: {singleErrand.timeFrame} hours
+            <Text style={{ fontSize: 16, marginLeft: 17 }}>
+              You are neeeded for: {singleErrand.timeFrame} hours
             </Text>
-            <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            <Text style={{ fontSize: 16, marginLeft: 17 }}>
               What you will need: {singleErrand.requirements}
             </Text>
-            <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            <Text style={{ fontSize: 16, marginLeft: 17 }}>
               Type of job: {singleErrand.workType}
             </Text>
-            <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            <Text style={{ fontSize: 16, marginLeft: 17 }}>
               How many have already volunteered to Chip In:{" "}
               {singleErrand.chippers.length}
             </Text>
