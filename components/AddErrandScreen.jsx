@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
@@ -110,8 +111,8 @@ export default function AddErrandScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <View style={styles.pageContent}>
-        <ScrollView>
+      <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={50}>
+        <View style={styles.pageContent}>
           <Text
             style={{
               marginLeft: 8,
@@ -230,8 +231,8 @@ export default function AddErrandScreen({ navigation }) {
               </Text>
             </Pressable>
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </KeyboardAwareScrollView>
       <NavBar navigation={navigation} />
     </View>
   );
