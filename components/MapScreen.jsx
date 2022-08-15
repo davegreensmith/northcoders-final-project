@@ -59,7 +59,7 @@ export default function MapScreen({ navigation }) {
       .catch((err) => {
         console.log(err);
       });
-  }, [usersLong]);
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -111,7 +111,7 @@ export default function MapScreen({ navigation }) {
                     latitude,
                     longitude,
                   }}
-                  key={errand.latLongID}
+                  key={errand.errandID}
                 >
                   <Callout style={styles.callout}>
                     <Text style={styles.heading}>{errand.errandName}</Text>

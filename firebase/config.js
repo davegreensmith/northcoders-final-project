@@ -145,7 +145,6 @@ export function updateUserInfo(userId, userDetails) {
 export function getUserInfo() {
   const userRef = doc(db, "users", loggedInUser.uid);
   return getDoc(userRef).then((data) => {
-    // console.log(data.data(), "<<< get user data");
     const userData = { ...data.data() };
     return { userData };
   });
@@ -182,8 +181,6 @@ export function addErrandToUser(errandID, errandUserIdD) {
 }
 
 export function updateErrand(errandID, updateBody) {
-  console.log(errandID, "<<< errandID in config");
-  console.log(updateBody, "<<< updateBody in config");
   const errandRef = doc(db, "errands", errandID);
   updateDoc(errandRef, updateBody);
 }
@@ -191,7 +188,6 @@ export function updateErrand(errandID, updateBody) {
 //delete errands
 export function deleteErrand(errandID) {
   const userId = loggedInUser.uid;
-  console.log(userId, "<<< user id in config");
 
   const errandRef = doc(db, "errands", errandID);
 
@@ -229,7 +225,6 @@ export function fetchLatLongs() {
 export function addLatLong(latlongDetails) {
   return addDoc(latlongsRef, latlongDetails).then((mystery) => {
     const latLongID = mystery._key.path.segments[1];
-    console.log(latLongID, "<<< latlongID in config");
     return { latLongID };
   });
 }
@@ -252,12 +247,8 @@ export function fetchErrandByErrandID(errandID) {
 export function deleteLatLongByErrandId(errandID) {
   return fetchErrandByErrandID(errandID)
     .then((errandData) => {
-      console.log(errandData, "<<<Errand data in config");
-      console.log(errandData.latLongID, "<<< latLongId in config");
       const latlongID = errandData.latLongID;
-      return deleteFoundLatLong(latlongID).then((undefined) => {
-        console.log("Deleted LatLong in db!!!");
-      });
+      return deleteFoundLatLong(latlongID).then((undefined) => {});
     })
     .catch((err) => {
       console.log(err);
