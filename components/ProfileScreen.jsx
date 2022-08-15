@@ -37,6 +37,10 @@ export default function ProfileScreen({ navigation }) {
     navigation.navigate("Errands List");
   }
 
+  function handleChipInsPress() {
+    navigation.navigate("Chip Ins List");
+  }
+
   useEffect(() => {
     getUserInfo().then(({ userData }) => {
       setProfileInfo(userData);
@@ -87,6 +91,13 @@ export default function ProfileScreen({ navigation }) {
             style={styles.myErrandsButton}
           >
             <Text>My Errands</Text>
+            <Ionicons name="md-list-outline" size={24} color="black" />
+          </Pressable>
+          <Pressable
+            onPress={handleChipInsPress}
+            style={styles.myErrandsButton}
+          >
+            <Text>My Chip Ins</Text>
             <Ionicons name="md-list-outline" size={24} color="black" />
           </Pressable>
           <View style={styles.iconFlexBox}>

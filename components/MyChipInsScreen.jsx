@@ -1,71 +1,35 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TextInput,
-  FlatList,
-  Pressable,
-  StyleSheet,
-} from "react-native";
+import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import { Feather } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
 import {
   deleteErrand,
   deleteLatLongByErrandId,
   fetchErrandByErrandID,
+  fetchErrandsByUserID,
   getUserInfo,
   loggedInUserId,
+  removeUserFromErrand,
   updateUserErrandList,
 } from "../firebase/config";
 
-export default function MyErrandsScreen({ navigation }) {
-  const [myErrands, setMyErrands] = useState([]);
+export default function MyChipInsScreen({ navigation }) {
+  const [myChipIns, setMyChipIns] = useState([]);
   const [refreshPage, setRefreshPage] = useState(true);
 
-  function handleEditErrand(errandID) {
-    fetchErrandByErrandID(errandID).then((errandData) => {
-      console.log(errandData, "errand data in MyErrandsScreen edit button");
-    });
-  }
-
-  function handleDeleteErrand(errandID) {
-    return Promise.all([deleteLatLongByErrandId(errandID), errandID]).then(
-      ([undefined, errandID]) => {
-        return deleteErrand(errandID).then(([undefined, errandID, userId]) => {
-          return Promise.all([getUserInfo(), errandID, userId]).then(
-            ([{ userData }, errandID, userId]) => {
-              const userErrands = userData.errands;
-              const newErrandList = userErrands.filter((errand) => {
-                return errand !== errandID;
-              });
-              const body = { errands: newErrandList };
-              updateUserErrandList(userId, body).then(() => {
-                setRefreshPage(!refreshPage);
-              });
-            }
-          );
-        });
-      }
-    );
-    const errandsArray = [...myErrands];
-    const newArray = errandsArray.filter((errand) => {
+  function handleRemoveName(errandID) {
+    removeUserFromErrand(errandID);
+    const chipInArray = [...myChipIns];
+    const newArray = chipInArray.filter((errand) => {
       return errand.id !== errandID;
     });
-    setMyErrands(newArray);
+    setMyChipIns(newArray);
   }
 
   useEffect(() => {
-    getUserInfo().then(({ userData }) => {
-      const userErrands = userData.errands;
-      const errandPromises = userErrands.map((errandID) => {
-        return fetchErrandByErrandID(errandID);
-      });
-      return Promise.all(errandPromises).then((fulfilledPromises) => {
-        setMyErrands([...fulfilledPromises]);
-      });
+    return fetchErrandsByUserID().then((data) => {
+      setMyChipIns([...data]);
     });
   }, [refreshPage]);
 
@@ -74,9 +38,9 @@ export default function MyErrandsScreen({ navigation }) {
       <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <ScrollView>
-          {myErrands.map((errand) => {
+          {myChipIns.map((errand) => {
             return (
-              <View key={errand.errandID} style={styles.listItem}>
+              <View key={errand.id} style={styles.listItem}>
                 <View style={styles.titleField}>
                   <Text style={{ fontSize: 22 }}>{errand.errandName}</Text>
                 </View>
@@ -98,42 +62,15 @@ export default function MyErrandsScreen({ navigation }) {
                 <View style={styles.jobLengthField}>
                   <Text>Job length: {errand.timeFrame}</Text>
                 </View>
-                <View style={styles.jobLengthField}>
-                  <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
-                  {errand.chippers.map((chipper) => {
-                    return <Text>{chipper}</Text>;
-                  })}
-                </View>
                 <View style={styles.buttonsFlexBox}>
-                  <Pressable style={styles.completeButton}>
-                    <Text>Completed</Text>
-                    <MaterialIcons
-                      name="done-outline"
-                      size={18}
-                      color="black"
-                    />
-                  </Pressable>
                   <Pressable
-                    onPress={(e) => {
-                      handleEditErrand(errand.errandID);
+                    onPress={() => {
+                      handleRemoveName(errand.id);
                     }}
                     style={styles.editButton}
                   >
-                    <Text>Edit</Text>
+                    <Text>Remove my name</Text>
                     <Feather name="edit" size={18} color="black" />
-                  </Pressable>
-                  <Pressable
-                    onPress={(e) => {
-                      handleDeleteErrand(errand.errandID);
-                    }}
-                    style={styles.deleteButton}
-                  >
-                    <Text>Delete</Text>
-                    <MaterialIcons
-                      name="delete-outline"
-                      size={22}
-                      color="black"
-                    />
                   </Pressable>
                 </View>
               </View>
@@ -223,33 +160,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    backgroundColor: "rgba(86, 232, 195, 0.7)",
-    borderWidth: 1,
-    borderRadius: 5,
-    height: 40,
-    width: 110,
-    padding: 5,
-  },
-  deleteButton: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
     backgroundColor: "rgba(255, 58, 58, 0.72)",
     borderWidth: 1,
     borderRadius: 5,
     height: 40,
-    width: 100,
-    padding: 5,
-  },
-  completeButton: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    backgroundColor: "#48e582b7",
-    borderWidth: 1,
-    borderRadius: 5,
-    height: 40,
-    width: 125,
+    width: 160,
     padding: 5,
   },
 });
