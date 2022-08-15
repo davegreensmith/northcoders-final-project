@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    height: Dimensions.get("window").height,
+    flex: 1,
     width: Dimensions.get("window").width,
   },
   radius: {
