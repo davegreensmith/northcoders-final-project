@@ -8,23 +8,22 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
+import { fetchErrandByErrandID } from "../firebase/config";
 
-export default function SingleErrandScreen({ navigation }) {
-  const [singleErrand, setSingleErrand] = useState({
-    title: "Chop some trees",
-    admin_ward: "Chorlton",
-    location: "M16 0AW",
-    image: "../assets/placeholder-avatar.png",
-    description:
-      "Need some help chopping down all the trees in my garden, they're literally everywhere and the squirrels are taking over, I've tried to get rid of them but they just keep  laughing at me.",
-    date: "12/08/2022",
-    timeFrame: "About 3 hours",
-    requirements: "Chainsaw, Axe, Grenades, RPG",
-    jobType: "Gardening",
-  });
+export default function SingleErrandScreen({ route, navigation }) {
+  const { id } = route.params;
+  console.log(id, "<<< inside single errand screen");
+
+  const [singleErrand, setSingleErrand] = useState({});
+
+  useEffect(() => {
+    fetchErrandByErrandID(id).then((errandData) => {
+      setSingleErrand({ ...errandData });
+    });
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -33,19 +32,20 @@ export default function SingleErrandScreen({ navigation }) {
         <View style={styles.titleHeader}>
           <View style={styles.titleHeaderText}>
             <View>
-              <Text style={{ fontSize: 26 }}>{singleErrand.title}</Text>
+              <Text style={{ fontSize: 26 }}>{singleErrand.errandName}</Text>
             </View>
             <View>
               <Text style={{ fontSize: 20, color: "gray" }}>
-                {singleErrand.admin_ward}
+                {singleErrand.area}
               </Text>
             </View>
           </View>
           <View style={styles.avatarFlexBox}>
-            <Image
+            {/* <Image
               style={styles.avatar}
               source={require("../assets/placeholder-avatar.png")}
-            />
+            /> */}
+            <Text>{singleErrand.author}</Text>
           </View>
         </View>
         <View style={styles.dividerLine}></View>
@@ -57,13 +57,13 @@ export default function SingleErrandScreen({ navigation }) {
             On: {singleErrand.date}
           </Text>
           <Text style={{ fontSize: 14, marginLeft: 17 }}>
-            For: {singleErrand.timeFrame}
+            For: {singleErrand.timeFrame} hours
           </Text>
           <Text style={{ fontSize: 14, marginLeft: 17 }}>
             What you will need: {singleErrand.requirements}
           </Text>
           <Text style={{ fontSize: 14, marginLeft: 17 }}>
-            Type of job: {singleErrand.jobType}
+            Type of job: {singleErrand.workType}
           </Text>
         </View>
         <View>
