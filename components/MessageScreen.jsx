@@ -16,10 +16,10 @@ export default function MessageScreen({ navigation }) {
   
   return (
     <View style={{ flex: 1 }}>
-      <Header />
+      <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <View style={styles.messageContainer}>
-          <Text  style={{ fontSize: 21 }} > You have no messages</Text>
+          <Text style={{ fontSize: 21 }}> You have no messages</Text>
         </View>
       </View>
       <NavBar navigation={navigation} />
