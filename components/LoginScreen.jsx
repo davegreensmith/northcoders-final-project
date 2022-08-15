@@ -5,6 +5,7 @@ import {
   Text,
   View,
   Pressable,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useState } from "react";
 import { sendResetPasswordEmail, userLogin } from "../firebase/config";
@@ -39,7 +40,7 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior="height" style={styles.container}>
       <Image
         style={styles.logo}
         source={require("../assets/chip-in-logo-large.png")}
@@ -82,7 +83,7 @@ export default function LoginScreen({ navigation }) {
           <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up</Text>
         </Pressable>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
