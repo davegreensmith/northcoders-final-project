@@ -69,7 +69,8 @@ export function getUsername() {
 
   return getDoc(docRef).then((doc) => {
     const user = doc.data();
-    return user.username;
+    const id = doc._key.path.segments[1];
+    return { user: user.username, id };
   });
 }
 
@@ -210,7 +211,6 @@ export function addChipperToErrand(errandID) {
     updateDoc(errand, {
       chippers: arrayUnion(username),
     });
-    console.log(username, "<<< should be added to the list");
   });
 }
 
