@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 10,
-    zIndex: "1",
+    zIndex: 1,
   },
   dropdown: {
     marginLeft: 10,
