@@ -6,6 +6,7 @@ import SignUpScreen from "./components/SignUpScreen";
 import SplashScreen from "./components/SplashScreen";
 import AddErrandScreen from "./components/AddErrandScreen";
 import MyErrandsScreen from "./components/MyErrandsScreen";
+import MyChipInsScreen from "./components/MyChipInsScreen";
 import ProfileScreen from "./components/ProfileScreen";
 import MapScreen from "./components/MapScreen";
 import ProfileSettingsScreen from "./components/ProfileSettingsScreen";
@@ -51,6 +52,11 @@ export default function App() {
         <Stack.Screen
           name="Errands List"
           component={MyErrandsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Chip Ins List"
+          component={MyChipInsScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
