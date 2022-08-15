@@ -193,6 +193,16 @@ export function addErrandToUser(errandID, errandUserID) {
   });
 }
 
+//remove user from errand
+export function removeUserFromErrand(errandID) {
+  const errandRef = doc(db, "errands", errandID);
+  getUsername().then((username) => {
+    updateDoc(errandRef, {
+      chippers: arrayRemove(username),
+    });
+  });
+}
+
 //add user to errand
 export function addChipperToErrand(errandID) {
   getUsername().then((username) => {
@@ -220,12 +230,13 @@ export function deleteErrand(errandID) {
 
 //get all errands
 export function fetchErrands() {
-  getDocs(errandsRef)
+  return getDocs(errandsRef)
     .then((snapshot) => {
       let errands = [];
       snapshot.docs.forEach((doc) => {
         errands.push({ ...doc.data(), id: doc.id });
       });
+      return errands;
     })
     .catch((err) => {
       console.log(err.message, "<<< errands errors");
@@ -266,6 +277,21 @@ export function fetchErrandByErrandID(errandID) {
       return errandData;
     }
   );
+}
+
+export function fetchErrandsByUserID() {
+  return fetchErrands().then((errands) => {
+    return Promise.all([getUsername(), errands]).then(([username, errands]) => {
+      const errandsList = [...errands];
+      let list = [];
+      errandsList.forEach((errand) => {
+        if (errand.chippers.includes(username)) {
+          list.push(errand);
+        }
+      });
+      return list;
+    });
+  });
 }
 
 export function deleteLatLongByErrandId(errandID) {

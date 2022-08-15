@@ -73,7 +73,7 @@ export default function MyErrandsScreen({ navigation }) {
             return (
               <View key={errand.errandID} style={styles.listItem}>
                 <View style={styles.titleField}>
-                  <Text style={{ fontSize: 22 }}>{errand.title}</Text>
+                  <Text style={{ fontSize: 22 }}>{errand.errandName}</Text>
                 </View>
                 <View style={styles.descriptionField}>
                   <Text>{errand.description}</Text>
