@@ -73,7 +73,7 @@ export default function ProfileSettingsScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <ScrollView contentContainerStyle={styles.pageContent} bounces={false}>
+      <View style={styles.pageContent}>
         <View style={styles.changeUsername}>
           <Text style={styles.fieldLabel}>Username:</Text>
           <TextInput
@@ -189,7 +189,7 @@ export default function ProfileSettingsScreen({ navigation }) {
             <AntDesign name="deleteuser" size={24} color="black" />
           </Pressable>
         </View>
-      </ScrollView>
+      </View>
       <NavBar navigation={navigation} />
     </View>
   );

@@ -110,7 +110,7 @@ export default function AddErrandScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={100}>
+      <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={50}>
         <View style={styles.pageContent}>
           <Text
             style={{

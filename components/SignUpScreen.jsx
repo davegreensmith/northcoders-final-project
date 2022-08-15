@@ -7,7 +7,7 @@ import {
   Pressable,
   Switch,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { signUpNewUser, userLogout, updateUserInfo } from "../firebase/config";
 import { convertLocationToLatLong } from "../utils/api";
@@ -25,6 +25,13 @@ export default function SignUpScreen({ navigation }) {
   const [show, setShow] = useState(false);
 
   const [error, setError] = useState(false);
+
+  const lastNameRef = useRef();
+  const userNameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const bioRef = useRef();
+  const postcodeRef = useRef();
 
   function handleSignUpPress() {
     if (!fname || !lname || !username || !password || !location || !email) {
@@ -90,24 +97,39 @@ export default function SignUpScreen({ navigation }) {
             onChangeText={setFname}
             value={fname}
             placeholder="* First name"
+            returnKeyType="next"
+            onSubmitEditing={() => lastNameRef.current.focus()}
+            blurOnSubmit={false}
           />
           <TextInput
             style={styles.textField}
             onChangeText={setLname}
             value={lname}
             placeholder="* Last name"
+            ref={lastNameRef}
+            returnKeyType="next"
+            onSubmitEditing={() => userNameRef.current.focus()}
+            blurOnSubmit={false}
           />
           <TextInput
             style={styles.textField}
             onChangeText={setUsername}
             value={username}
             placeholder="* Username (What others will see)"
+            ref={userNameRef}
+            returnKeyType="next"
+            onSubmitEditing={() => emailRef.current.focus()}
+            blurOnSubmit={false}
           />
           <TextInput
             style={styles.textField}
             onChangeText={setEmail}
             value={email}
             placeholder="* Email"
+            ref={emailRef}
+            returnKeyType="next"
+            onSubmitEditing={() => passwordRef.current.focus()}
+            blurOnSubmit={false}
           />
           <TextInput
             style={styles.textField}
@@ -115,6 +137,10 @@ export default function SignUpScreen({ navigation }) {
             secureTextEntry={true}
             value={password}
             placeholder="* Password (Must be at least 6 characters)"
+            ref={passwordRef}
+            returnKeyType="next"
+            onSubmitEditing={() => bioRef.current.focus()}
+            blurOnSubmit={false}
           />
           <TextInput
             multiline={true}
@@ -122,12 +148,17 @@ export default function SignUpScreen({ navigation }) {
             onChangeText={setBio}
             value={bio}
             placeholder="A brief description of your skills and abilities..."
+            ref={bioRef}
+            onSubmitEditing={() => postcodeRef.current.focus()}
+            blurOnSubmit={false}
           />
           <TextInput
             style={styles.textField}
             onChangeText={setLocation}
             value={location}
             placeholder="* Your postcode"
+            ref={postcodeRef}
+            returnKeyType="done"
           />
           <View style={styles.doYouDrive}>
             <Text style={{ fontSize: 15 }}>Do you drive?</Text>

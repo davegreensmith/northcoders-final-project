@@ -41,66 +41,61 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      <KeyboardAwareScrollView>
-        <View
-          style={{
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Image
-            style={styles.logo}
-            source={require("../assets/chip-in-logo-large.png")}
-          />
-          <TextInput
-            style={styles.textField}
-            placeholder="Email"
-            onChangeText={setEmail}
-            value={email}
-          />
-          <TextInput
-            style={styles.textField}
-            secureTextEntry={true}
-            placeholder="Password"
-            onChangeText={setPassword}
-            value={password}
-          />
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.pageContent}
+      enableOnAndroid={true}
+    >
+      <Image
+        style={styles.logo}
+        source={require("../assets/chip-in-logo-large.png")}
+      />
+      <TextInput
+        style={styles.textField}
+        placeholder="Email"
+        onChangeText={setEmail}
+        value={email}
+      />
+      <TextInput
+        style={styles.textField}
+        secureTextEntry={true}
+        placeholder="Password"
+        onChangeText={setPassword}
+        value={password}
+      />
 
-          {error ? (
-            <View>
-              <Text style={{ color: "red" }}>{error}</Text>
-              {error === "Wrong password" ? (
-                <Pressable onPress={handleEmailResetLink}>
-                  <Text>Send password Reset Link</Text>
-                </Pressable>
-              ) : (
-                <></>
-              )}
-            </View>
+      {error ? (
+        <View>
+          <Text style={{ color: "red" }}>{error}</Text>
+          {error === "Wrong password" ? (
+            <Pressable onPress={handleEmailResetLink}>
+              <Text>Send password Reset Link</Text>
+            </Pressable>
           ) : (
             <></>
           )}
-          <Pressable style={styles.loginButton} onPress={handleLoginPress}>
-            <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
-          </Pressable>
-          <View style={styles.divideLine}></View>
-          <View style={styles.viewRow}>
-            <Text style={styles.signupText}>New to ChipIn?</Text>
-            <Pressable style={styles.sigupButton} onPress={handleSignUpPress}>
-              <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up</Text>
-            </Pressable>
-          </View>
         </View>
-      </KeyboardAwareScrollView>
-    </View>
+      ) : (
+        <></>
+      )}
+      <Pressable style={styles.loginButton} onPress={handleLoginPress}>
+        <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
+      </Pressable>
+      <View style={styles.divideLine}></View>
+      <View style={styles.viewRow}>
+        <Text style={styles.signupText}>New to ChipIn?</Text>
+        <Pressable style={styles.sigupButton} onPress={handleSignUpPress}>
+          <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up</Text>
+        </Pressable>
+      </View>
+    </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  pageContent: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#fff",
   },
   logo: {
