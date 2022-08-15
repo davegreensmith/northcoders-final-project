@@ -163,7 +163,7 @@ export default function ProfileSettingsScreen({ navigation }) {
         <View style={styles.submitFlexBox}>
           <View style={styles.dividerLine}></View>
           <Pressable style={styles.submitButton}>
-            <Text style={{ fontSize: Platform.OS === "android" ? 16 : 14 }}>
+            <Text style={{ fontSize: Platform.OS === "android" ? 16 : 11 }}>
               Submit Changes
             </Text>
           </Pressable>
