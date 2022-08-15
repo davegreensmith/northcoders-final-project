@@ -101,8 +101,8 @@ export default function ProfileScreen({ navigation }) {
             <Ionicons name="md-list-outline" size={24} color="black" />
           </Pressable>
           <View style={styles.iconFlexBox}>
-            <Pressable onPress={handleSettingsPress}>
-              <Ionicons name="cog-outline" size={47} color="black" />
+            <Pressable style={styles.cogButton} onPress={handleSettingsPress}>
+              <Ionicons name="cog-outline" size={36} color="black" />
             </Pressable>
           </View>
         </View>
@@ -174,7 +174,16 @@ const styles = StyleSheet.create({
   },
   iconFlexBox: {
     marginLeft: 1,
-    top: 5,
+  },
+  cogButton: {
+    borderWidth: 1,
+    padding: 0,
+    height: 40,
+    width: 40,
+    borderRadius: 5,
+    backgroundColor: "#47c9af",
+    justifyContent: "center",
+    alignItems: "center",
   },
   avatarInitials: {
     color: "#FFFAF0",
