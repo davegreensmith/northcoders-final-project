@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import { useState } from "react";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { sendResetPasswordEmail, userLogin } from "../firebase/config";
 
 export default function LoginScreen({ navigation }) {
@@ -40,50 +41,60 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-    <KeyboardAvoidingView behavior="height" style={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require("../assets/chip-in-logo-large.png")}
-      />
-      <TextInput
-        style={styles.textField}
-        placeholder="Email"
-        onChangeText={setEmail}
-        value={email}
-      />
-      <TextInput
-        style={styles.textField}
-        secureTextEntry={true}
-        placeholder="Password"
-        onChangeText={setPassword}
-        value={password}
-      />
+    <View style={styles.container}>
+      <KeyboardAwareScrollView>
+        <View
+          style={{
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            style={styles.logo}
+            source={require("../assets/chip-in-logo-large.png")}
+          />
+          <TextInput
+            style={styles.textField}
+            placeholder="Email"
+            onChangeText={setEmail}
+            value={email}
+          />
+          <TextInput
+            style={styles.textField}
+            secureTextEntry={true}
+            placeholder="Password"
+            onChangeText={setPassword}
+            value={password}
+          />
 
-      {error ? (
-        <View>
-          <Text style={{ color: "red" }}>{error}</Text>
-          {error === "Wrong password" ? (
-            <Pressable onPress={handleEmailResetLink}>
-              <Text>Send password Reset Link</Text>
-            </Pressable>
+          {error ? (
+            <View>
+              <Text style={{ color: "red" }}>{error}</Text>
+              {error === "Wrong password" ? (
+                <Pressable onPress={handleEmailResetLink}>
+                  <Text>Send password Reset Link</Text>
+                </Pressable>
+              ) : (
+                <></>
+              )}
+            </View>
           ) : (
             <></>
           )}
+          <Pressable style={styles.loginButton} onPress={handleLoginPress}>
+            <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
+          </Pressable>
+          <View style={styles.divideLine}></View>
+          <View style={styles.viewRow}>
+            <Text style={styles.signupText}>New to ChipIn?</Text>
+            <Pressable style={styles.sigupButton} onPress={handleSignUpPress}>
+              <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up</Text>
+            </Pressable>
+          </View>
         </View>
-      ) : (
-        <></>
-      )}
-      <Pressable style={styles.loginButton} onPress={handleLoginPress}>
-        <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
-      </Pressable>
-      <View style={styles.divideLine}></View>
-      <View style={styles.viewRow}>
-        <Text style={styles.signupText}>New to ChipIn?</Text>
-        <Pressable style={styles.sigupButton} onPress={handleSignUpPress}>
-          <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up</Text>
-        </Pressable>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
+    </View>
   );
 }
 
@@ -91,8 +102,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
   logo: {
     resizeMode: "cover",

@@ -8,6 +8,7 @@ import {
   Switch,
 } from "react-native";
 import { useEffect, useState } from "react";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { signUpNewUser, userLogout, updateUserInfo } from "../firebase/config";
 import { convertLocationToLatLong } from "../utils/api";
 import { getInitials } from "../firebase/functions";
@@ -73,93 +74,97 @@ export default function SignUpScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require("../assets/chip-in-logo-large.png")}
-      />
-      <Text style={styles.subtitle}>Tell us a little about yourself...</Text>
-      <Text style={styles.requiredText}>* required fields</Text>
-      <TextInput
-        style={styles.textField}
-        onChangeText={setFname}
-        value={fname}
-        placeholder="* First name"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setLname}
-        value={lname}
-        placeholder="* Last name"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setUsername}
-        value={username}
-        placeholder="* Username (What others will see)"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setEmail}
-        value={email}
-        placeholder="* Email"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-        value={password}
-        placeholder="* Password (Must be at least 6 characters)"
-      />
-      <TextInput
-        multiline={true}
-        style={styles.bio}
-        onChangeText={setBio}
-        value={bio}
-        placeholder="A brief description of your skills and abilities..."
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setLocation}
-        value={location}
-        placeholder="* Your postcode"
-      />
-      <View style={styles.doYouDrive}>
-        <Text style={{ fontSize: 15 }}>Do you drive?</Text>
-        <Switch
-          value={canDrive}
-          onValueChange={() => {
-            setCanDrive(!canDrive);
-          }}
-        />
-      </View>
-      {show ? (
-        <View>
-          <Text style={{ color: "red" }}>
-            Missing information, please check and try again
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={75}>
+        <View style={styles.container}>
+          <Image
+            style={styles.logo}
+            source={require("../assets/chip-in-logo-large.png")}
+          />
+          <Text style={styles.subtitle}>
+            Tell us a little about yourself...
           </Text>
+          <Text style={styles.requiredText}>* required fields</Text>
+          <TextInput
+            style={styles.textField}
+            onChangeText={setFname}
+            value={fname}
+            placeholder="* First name"
+          />
+          <TextInput
+            style={styles.textField}
+            onChangeText={setLname}
+            value={lname}
+            placeholder="* Last name"
+          />
+          <TextInput
+            style={styles.textField}
+            onChangeText={setUsername}
+            value={username}
+            placeholder="* Username (What others will see)"
+          />
+          <TextInput
+            style={styles.textField}
+            onChangeText={setEmail}
+            value={email}
+            placeholder="* Email"
+          />
+          <TextInput
+            style={styles.textField}
+            onChangeText={setPassword}
+            secureTextEntry={true}
+            value={password}
+            placeholder="* Password (Must be at least 6 characters)"
+          />
+          <TextInput
+            multiline={true}
+            style={styles.bio}
+            onChangeText={setBio}
+            value={bio}
+            placeholder="A brief description of your skills and abilities..."
+          />
+          <TextInput
+            style={styles.textField}
+            onChangeText={setLocation}
+            value={location}
+            placeholder="* Your postcode"
+          />
+          <View style={styles.doYouDrive}>
+            <Text style={{ fontSize: 15 }}>Do you drive?</Text>
+            <Switch
+              value={canDrive}
+              onValueChange={() => {
+                setCanDrive(!canDrive);
+              }}
+            />
+          </View>
+          {show ? (
+            <View>
+              <Text style={{ color: "red" }}>
+                Missing information, please check and try again
+              </Text>
+            </View>
+          ) : (
+            <></>
+          )}
+          {error ? (
+            <View>
+              <Text style={{ color: "red" }}>{error}</Text>
+            </View>
+          ) : (
+            <></>
+          )}
+          <Pressable style={styles.signUpButton} onPress={handleSignUpPress}>
+            <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
+          </Pressable>
         </View>
-      ) : (
-        <></>
-      )}
-      {error ? (
-        <View>
-          <Text style={{ color: "red" }}>{error}</Text>
-        </View>
-      ) : (
-        <></>
-      )}
-      <Pressable style={styles.signUpButton} onPress={handleSignUpPress}>
-        <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
-      </Pressable>
+      </KeyboardAwareScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
