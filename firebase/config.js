@@ -42,6 +42,7 @@ auth.onAuthStateChanged(function (user) {
     loggedInUser = user;
   }
 });
+export const loggedInUserId = loggedInUser.uid;
 
 export function sendResetPasswordEmail(email) {
   sendPasswordResetEmail(auth, email)
@@ -157,10 +158,15 @@ export function updateUserInfo(userId, userDetails) {
 export function getUserInfo() {
   const userRef = doc(db, "users", loggedInUser.uid);
   return getDoc(userRef).then((data) => {
-    // console.log(data.data(), "<<< get user data");
     const userData = { ...data.data() };
     return { userData };
   });
+}
+
+export function updateUserErrandList(userId, addDetail) {
+  const userRef = doc(db, "users", userId);
+
+  return updateDoc(userRef, addDetail);
 }
 
 //ERRANDS
@@ -194,11 +200,11 @@ export function updateErrand(errandID, updateBody) {
 
 //delete errands
 export function deleteErrand(errandID) {
+  const userId = loggedInUser.uid;
+
   const errandRef = doc(db, "errands", errandID);
-  deleteDoc(errandRef);
-  getUserInfo().then((data) => {
-    console.log(data);
-  });
+
+  return Promise.all([deleteDoc(errandRef), errandID, userId]);
 }
 
 //get all errands
@@ -230,7 +236,15 @@ export function fetchLatLongs() {
 }
 
 export function addLatLong(latlongDetails) {
-  return addDoc(latlongsRef, latlongDetails);
+  return addDoc(latlongsRef, latlongDetails).then((mystery) => {
+    const latLongID = mystery._key.path.segments[1];
+    return { latLongID };
+  });
+}
+
+export function updateLatLong(latLongID, updateBody) {
+  const latLongRef = doc(db, "latlongs", latLongID);
+  updateDoc(latLongRef, updateBody);
 }
 
 export function fetchErrandByErrandID(errandID) {
@@ -243,11 +257,22 @@ export function fetchErrandByErrandID(errandID) {
   );
 }
 
-// return getDoc(userRef).then((data) => {
-//   // console.log(data.data(), "<<< get user data");
-//   const userData = { ...data.data() };
-//   return { userData };
-// });
+export function deleteLatLongByErrandId(errandID) {
+  return fetchErrandByErrandID(errandID)
+    .then((errandData) => {
+      const latlongID = errandData.latLongID;
+      return deleteFoundLatLong(latlongID).then((undefined) => {});
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+function deleteFoundLatLong(latlongID) {
+  const latLongRef = doc(db, "latlongs", latlongID);
+
+  deleteDoc(latLongRef);
+}
 
 //CHAT MESSAGES
 //add message to db
