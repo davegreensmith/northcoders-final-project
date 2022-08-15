@@ -42,6 +42,10 @@ export default function MapScreen({ navigation }) {
     navigation.navigate("Map");
   }
 
+  function handleGoToErrand(id) {
+    navigation.navigate("Single Errand", { id });
+  }
+
   useEffect(() => {
     getUsersLatLong()
       .then((data) => {
@@ -105,6 +109,8 @@ export default function MapScreen({ navigation }) {
             latLongArray.map((errand) => {
               const latitude = errand.latitude;
               const longitude = errand.longitude;
+              const id = errand.errandID;
+
               return (
                 <Marker
                   coordinate={{
@@ -114,9 +120,15 @@ export default function MapScreen({ navigation }) {
                   key={errand.errandID}
                 >
                   <Callout style={styles.callout}>
-                    <Text style={styles.heading}>{errand.errandName}</Text>
-                    <Text style={styles.paragraph}>{errand.author}</Text>
-                    <Text style={styles.date}>{errand.date}</Text>
+                    <Pressable
+                      onPress={() => {
+                        handleGoToErrand(id);
+                      }}
+                    >
+                      <Text style={styles.heading}>{errand.errandName}</Text>
+                      <Text style={styles.paragraph}>{errand.author}</Text>
+                      <Text style={styles.date}>{errand.date}</Text>
+                    </Pressable>
                   </Callout>
                 </Marker>
               );
