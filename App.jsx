@@ -8,6 +8,7 @@ import AddErrandScreen from "./components/AddErrandScreen";
 import MyErrandsScreen from "./components/MyErrandsScreen";
 import ProfileScreen from "./components/ProfileScreen";
 import MapScreen from "./components/MapScreen";
+import ProfileSettingsScreen from "./components/ProfileSettingsScreen";
 import SingleErrandScreen from "./components/SingleErrandScreen";
 import NotificationsScreen from "./components/NotficationsScreen";
 import MessageScreen from "./components/MessageScreen";
@@ -17,6 +18,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Profile Settings"
+          component={ProfileSettingsScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Login"
           component={LoginScreen}
