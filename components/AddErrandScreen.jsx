@@ -50,7 +50,7 @@ export default function AddErrandScreen({ navigation }) {
         .then(({ longLatData }) => {
           return Promise.all([getUsername(), longLatData]);
         })
-        .then(([username, longLatData]) => {
+        .then(([{ user, id }, longLatData]) => {
           const errandDetails = {
             ...longLatData,
             timeFrame,
@@ -60,7 +60,8 @@ export default function AddErrandScreen({ navigation }) {
             requirements,
             location,
             date,
-            author: username,
+            author: user,
+            authorId: id,
             chippers: [],
           };
           return errandDetails;

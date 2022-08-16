@@ -19,16 +19,17 @@ import {
   getUserInfo,
   loggedInUserId,
   updateUserErrandList,
+  getUsername,
+  giveKudosByUid,
 } from "../firebase/config";
 
 export default function MyErrandsScreen({ navigation }) {
   const [myErrands, setMyErrands] = useState([]);
   const [refreshPage, setRefreshPage] = useState(true);
+  const [completed, setCompleted] = useState(false);
 
   function handleEditErrand(errandID) {
-    fetchErrandByErrandID(errandID).then((errandData) => {
-      console.log(errandData, "errand data in MyErrandsScreen edit button");
-    });
+    fetchErrandByErrandID(errandID);
   }
 
   function handleDeleteErrand(errandID) {
@@ -55,6 +56,14 @@ export default function MyErrandsScreen({ navigation }) {
       return errand.id !== errandID;
     });
     setMyErrands(newArray);
+  }
+
+  function handleCompleteErrand(errandID) {
+    setCompleted(true);
+  }
+
+  function giveKudos(id) {
+    giveKudosByUid(id);
   }
 
   useEffect(() => {
@@ -104,11 +113,29 @@ export default function MyErrandsScreen({ navigation }) {
                 {/* <View style={styles.jobLengthField}>
                   <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
                   {errand.chippers.map((chipper) => {
-                    return <Text>{chipper}</Text>;
+                    return (
+                      <View key={chipper.id} style={styles.chipperList}>
+                        <Text>{chipper.user}</Text>
+                        <Pressable
+                          disabled={false}
+                          style={styles.kudosButton}
+                          onPress={(e) => {
+                            giveKudos(chipper.id);
+                          }}
+                        >
+                          <Text>Give kudos!</Text>
+                        </Pressable>
+                      </View>
+                    );
                   })}
                 </View> */}
                 <View style={styles.buttonsFlexBox}>
-                  <Pressable style={styles.completeButton}>
+                  <Pressable
+                    style={styles.completeButton}
+                    onPress={(e) => {
+                      handleCompleteErrand(errand.errandID);
+                    }}
+                  >
                     <Text>Completed</Text>
                     <MaterialIcons
                       name="done-outline"
@@ -263,6 +290,17 @@ const styles = StyleSheet.create({
     height: 40,
     width: 125,
     padding: 5,
+  },
+  chipperList: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  kudosButton: {
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "black",
+    width: 80,
+    backgroundColor: "beige",
   },
   noErrandsPage: {
     flex: 1,

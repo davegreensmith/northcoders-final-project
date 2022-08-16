@@ -28,7 +28,7 @@ export default function MyChipInsScreen({ navigation }) {
   }
 
   useEffect(() => {
-    return fetchErrandsByUserID().then((data) => {
+    fetchErrandsByUserID().then((data) => {
       setMyChipIns([...data]);
     });
   }, [refreshPage]);

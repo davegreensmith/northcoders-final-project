@@ -33,10 +33,12 @@ export default function SingleErrandScreen({ route, navigation }) {
   useEffect(() => {
     fetchErrandByErrandID(id).then((errandData) => {
       return getUsername().then((username) => {
-        const user = username;
-        if (errandData.chippers.includes(`${user}`)) {
-          setHasChippedIn(true);
-        }
+        const user = username.user;
+        errandData.chippers.forEach((chipper) => {
+          if (chipper.user === user) {
+            setHasChippedIn(true);
+          }
+        });
         setSingleErrand({ ...errandData });
         setIsLoading(false);
       });
