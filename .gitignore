@@ -9,6 +9,6 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-
+profile-settings-backup.jsx
 # macOS
 .DS_Store
