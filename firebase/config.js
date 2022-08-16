@@ -240,6 +240,25 @@ export function deleteErrand(errandID) {
   return Promise.all([deleteDoc(errandRef), errandID, userId]);
 }
 
+export function deleteErrandByErrandID(errandID) {
+  return Promise.all([deleteLatLongByErrandId(errandID), errandID]).then(
+    ([undefined, errandID]) => {
+      return deleteErrand(errandID).then(([undefined, errandID, userId]) => {
+        return Promise.all([getUserInfo(), errandID, userId]).then(
+          ([{ userData }, errandID, userId]) => {
+            const userErrands = userData.errands;
+            const newErrandList = userErrands.filter((errand) => {
+              return errand !== errandID;
+            });
+            const body = { errands: newErrandList };
+            updateUserErrandList(userId, body).then(() => {});
+          }
+        );
+      });
+    }
+  );
+}
+
 //get all errands
 export function fetchErrands() {
   return getDocs(errandsRef)
@@ -314,7 +333,7 @@ export function deleteLatLongByErrandId(errandID) {
   return fetchErrandByErrandID(errandID)
     .then((errandData) => {
       const latlongID = errandData.latLongID;
-      return deleteFoundLatLong(latlongID).then((undefined) => {});
+      deleteFoundLatLong(latlongID);
     })
     .catch((err) => {
       console.log(err);
