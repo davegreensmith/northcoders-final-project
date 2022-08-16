@@ -70,17 +70,23 @@ export default function MapScreen({ navigation }) {
       <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <View style={styles.radius}>
-          <Text>Select your travel distance: </Text>
-          <DropDownPicker
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            dropDownContainerStyle={{ marginLeft: 10, width: 200 }}
-            style={styles.dropdown}
-          />
+          <Text style={{ fontSize: Platform.OS === "android" ? 14 : 13 }}>
+            Select your travel distance:{" "}
+          </Text>
+          <View>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              dropDownContainerStyle={{
+                width: Platform.OS === "android" ? 200 : 180,
+              }}
+              style={styles.dropdown}
+            />
+          </View>
         </View>
         <MapView
           style={styles.map}
@@ -155,12 +161,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 10,
+    padding: 5,
     zIndex: 1,
+    backgroundColor: "#47c9af",
   },
   dropdown: {
-    marginLeft: 10,
-    width: 200,
+    width: Platform.OS === "android" ? 200 : 180,
   },
   callout: {
     flex: 1,
