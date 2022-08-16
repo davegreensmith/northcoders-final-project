@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
-import { Feather } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   deleteErrand,
   deleteLatLongByErrandId,
@@ -17,6 +17,8 @@ import {
 export default function MyChipInsScreen({ navigation }) {
   const [myChipIns, setMyChipIns] = useState([]);
   const [refreshPage, setRefreshPage] = useState(true);
+
+  const [editButtonPressed, setEditButtonPressed] = useState(false);
 
   function handleRemoveName(errandID) {
     removeUserFromErrand(errandID);
@@ -67,13 +69,23 @@ export default function MyChipInsScreen({ navigation }) {
                 </View>
                 <View style={styles.buttonsFlexBox}>
                   <Pressable
-                    onPress={() => {
+                    onPressIn={() => setEditButtonPressed(true)}
+                    onPressOut={() => {
+                      setEditButtonPressed(false);
                       handleRemoveName(errand.id);
                     }}
-                    style={styles.editButton}
+                    style={
+                      editButtonPressed
+                        ? styles.editButtonPressed
+                        : styles.editButton
+                    }
                   >
-                    <Text>Remove my name</Text>
-                    <Feather name="edit" size={18} color="black" />
+                    <Text>Chip Out</Text>
+                    <MaterialCommunityIcons
+                      name="head-remove-outline"
+                      size={22}
+                      color="black"
+                    />
                   </Pressable>
                 </View>
               </View>
@@ -97,7 +109,7 @@ export default function MyChipInsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flex: 1,
+    flexGrow: 1,
   },
   listItem: {
     justifyContent: "space-evenly",
@@ -176,7 +188,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     height: 40,
-    width: 160,
+    width: 120,
+    padding: 5,
+  },
+  editButtonPressed: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    backgroundColor: "rgba(149, 37, 37, 1)",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 120,
     padding: 5,
   },
   noChipInsPage: {

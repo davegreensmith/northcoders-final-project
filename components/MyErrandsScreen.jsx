@@ -29,6 +29,10 @@ export default function MyErrandsScreen({ navigation }) {
   const [refreshPage, setRefreshPage] = useState(true);
   const [completed, setCompleted] = useState(false);
 
+  const [completeButtonPressed, setCompleteButtonPressed] = useState(false);
+  const [editButtonPressed, setEditButtonPressed] = useState(false);
+  const [deleteButtonPressed, setDeleteButtonPressed] = useState(false);
+
   function handleEditErrand(errandID) {
     fetchErrandByErrandID(errandID);
   }
@@ -112,8 +116,14 @@ export default function MyErrandsScreen({ navigation }) {
                 </View> */}
                 <View style={styles.buttonsFlexBox}>
                   <Pressable
-                    style={styles.completeButton}
-                    onPress={(e) => {
+                    style={
+                      completeButtonPressed
+                        ? styles.completeButtonPressed
+                        : styles.completeButton
+                    }
+                    onPressIn={() => setCompleteButtonPressed(true)}
+                    onPressOut={() => {
+                      setCompleteButtonPressed(false);
                       handleCompleteErrand(errand.errandID);
                     }}
                   >
@@ -125,19 +135,31 @@ export default function MyErrandsScreen({ navigation }) {
                     />
                   </Pressable>
                   <Pressable
-                    onPress={(e) => {
+                    onPressIn={() => setEditButtonPressed(true)}
+                    onPressOut={() => {
+                      setEditButtonPressed(false);
                       handleEditErrand(errand.errandID);
                     }}
-                    style={styles.editButton}
+                    style={
+                      editButtonPressed
+                        ? styles.editButtonPressed
+                        : styles.editButton
+                    }
                   >
                     <Text>Edit</Text>
                     <Feather name="edit" size={18} color="black" />
                   </Pressable>
                   <Pressable
-                    onPress={(e) => {
+                    style={
+                      deleteButtonPressed
+                        ? styles.deleteButtonPressedIn
+                        : styles.deleteButton
+                    }
+                    onPressIn={() => setDeleteButtonPressed(true)}
+                    onPressOut={() => {
+                      setDeleteButtonPressed(false);
                       handleDeleteErrand(errand.errandID);
                     }}
-                    style={styles.deleteButton}
                   >
                     <Text>Delete</Text>
                     <MaterialIcons
@@ -239,11 +261,44 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
+  completeButton: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    backgroundColor: "#48e582b7",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 125,
+    padding: 5,
+  },
+  completeButtonPressed: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    backgroundColor: "#339457",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 125,
+    padding: 5,
+  },
   editButton: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     backgroundColor: "rgba(86, 232, 195, 0.7)",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 110,
+    padding: 5,
+  },
+  editButtonPressed: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    backgroundColor: "rgb(49, 151, 125)",
     borderWidth: 1,
     borderRadius: 5,
     height: 40,
@@ -261,15 +316,15 @@ const styles = StyleSheet.create({
     width: 100,
     padding: 5,
   },
-  completeButton: {
+  deleteButtonPressedIn: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    backgroundColor: "#48e582b7",
+    backgroundColor: "rgba(149, 37, 37, 1)",
     borderWidth: 1,
     borderRadius: 5,
     height: 40,
-    width: 125,
+    width: 100,
     padding: 5,
   },
   chipperList: {

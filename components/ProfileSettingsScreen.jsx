@@ -333,6 +333,16 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 5,
   },
+  submitButtonPressed: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#357568",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 120,
+    height: 40,
+    padding: 5,
+  },
   dividerLine: {
     borderWidth: 0.5,
     flex: 1,
@@ -352,6 +362,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
   },
+  passwordResetButtonPressed: {
+    marginRight: 16,
+    borderWidth: 0.5,
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: "gray",
+  },
   logoutFlex: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -365,6 +382,13 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 10,
     backgroundColor: "white",
+  },
+  logoutButtonPressed: {
+    marginRight: 16,
+    borderWidth: 0.5,
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: "gray",
   },
   deleteButton: {
     marginRight: 16,
@@ -391,5 +415,12 @@ const styles = StyleSheet.create({
   popUpMessage: {
     color: "#47C9AF",
     alignItems: "center",
+  },
+  deleteButtonPressed: {
+    marginRight: 16,
+    borderWidth: 0.5,
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: "rgba(149, 37, 37, 0.9)",
   },
 });

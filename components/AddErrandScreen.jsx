@@ -35,6 +35,8 @@ export default function AddErrandScreen({ navigation }) {
 
   const [error, setError] = useState(false);
 
+  const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
+
   function handleAddErrand() {
     if (
       !errandName ||
@@ -231,7 +233,20 @@ export default function AddErrandScreen({ navigation }) {
             </View>
           )}
           <View style={styles.submitButtonFlex}>
-            <Pressable style={styles.submitButton} onPress={handleAddErrand}>
+            <Pressable
+              style={
+                submitButtonPressed
+                  ? styles.submitButtonPressed
+                  : styles.submitButton
+              }
+              onPress={handleAddErrand}
+              onPressIn={() => {
+                setSubmitButtonPressed(true);
+              }}
+              onPressOut={() => {
+                setSubmitButtonPressed(false);
+              }}
+            >
               <Text style={{ textAlign: "center", fontSize: 16 }}>
                 Create Errand
               </Text>
@@ -246,7 +261,7 @@ export default function AddErrandScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flex: 1,
+    flexGrow: 1,
   },
   genericInputField: {
     backgroundColor: "#FFF",
@@ -307,6 +322,14 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: "#47c9af",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: Platform.OS === "android" ? 125 : 150,
+    marginBottom: 30,
+    padding: 10,
+  },
+  submitButtonPressed: {
+    backgroundColor: "#357568",
     borderWidth: 1,
     borderRadius: 5,
     width: Platform.OS === "android" ? 125 : 150,

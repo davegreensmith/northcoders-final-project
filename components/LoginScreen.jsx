@@ -16,6 +16,9 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
+  const [loginPressed, setLoginPressed] = useState(false);
+  const [signupPressed, setSignupPressed] = useState(false);
+
   function handleEmailResetLink() {
     sendResetPasswordEmail(email);
     setError("Please check your email for link to reset password");
@@ -76,7 +79,10 @@ export default function LoginScreen({ navigation }) {
         <View>
           <Text style={{ color: "red" }}>{error}</Text>
           {error === "Wrong password" ? (
-            <Pressable onPress={handleEmailResetLink}>
+            <Pressable
+              android_ripple={{ color: "white" }}
+              onPress={handleEmailResetLink}
+            >
               <Text>Send password Reset Link</Text>
             </Pressable>
           ) : (
@@ -86,13 +92,23 @@ export default function LoginScreen({ navigation }) {
       ) : (
         <></>
       )}
-      <Pressable style={styles.loginButton} onPress={handleLoginPress}>
+      <Pressable
+        style={loginPressed ? styles.loginButtonPressed : styles.loginButton}
+        onPress={handleLoginPress}
+        onPressIn={() => setLoginPressed(true)}
+        onPressOut={() => setLoginPressed(false)}
+      >
         <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
       </Pressable>
       <View style={styles.divideLine}></View>
       <View style={styles.viewRow}>
         <Text style={styles.signupText}>New to ChipIn?</Text>
-        <Pressable style={styles.sigupButton} onPress={handleSignUpPress}>
+        <Pressable
+          style={signupPressed ? styles.sigupButtonPressed : styles.sigupButton}
+          onPress={handleSignUpPress}
+          onPressIn={() => setSignupPressed(true)}
+          onPressOut={() => setSignupPressed(false)}
+        >
           <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up</Text>
         </Pressable>
       </View>
@@ -130,6 +146,14 @@ const styles = StyleSheet.create({
     margin: 20,
     padding: 10,
   },
+  loginButtonPressed: {
+    backgroundColor: "#357568",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 90,
+    margin: 20,
+    padding: 10,
+  },
   divideLine: {
     width: 350,
     borderWidth: 1,
@@ -146,6 +170,14 @@ const styles = StyleSheet.create({
   },
   sigupButton: {
     backgroundColor: "#47c9af",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 100,
+    margin: 10,
+    padding: 10,
+  },
+  sigupButtonPressed: {
+    backgroundColor: "#357568",
     borderWidth: 1,
     borderRadius: 5,
     width: 100,
