@@ -73,7 +73,7 @@ export default function MyErrandsScreen({ navigation }) {
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
       <View style={styles.pageContent}>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps="always">
           {myErrands.map((errand) => {
             return (
               <View key={errand.errandID} style={styles.listItem}>
