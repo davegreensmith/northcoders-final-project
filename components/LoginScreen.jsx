@@ -68,7 +68,10 @@ export default function LoginScreen({ navigation }) {
         <View>
           <Text style={{ color: "red" }}>{error}</Text>
           {error === "Wrong password" ? (
-            <Pressable onPress={handleEmailResetLink}>
+            <Pressable
+              android_ripple={{ color: "white", borderless: false }}
+              onPress={handleEmailResetLink}
+            >
               <Text>Send password Reset Link</Text>
             </Pressable>
           ) : (
@@ -78,13 +81,21 @@ export default function LoginScreen({ navigation }) {
       ) : (
         <></>
       )}
-      <Pressable style={styles.loginButton} onPress={handleLoginPress}>
+      <Pressable
+        android_ripple={{ color: "white", borderless: false }}
+        style={styles.loginButton}
+        onPress={handleLoginPress}
+      >
         <Text style={{ textAlign: "center", fontSize: 16 }}>Login</Text>
       </Pressable>
       <View style={styles.divideLine}></View>
       <View style={styles.viewRow}>
         <Text style={styles.signupText}>New to ChipIn?</Text>
-        <Pressable style={styles.sigupButton} onPress={handleSignUpPress}>
+        <Pressable
+          android_ripple={{ color: "white", borderless: false }}
+          style={styles.sigupButton}
+          onPress={handleSignUpPress}
+        >
           <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up</Text>
         </Pressable>
       </View>

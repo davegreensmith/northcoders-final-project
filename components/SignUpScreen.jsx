@@ -189,7 +189,11 @@ export default function SignUpScreen({ navigation }) {
           ) : (
             <></>
           )}
-          <Pressable style={styles.signUpButton} onPress={handleSignUpPress}>
+          <Pressable
+            android_ripple={{ color: "white", borderless: false }}
+            style={styles.signUpButton}
+            onPress={handleSignUpPress}
+          >
             <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
           </Pressable>
         </View>

@@ -25,6 +25,7 @@ export default function SplashScreen({ navigation }) {
         <Text style={styles.introText}>What are you looking for...</Text>
         <View style={styles.pageContent}>
           <Pressable
+            android_ripple={{ color: "white", borderless: false }}
             style={styles.volunteerButton}
             onPress={handleGiveHelpPress}
           >
@@ -37,7 +38,11 @@ export default function SplashScreen({ navigation }) {
             <Text style={styles.dividerText}>OR</Text>
             <View style={styles.dividerLine}></View>
           </View>
-          <Pressable style={styles.helpButton} onPress={wantHelpPress}>
+          <Pressable
+            android_ripple={{ color: "white", borderless: false }}
+            style={styles.helpButton}
+            onPress={wantHelpPress}
+          >
             <Text style={{ textAlign: "center", fontSize: 20 }}>
               Need help?
             </Text>

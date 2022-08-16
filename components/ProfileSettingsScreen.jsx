@@ -86,6 +86,7 @@ export default function ProfileSettingsScreen({ navigation }) {
             onBlur={handleUsernameChange}
           />
           <Pressable
+            android_ripple={{ color: "white", borderless: false }}
             onPress={handleUsernameEditPress}
             style={styles.editFieldButton}
           >
@@ -104,6 +105,7 @@ export default function ProfileSettingsScreen({ navigation }) {
             onBlur={handleLocationChange}
           />
           <Pressable
+            android_ripple={{ color: "white", borderless: false }}
             onPress={handleLocationEditPress}
             style={styles.editFieldButton}
           >
@@ -122,6 +124,7 @@ export default function ProfileSettingsScreen({ navigation }) {
             onBlur={handleFirstNameChange}
           />
           <Pressable
+            android_ripple={{ color: "white", borderless: false }}
             onPress={handleFirstNameEditPress}
             style={styles.editFieldButton}
           >
@@ -140,6 +143,7 @@ export default function ProfileSettingsScreen({ navigation }) {
             onBlur={handleLastNameChange}
           />
           <Pressable
+            android_ripple={{ color: "white", borderless: false }}
             onPress={handleLastNameEditPress}
             style={styles.editFieldButton}
           >
@@ -162,7 +166,10 @@ export default function ProfileSettingsScreen({ navigation }) {
         </View>
         <View style={styles.submitFlexBox}>
           <View style={styles.dividerLine}></View>
-          <Pressable style={styles.submitButton}>
+          <Pressable
+            android_ripple={{ color: "white", borderless: false }}
+            style={styles.submitButton}
+          >
             <Text style={{ fontSize: Platform.OS === "android" ? 16 : 11 }}>
               Submit Changes
             </Text>
@@ -171,7 +178,10 @@ export default function ProfileSettingsScreen({ navigation }) {
         </View>
         <View style={styles.changePassword}>
           <Text style={styles.fieldLabel}>Send Password Reset Link:</Text>
-          <Pressable style={styles.passwordResetButton}>
+          <Pressable
+            android_ripple={{ color: "white", borderless: false }}
+            style={styles.passwordResetButton}
+          >
             <MaterialCommunityIcons
               name="email-send-outline"
               size={26}
@@ -181,13 +191,19 @@ export default function ProfileSettingsScreen({ navigation }) {
         </View>
         <View style={styles.logoutFlex}>
           <Text style={styles.fieldLabel}>Logout:</Text>
-          <Pressable style={styles.logoutButton}>
+          <Pressable
+            android_ripple={{ color: "white", borderless: false }}
+            style={styles.logoutButton}
+          >
             <SimpleLineIcons name="logout" size={24} color="black" />
           </Pressable>
         </View>
         <View style={styles.logoutFlex}>
           <Text style={styles.fieldLabel}>Delete Account:</Text>
-          <Pressable style={styles.deleteButton}>
+          <Pressable
+            android_ripple={{ color: "white", borderless: false }}
+            style={styles.deleteButton}
+          >
             <AntDesign name="deleteuser" size={24} color="black" />
           </Pressable>
         </View>

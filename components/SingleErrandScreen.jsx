@@ -6,7 +6,7 @@ import {
   TextInput,
   FlatList,
   Pressable,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import { useEffect, useState } from "react";
 import Header from "./Header";
@@ -15,7 +15,7 @@ import {
   fetchErrandByErrandID,
   getUsername,
   updateErrand,
-  addChipperToErrand
+  addChipperToErrand,
 } from "../firebase/config";
 
 export default function SingleErrandScreen({ route, navigation }) {
@@ -95,7 +95,11 @@ export default function SingleErrandScreen({ route, navigation }) {
             <Text>You've Chipped In!</Text>
           ) : (
             <View>
-              <Pressable style={styles.chipInButton} onPress={handleChipIn}>
+              <Pressable
+                android_ripple={{ color: "white", borderless: false }}
+                style={styles.chipInButton}
+                onPress={handleChipIn}
+              >
                 <Text style={{ textAlign: "center", fontSize: 18 }}>
                   Chip In
                 </Text>
@@ -112,29 +116,29 @@ export default function SingleErrandScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   pageContent: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   titleHeader: {
     flexDirection: "row",
     justifyContent: "space-",
-    paddingTop: 10
+    paddingTop: 10,
   },
   titleHeaderText: {
     justifyContent: "space-around",
     flex: 0.66,
-    marginLeft: 25
+    marginLeft: 25,
   },
   avatarFlexBox: {
     flex: 0.33,
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
-    borderRadius: 100
+    borderRadius: 100,
   },
   dividerLine: {
     borderBottomWidth: 2,
     paddingTop: 5,
-    width: "90%"
+    width: "90%",
   },
   descriptionBubble: {
     backgroundColor: "#fff",
@@ -143,7 +147,7 @@ const styles = StyleSheet.create({
     width: "90%",
     marginTop: 20,
     marginBottom: 0,
-    padding: 10
+    padding: 10,
   },
   chipInButton: {
     backgroundColor: "#47c9af",
@@ -151,6 +155,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: 100,
     margin: 30,
-    padding: 10
-  }
+    padding: 10,
+  },
 });

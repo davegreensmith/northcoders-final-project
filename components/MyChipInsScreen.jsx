@@ -64,6 +64,7 @@ export default function MyChipInsScreen({ navigation }) {
                 </View>
                 <View style={styles.buttonsFlexBox}>
                   <Pressable
+                    android_ripple={{ color: "white", borderless: false }}
                     onPress={() => {
                       handleRemoveName(errand.id);
                     }}

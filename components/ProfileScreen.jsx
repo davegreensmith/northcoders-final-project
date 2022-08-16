@@ -87,6 +87,7 @@ export default function ProfileScreen({ navigation }) {
         </View>
         <View style={styles.buttonsFlexBox}>
           <Pressable
+            android_ripple={{ color: "white", borderless: false }}
             onPress={handleErrandsListPress}
             style={styles.myErrandsButton}
           >
@@ -94,6 +95,7 @@ export default function ProfileScreen({ navigation }) {
             <Ionicons name="md-list-outline" size={24} color="black" />
           </Pressable>
           <Pressable
+            android_ripple={{ color: "white", borderless: false }}
             onPress={handleChipInsPress}
             style={styles.myErrandsButton}
           >
@@ -101,7 +103,11 @@ export default function ProfileScreen({ navigation }) {
             <Ionicons name="md-list-outline" size={24} color="black" />
           </Pressable>
           <View style={styles.iconFlexBox}>
-            <Pressable style={styles.cogButton} onPress={handleSettingsPress}>
+            <Pressable
+              android_ripple={{ color: "white", borderless: false }}
+              style={styles.cogButton}
+              onPress={handleSettingsPress}
+            >
               <Ionicons name="cog-outline" size={36} color="black" />
             </Pressable>
           </View>

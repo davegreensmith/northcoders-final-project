@@ -229,7 +229,11 @@ export default function AddErrandScreen({ navigation }) {
             </View>
           )}
           <View style={styles.submitButtonFlex}>
-            <Pressable style={styles.submitButton} onPress={handleAddErrand}>
+            <Pressable
+              android_ripple={{ color: "white", borderless: false }}
+              style={styles.submitButton}
+              onPress={handleAddErrand}
+            >
               <Text style={{ textAlign: "center", fontSize: 16 }}>
                 Create Errand
               </Text>

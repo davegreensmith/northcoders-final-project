@@ -105,7 +105,10 @@ export default function MyErrandsScreen({ navigation }) {
                   })}
                 </View>
                 <View style={styles.buttonsFlexBox}>
-                  <Pressable style={styles.completeButton}>
+                  <Pressable
+                    android_ripple={{ color: "white", borderless: false }}
+                    style={styles.completeButton}
+                  >
                     <Text>Completed</Text>
                     <MaterialIcons
                       name="done-outline"
@@ -114,6 +117,7 @@ export default function MyErrandsScreen({ navigation }) {
                     />
                   </Pressable>
                   <Pressable
+                    android_ripple={{ color: "white", borderless: false }}
                     onPress={(e) => {
                       handleEditErrand(errand.errandID);
                     }}
@@ -123,6 +127,7 @@ export default function MyErrandsScreen({ navigation }) {
                     <Feather name="edit" size={18} color="black" />
                   </Pressable>
                   <Pressable
+                    android_ripple={{ color: "white", borderless: false }}
                     onPress={(e) => {
                       handleDeleteErrand(errand.errandID);
                     }}
