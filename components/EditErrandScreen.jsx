@@ -10,201 +10,177 @@ import {
 import { useState, useEffect } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
-import { Feather } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 import {
-  deleteErrand,
-  deleteLatLongByErrandId,
   fetchErrandByErrandID,
   getUserInfo,
   loggedInUserId,
-  updateUserErrandList,
   getUsername,
-  giveKudosByUid,
+  updateErrand,
 } from "../firebase/config";
 
-export default function MyErrandsScreen({ navigation }) {
-  const [myErrands, setMyErrands] = useState([]);
-  const [refreshPage, setRefreshPage] = useState(true);
-  const [completed, setCompleted] = useState(false);
+export default function EditErrandScreen({ route, navigation }) {
+  const [errand, setMyErrand] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [timeFrame, setTimeFrame] = useState("- Select -");
+  const [workType, setWorkType] = useState("- Select -");
+  const [description, setDescription] = useState("");
+  const [area, setArea] = useState("");
+  const [date, setDate] = useState("");
 
-  const [completeButtonPressed, setCompleteButtonPressed] = useState(false);
-  const [editButtonPressed, setEditButtonPressed] = useState(false);
-  const [deleteButtonPressed, setDeleteButtonPressed] = useState(false);
+  const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
+  const [backButtonPressed, setBackButtonPressed] = useState(false);
 
-  function handleEditErrand(errandID) {
-    fetchErrandByErrandID(errandID);
-  }
+  const { id } = route.params;
 
-  function handleDeleteErrand(errandID) {
-    return Promise.all([deleteLatLongByErrandId(errandID), errandID]).then(
-      ([undefined, errandID]) => {
-        return deleteErrand(errandID).then(([undefined, errandID, userId]) => {
-          return Promise.all([getUserInfo(), errandID, userId]).then(
-            ([{ userData }, errandID, userId]) => {
-              const userErrands = userData.errands;
-              const newErrandList = userErrands.filter((errand) => {
-                return errand !== errandID;
-              });
-              const body = { errands: newErrandList };
-              updateUserErrandList(userId, body).then(() => {
-                setRefreshPage(!refreshPage);
-              });
-            }
-          );
-        });
-      }
-    );
-    const errandsArray = [...myErrands];
-    const newArray = errandsArray.filter((errand) => {
-      return errand.id !== errandID;
-    });
-    setMyErrands(newArray);
-  }
-
-  function handleCompleteErrand(errandID) {
-    setCompleted(true);
-  }
-
-  function giveKudos(id) {
-    giveKudosByUid(id);
+  function handleUpdateErrand(errandID) {
+    const body = {};
+    updateErrand(errandID, body);
   }
 
   useEffect(() => {
-    getUserInfo().then(({ userData }) => {
-      const userErrands = userData.errands;
-      const errandPromises = userErrands.map((errandID) => {
-        return fetchErrandByErrandID(errandID);
-      });
-      return Promise.all(errandPromises).then((fulfilledPromises) => {
-        setMyErrands([...fulfilledPromises]);
-      });
+    fetchErrandByErrandID(id).then((errandData) => {
+      const { description, area, date } = errandData;
+      setDescription(description);
+      setArea(area);
+      setDate(date);
+      const data = { ...errandData };
+      setMyErrand(data);
+      setIsLoading(false);
     });
-  }, [refreshPage]);
+  }, []);
 
-  return (
-    <View style={{ flex: 1 }}>
-      <Header navigation={navigation} />
-      <ScrollView
-        contentContainerStyle={styles.pageContent}
-        keyboardShouldPersistTaps="always"
-      >
-        {myErrands.length > 0 ? (
-          myErrands.map((errand) => {
-            return (
-              <View key={errand.errandID} style={styles.listItem}>
-                <View style={styles.titleField}>
-                  <Text style={{ fontSize: 22 }}>{errand.errandName}</Text>
-                </View>
-                <View style={styles.descriptionField}>
-                  <Text>{errand.description}</Text>
-                </View>
-                <View style={styles.requirementsField}>
-                  <Text>Helper Requirements: {errand.requirements}</Text>
-                </View>
-                <View style={styles.jobTypeField}>
-                  <Text>Job Type: {errand.workType}</Text>
-                </View>
-                <View style={styles.locationField}>
-                  <Text>Location: {errand.area}</Text>
-                </View>
-                <View style={styles.dateField}>
-                  <Text>Date: {errand.date}</Text>
-                </View>
-                <View style={styles.jobLengthField}>
-                  <Text>Job length: {errand.timeFrame} hours</Text>
-                </View>
-                <View style={styles.jobLengthField}>
-                  <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
-                  {errand.chippers.map((chipper) => {
-                    return (
-                      <View key={chipper.id} style={styles.chipperList}>
-                        <Text>{chipper.user}</Text>
-                        <Pressable
-                          disabled={false}
-                          style={styles.kudosButton}
-                          onPress={(e) => {
-                            giveKudos(chipper.id);
-                          }}
-                        >
-                          <Text>Give kudos!</Text>
-                        </Pressable>
-                      </View>
-                    );
-                  })}
-                </View>
-                <View style={styles.buttonsFlexBox}>
-                  <Pressable
-                    style={
-                      completeButtonPressed
-                        ? styles.completeButtonPressed
-                        : styles.completeButton
-                    }
-                    onPressIn={() => setCompleteButtonPressed(true)}
-                    onPressOut={() => {
-                      setCompleteButtonPressed(false);
-                      handleCompleteErrand(errand.errandID);
-                    }}
-                  >
-                    <Text>Completed</Text>
-                    <MaterialIcons
-                      name="done-outline"
-                      size={18}
-                      color="black"
-                    />
-                  </Pressable>
-                  <Pressable
-                    onPressIn={() => setEditButtonPressed(true)}
-                    onPressOut={() => {
-                      setEditButtonPressed(false);
-                      handleEditErrand(errand.errandID);
-                    }}
-                    style={
-                      editButtonPressed
-                        ? styles.editButtonPressed
-                        : styles.editButton
-                    }
-                  >
-                    <Text>Edit</Text>
-                    <Feather name="edit" size={18} color="black" />
-                  </Pressable>
-                  <Pressable
-                    style={
-                      deleteButtonPressed
-                        ? styles.deleteButtonPressedIn
-                        : styles.deleteButton
-                    }
-                    onPressIn={() => setDeleteButtonPressed(true)}
-                    onPressOut={() => {
-                      setDeleteButtonPressed(false);
-                      handleDeleteErrand(errand.errandID);
-                    }}
-                  >
-                    <Text>Delete</Text>
-                    <MaterialIcons
-                      name="delete-outline"
-                      size={22}
-                      color="black"
-                    />
-                  </Pressable>
-                </View>
-              </View>
-            );
-          })
-        ) : (
-          <View style={styles.noErrandsPage}>
-            <View style={styles.noErrandsBubble}>
-              <Text style={{ textAlign: "center" }}>
-                You don't have any errands yet, if you need some help go and add
-                a new one! 📝
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  } else {
+    return (
+      <View style={{ flex: 1 }}>
+        <Header navigation={navigation} />
+        <ScrollView
+          contentContainerStyle={styles.pageContent}
+          keyboardShouldPersistTaps="always"
+        >
+          <View key={errand.errandID} style={styles.listItem}>
+            <View style={styles.titleField}>
+              <Text style={{ fontSize: 22 }}>{errand.errandName}</Text>
+            </View>
+            <View style={styles.descriptionField}>
+              <TextInput
+                defaultValue={description}
+                value={description}
+                onChangeText={(newValue) => setDescription(newValue)}
+              />
+            </View>
+            <View style={styles.locationField}>
+              <TextInput
+                defaultValue={area}
+                value={area}
+                onChangeText={(newValue) => setArea(newValue)}
+              />
+            </View>
+            <View style={styles.dateField}>
+              <TextInput
+                defaultValue={date}
+                value={date}
+                onChangeText={(newValue) => setDate(newValue)}
+              />
+            </View>
+            <View style={styles.dropdownFlexTime}>
+              <Picker
+                style={styles.dropdownMenu}
+                itemStyle={{ fontSize: 16 }}
+                selectedValue={timeFrame}
+                prompt={"How long will it take?"}
+                onValueChange={(itemValue) => {
+                  setTimeFrame(itemValue);
+                }}
+              >
+                <Picker.Item label="- Select -" value={0} />
+                <Picker.Item label="Less than half an hour" value={0.5} />
+                <Picker.Item label="Around an hour" value={1} />
+                <Picker.Item label="A couple of hours" value={2} />
+                <Picker.Item label="A few hours" value={3} />
+                <Picker.Item label="Half a working day" value={4} />
+                <Picker.Item label="A full day's work" value={8} />
+              </Picker>
+              <Text
+                style={{
+                  fontSize: Platform.OS === "android" ? 20 : 16,
+                  flex: 1,
+                  marginLeft: 10,
+                }}
+              >
+                How long will it take?
               </Text>
             </View>
+            <View style={styles.dropdownFlexWorkType}>
+              <Picker
+                style={styles.dropdownMenu}
+                itemStyle={{ fontSize: 16 }}
+                selectedValue={workType}
+                prompt={"Pick the most relevant type"}
+                onValueChange={(itemValue) => {
+                  setWorkType(itemValue);
+                }}
+              >
+                <Picker.Item label="- Select -" value={"none"} />
+                <Picker.Item label="Heavy Lifting" value={"heavy lifting"} />
+                <Picker.Item label="Gardening" value={"gardening"} />
+                <Picker.Item label="Shopping" value={"shopping"} />
+                <Picker.Item label="Transportation" value={"transportation"} />
+                <Picker.Item label="Entertainment" value={"entertainment"} />
+                <Picker.Item label="Charity" value={"charity"} />
+                <Picker.Item label="Dog Walking" value={"dog walking"} />
+                <Picker.Item label="Construction" value={"construction"} />
+                <Picker.Item label="Cleaning" value={"cleaning"} />
+              </Picker>
+              <Text
+                style={{
+                  fontSize: Platform.OS === "android" ? 20 : 16,
+                  flex: 1,
+                  marginLeft: 10,
+                }}
+              >
+                What type of work is involved?
+              </Text>
+            </View>
+            <View style={styles.buttonsFlexBox}>
+              <Pressable
+                style={
+                  submitButtonPressed
+                    ? styles.completeButtonPressed
+                    : styles.completeButton
+                }
+                defaultValue={errand.timeFrame}
+                onPressIn={() => setSubmitButtonPressed(true)}
+                onPressOut={() => {
+                  setSubmitButtonPressed(false);
+                  handleUpdateErrand(errand.errandID);
+                }}
+              >
+                <Text>Submit changes</Text>
+              </Pressable>
+              <Pressable
+                style={
+                  backButtonPressed
+                    ? styles.deleteButtonPressedIn
+                    : styles.deleteButton
+                }
+                onPressIn={() => setBackButtonPressed(true)}
+                onPressOut={() => {
+                  setBackButtonPressed(false);
+                  navigation.goBack();
+                }}
+              >
+                <Text>Cancel</Text>
+              </Pressable>
+            </View>
           </View>
-        )}
-      </ScrollView>
-      <NavBar navigation={navigation} />
-    </View>
-  );
+        </ScrollView>
+        <NavBar navigation={navigation} />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

@@ -13,6 +13,7 @@ import ProfileSettingsScreen from "./components/ProfileSettingsScreen";
 import SingleErrandScreen from "./components/SingleErrandScreen";
 import NotificationsScreen from "./components/NotficationsScreen";
 import MessageScreen from "./components/MessageScreen";
+import EditErrandScreen from "./components/EditErrandScreen";
 export default function App() {
   const Stack = createNativeStackNavigator();
 
@@ -77,6 +78,11 @@ export default function App() {
         <Stack.Screen
           name="Chats"
           component={MessageScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Edit Errand"
+          component={EditErrandScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

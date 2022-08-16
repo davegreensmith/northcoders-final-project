@@ -138,7 +138,8 @@ export default function MyErrandsScreen({ navigation }) {
                     onPressIn={() => setEditButtonPressed(true)}
                     onPressOut={() => {
                       setEditButtonPressed(false);
-                      handleEditErrand(errand.errandID);
+                      const id = errand.errandID;
+                      navigation.navigate("Edit Errand", { id });
                     }}
                     style={
                       editButtonPressed
