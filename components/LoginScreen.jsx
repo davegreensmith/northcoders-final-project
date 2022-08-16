@@ -7,7 +7,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { sendResetPasswordEmail, userLogin } from "../firebase/config";
 
@@ -27,11 +27,15 @@ export default function LoginScreen({ navigation }) {
         navigation.navigate("Splash");
       })
       .catch((err) => {
+        console.log(err);
         if (err.code === "auth/invalid-email") {
           setError("Email not found");
         }
         if (err.code === "auth/wrong-password") {
           setError("Wrong password");
+        }
+        if (err.code === "auth/user-not-found") {
+          setError("No user found, please sign up!");
         }
       });
   }
@@ -39,6 +43,10 @@ export default function LoginScreen({ navigation }) {
   function handleSignUpPress() {
     navigation.navigate("Sign Up");
   }
+
+  useEffect(() => {
+    setPassword("");
+  }, []);
 
   return (
     <KeyboardAwareScrollView
