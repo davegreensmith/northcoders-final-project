@@ -20,6 +20,7 @@ import {
   loggedInUserId,
   updateUserErrandList,
   getUsername,
+  giveKudosByUid,
 } from "../firebase/config";
 
 export default function MyErrandsScreen({ navigation }) {
@@ -57,7 +58,7 @@ export default function MyErrandsScreen({ navigation }) {
   }
 
   function giveKudos(id) {
-    console.log(id);
+    giveKudosByUid(id);
   }
 
   useEffect(() => {
@@ -105,9 +106,11 @@ export default function MyErrandsScreen({ navigation }) {
                   <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
                   {errand.chippers.map((chipper) => {
                     return (
-                      <View key={chipper.id}>
+                      <View key={chipper.id} style={styles.chipperList}>
                         <Text>{chipper.user}</Text>
                         <Pressable
+                          disabled={false}
+                          style={styles.kudosButton}
                           onPress={(e) => {
                             giveKudos(chipper.id);
                           }}
@@ -270,5 +273,16 @@ const styles = StyleSheet.create({
     height: 40,
     width: 125,
     padding: 5,
+  },
+  chipperList: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  kudosButton: {
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "black",
+    width: 80,
+    backgroundColor: "beige",
   },
 });

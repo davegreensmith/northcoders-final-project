@@ -101,7 +101,7 @@ export function fetchUsers() {
 export function addUser(email, id) {
   const userRef = doc(db, "users", id);
 
-  return Promise.all([setDoc(userRef, { email, errands: [] }), id])
+  return Promise.all([setDoc(userRef, { email, errands: [], kudos: 0 }), id])
     .then(([undefined, id]) => {
       return { id };
     })
@@ -156,8 +156,8 @@ export function updateUserInfo(userId, userDetails) {
 }
 
 //get logged in user info
-export function getUserInfo() {
-  const userRef = doc(db, "users", loggedInUser.uid);
+export function getUserInfo(id = loggedInUser.uid) {
+  const userRef = doc(db, "users", id);
   return getDoc(userRef).then((data) => {
     const userData = { ...data.data() };
     return { userData };
@@ -214,6 +214,18 @@ export function addChipperToErrand(errandID) {
   });
 }
 
+//give kudos
+export function giveKudosByUid(id) {
+  return getUserInfo(id).then(({ userData }) => {
+    let kudos = userData.kudos;
+    kudos++;
+    const body = { kudos };
+    const userRef = doc(db, "users", id);
+    updateDoc(userRef, body);
+  });
+}
+
+//update errand
 export function updateErrand(errandID, updateBody) {
   const errandRef = doc(db, "errands", errandID);
   updateDoc(errandRef, updateBody);
