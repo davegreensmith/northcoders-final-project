@@ -261,7 +261,7 @@ export default function AddErrandScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flex: 1,
+    flexGrow: 1,
   },
   genericInputField: {
     backgroundColor: "#FFF",

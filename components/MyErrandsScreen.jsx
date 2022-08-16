@@ -140,11 +140,11 @@ export default function MyErrandsScreen({ navigation }) {
                         ? styles.completeButtonPressed
                         : styles.completeButton
                     }
-                    onPress={(e) => {
+                    onPressIn={() => setCompleteButtonPressed(true)}
+                    onPressOut={() => {
+                      setCompleteButtonPressed(false);
                       handleCompleteErrand(errand.errandID);
                     }}
-                    onPressIn={() => setCompleteButtonPressed(true)}
-                    onPressOut={() => setCompleteButtonPressed(false)}
                   >
                     <Text>Completed</Text>
                     <MaterialIcons
@@ -154,11 +154,11 @@ export default function MyErrandsScreen({ navigation }) {
                     />
                   </Pressable>
                   <Pressable
-                    onPress={(e) => {
+                    onPressIn={() => setEditButtonPressed(true)}
+                    onPressOut={() => {
+                      setEditButtonPressed(false);
                       handleEditErrand(errand.errandID);
                     }}
-                    onPressIn={() => setEditButtonPressed(true)}
-                    onPressOut={() => setEditButtonPressed(false)}
                     style={
                       editButtonPressed
                         ? styles.editButtonPressed
@@ -174,11 +174,11 @@ export default function MyErrandsScreen({ navigation }) {
                         ? styles.deleteButtonPressedIn
                         : styles.deleteButton
                     }
-                    onPress={(e) => {
+                    onPressIn={() => setDeleteButtonPressed(true)}
+                    onPressOut={() => {
+                      setDeleteButtonPressed(false);
                       handleDeleteErrand(errand.errandID);
                     }}
-                    onPressIn={() => setDeleteButtonPressed(true)}
-                    onPressOut={() => setDeleteButtonPressed(false)}
                   >
                     <Text>Delete</Text>
                     <MaterialIcons
