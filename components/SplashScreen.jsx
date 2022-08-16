@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   StyleSheet,
   TextInput,
@@ -11,6 +12,9 @@ import Header from "./Header";
 import NavBar from "./NavBar";
 
 export default function SplashScreen({ navigation }) {
+  const [volunteerButtonPressed, setVolunteerButtonPressed] = useState(false);
+  const [helpButtonPressed, setHelpButtonPressed] = useState(false);
+
   function handleGiveHelpPress() {
     navigation.navigate("Map");
   }
@@ -25,8 +29,14 @@ export default function SplashScreen({ navigation }) {
         <Text style={styles.introText}>What are you looking for...</Text>
         <View style={styles.pageContent}>
           <Pressable
-            style={styles.volunteerButton}
+            style={
+              volunteerButtonPressed
+                ? styles.volunteerButtonPressed
+                : styles.volunteerButton
+            }
             onPress={handleGiveHelpPress}
+            onPressIn={() => setVolunteerButtonPressed(true)}
+            onPressOut={() => setVolunteerButtonPressed(false)}
           >
             <Text style={{ textAlign: "center", fontSize: 20 }}>
               Volunteer your time?
@@ -37,7 +47,14 @@ export default function SplashScreen({ navigation }) {
             <Text style={styles.dividerText}>OR</Text>
             <View style={styles.dividerLine}></View>
           </View>
-          <Pressable style={styles.helpButton} onPress={wantHelpPress}>
+          <Pressable
+            style={
+              helpButtonPressed ? styles.helpButtonPressed : styles.helpButton
+            }
+            onPress={wantHelpPress}
+            onPressIn={() => setHelpButtonPressed(true)}
+            onPressOut={() => setHelpButtonPressed(false)}
+          >
             <Text style={{ textAlign: "center", fontSize: 20 }}>
               Need help?
             </Text>
@@ -63,7 +80,15 @@ const styles = StyleSheet.create({
   volunteerButton: {
     justifyContent: "center",
     backgroundColor: "#47c9af",
-    borderColor: "#000",
+    borderWidth: 1,
+    borderRadius: 10,
+    width: 260,
+    height: 85,
+    padding: 10,
+  },
+  volunteerButtonPressed: {
+    justifyContent: "center",
+    backgroundColor: "#357568",
     borderWidth: 1,
     borderRadius: 10,
     width: 260,
@@ -73,7 +98,15 @@ const styles = StyleSheet.create({
   helpButton: {
     justifyContent: "center",
     backgroundColor: "#47c9af",
-    borderColor: "#000",
+    borderWidth: 1,
+    borderRadius: 10,
+    width: 260,
+    height: 85,
+    padding: 10,
+  },
+  helpButtonPressed: {
+    justifyContent: "center",
+    backgroundColor: "#357568",
     borderWidth: 1,
     borderRadius: 10,
     width: 260,

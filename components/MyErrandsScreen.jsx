@@ -144,6 +144,7 @@ export default function MyErrandsScreen({ navigation }) {
                     />
                   </Pressable>
                   <Pressable
+                    android_ripple={{ color: "white", borderless: false }}
                     onPress={(e) => {
                       handleEditErrand(errand.errandID);
                     }}
@@ -153,6 +154,7 @@ export default function MyErrandsScreen({ navigation }) {
                     <Feather name="edit" size={18} color="black" />
                   </Pressable>
                   <Pressable
+                    android_ripple={{ color: "white", borderless: false }}
                     onPress={(e) => {
                       handleDeleteErrand(errand.errandID);
                     }}
