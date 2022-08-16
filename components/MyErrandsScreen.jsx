@@ -21,6 +21,7 @@ import {
   updateUserErrandList,
   getUsername,
   giveKudosByUid,
+  deleteErrandByErrandID,
 } from "../firebase/config";
 
 export default function MyErrandsScreen({ navigation }) {
@@ -37,29 +38,9 @@ export default function MyErrandsScreen({ navigation }) {
   }
 
   function handleDeleteErrand(errandID) {
-    return Promise.all([deleteLatLongByErrandId(errandID), errandID]).then(
-      ([undefined, errandID]) => {
-        return deleteErrand(errandID).then(([undefined, errandID, userId]) => {
-          return Promise.all([getUserInfo(), errandID, userId]).then(
-            ([{ userData }, errandID, userId]) => {
-              const userErrands = userData.errands;
-              const newErrandList = userErrands.filter((errand) => {
-                return errand !== errandID;
-              });
-              const body = { errands: newErrandList };
-              updateUserErrandList(userId, body).then(() => {
-                setRefreshPage(!refreshPage);
-              });
-            }
-          );
-        });
-      }
-    );
-    const errandsArray = [...myErrands];
-    const newArray = errandsArray.filter((errand) => {
-      return errand.id !== errandID;
+    deleteErrandByErrandID(errandID).then(() => {
+      setRefreshPage(!refreshPage);
     });
-    setMyErrands(newArray);
   }
 
   function handleCompleteErrand(errandID) {

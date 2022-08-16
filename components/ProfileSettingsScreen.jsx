@@ -9,71 +9,117 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
 } from "react-native";
-import { useState, useRef } from "react";
+import { CommonActions } from "@react-navigation/native";
+import { useState, useRef, useEffect } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import {
+  getUserInfo,
+  updateUserInfo,
+  sendResetPasswordEmail,
+  auth,
+  deleteErrandByErrandID,
+  fetchErrandsByUserID,
+  removeUserFromErrand,
+} from "../firebase/config";
+import { getAuth, deleteUser } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
 
 export default function ProfileSettingsScreen({ navigation }) {
-  const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
-  const [passwordButtonPressed, setPasswordButtonPressed] = useState(false);
-  const [logoutButtonPressed, setLogoutButtonPressed] = useState(false);
-  const [deleteButtonPressed, setDeleteButtonPressed] = useState(false);
+  const [username, setUsername] = useState("");
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [location, setLocation] = useState("");
+  const [canDrive, setCanDrive] = useState(true);
+  const [fieldChanged, setFieldChanged] = useState(false);
+  const [emailMessage, setEmailMessage] = useState(false);
+  const [wantToDelete, setWantToDelete] = useState(false);
+  const [myErrands, setMyErrands] = useState([]);
+  const [myChipIns, setMyChipIns] = useState([]);
+  const [loggedInUserId, setLoggedInUser] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [currentLoggedInUser, setCurrentLoggedInUser] = useState("");
 
-  const [profileDetails, setProfileDetails] = useState({
-    username: "pipe-smoking-rabbit",
-    location: "M16 0AW",
-    canDrive: true,
-    firstName: "Mitch",
-    lastName: "Please",
-  });
-
-  const [isUsernameEdit, setIsUsernameEdit] = useState(false);
-  const username = useRef();
-
-  function handleUsernameEditPress() {
-    setIsUsernameEdit(true);
-    username.current.focus();
-  }
-  function handleUsernameChange() {
-    setIsUsernameEdit(false);
+  function handleSubmitChanges() {
+    if (fieldChanged) {
+      const body = { username, fname, lname, location, canDrive };
+      updateUserInfo(loggedInUserId, body);
+    }
   }
 
-  const [isLocationEdit, setIsLocationEdit] = useState(false);
-  const location = useRef();
-
-  function handleLocationEditPress() {
-    setIsLocationEdit(true);
-    location.current.focus();
-  }
-  function handleLocationChange() {
-    setIsLocationEdit(false);
+  function handleSendPasswordLink() {
+    sendResetPasswordEmail(userEmail);
+    setEmailMessage("Please check your email for link to reset password");
   }
 
-  const [isFirstNameEdit, setIsFirstNameEdit] = useState(false);
-  const firstName = useRef();
+  function handleLogOut() {
+    auth.signOut();
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{ name: "Login" }],
+      })
+    );
+  }
 
-  function handleFirstNameEditPress() {
-    setIsFirstNameEdit(true);
-    firstName.current.focus();
-  }
-  function handleFirstNameChange() {
-    setIsFirstNameEdit(false);
+  function handleDeleteAccount() {
+    setWantToDelete(true);
   }
 
-  const [isLastNameEdit, setIsLastNameEdit] = useState(false);
-  const lastName = useRef();
+  function definatelyDeleteAccount() {
+    const myErrandList = [...myErrands];
+    myErrands.forEach((errand) => {
+      deleteErrandByErrandID(errand);
+    });
 
-  function handleLastNameEditPress() {
-    setIsLastNameEdit(true);
-    lastName.current.focus();
+    //remove chips
+    fetchErrandsByUserID(loggedInUserId)
+      .then((data) => {
+        setMyChipIns([...data]);
+      })
+      .then(() => {
+        const myChipInArray = [...myChipIns];
+        myChipInArray.forEach((errand) => {
+          removeUserFromErrand(errand.id);
+        });
+      });
+
+    //delete account
+    deleteUser(currentLoggedInUser)
+      .then(() => {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: "Login" }],
+          })
+        );
+      })
+      .catch((error) => {
+        // An error ocurred
+        // ...
+      });
   }
-  function handleLastNameChange() {
-    setIsLastNameEdit(false);
-  }
+
+  useEffect(() => {
+    getUserInfo().then(({ userData }) => {
+      const { username, fname, lname, location, canDrive, errands } = userData;
+      setFname(fname);
+      setLname(lname);
+      setCanDrive(canDrive);
+      setUsername(username);
+      setLocation(location);
+      setMyErrands(errands);
+    });
+    const auth = getAuth();
+    const user = auth.currentUser;
+    setLoggedInUser(user.uid);
+    setUserEmail(user.email);
+    setCurrentLoggedInUser(user);
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -82,101 +128,69 @@ export default function ProfileSettingsScreen({ navigation }) {
         <View style={styles.changeUsername}>
           <Text style={styles.fieldLabel}>Username:</Text>
           <TextInput
-            ref={username}
-            style={isUsernameEdit ? styles.editFieldValue : styles.fieldValue}
-            defaultValue={profileDetails.username}
-            onFocus={() => {
-              setIsUsernameEdit(true);
+            value={username}
+            onChangeText={(newValue) => {
+              setUsername(newValue);
+              setFieldChanged(true);
             }}
-            onBlur={handleUsernameChange}
+            style={styles.editFieldValue}
+            onFocus={() => {}}
           />
-          <Pressable
-            onPress={handleUsernameEditPress}
-            style={styles.editFieldButton}
-          >
-            <Feather name="edit" size={24} color="black" />
-          </Pressable>
         </View>
         <View style={styles.changeLocation}>
           <Text style={styles.fieldLabel}>Your Location:</Text>
           <TextInput
-            ref={location}
-            style={isLocationEdit ? styles.editFieldValue : styles.fieldValue}
-            defaultValue={profileDetails.location}
-            onFocus={() => {
-              setIsLocationEdit(true);
+            value={location}
+            onChangeText={(newValue) => {
+              setLocation(newValue);
+              setFieldChanged(true);
             }}
-            onBlur={handleLocationChange}
+            style={styles.editFieldValue}
+            defaultValue={location}
+            onFocus={() => {}}
           />
-          <Pressable
-            onPress={handleLocationEditPress}
-            style={styles.editFieldButton}
-          >
-            <Feather name="edit" size={24} color="black" />
-          </Pressable>
         </View>
         <View style={styles.changeFirstname}>
           <Text style={styles.fieldLabel}>First Name:</Text>
           <TextInput
-            ref={firstName}
-            style={isFirstNameEdit ? styles.editFieldValue : styles.fieldValue}
-            defaultValue={profileDetails.firstName}
-            onFocus={() => {
-              setIsFirstNameEdit(true);
+            value={fname}
+            onChangeText={(newValue) => {
+              setFieldChanged(true);
+              setFname(newValue);
             }}
-            onBlur={handleFirstNameChange}
+            style={styles.editFieldValue}
+            defaultValue={fname}
+            onFocus={() => {}}
           />
-          <Pressable
-            onPress={handleFirstNameEditPress}
-            style={styles.editFieldButton}
-          >
-            <Feather name="edit" size={24} color="black" />
-          </Pressable>
         </View>
         <View style={styles.changeLastname}>
           <Text style={styles.fieldLabel}>Last Name:</Text>
           <TextInput
-            ref={lastName}
-            style={isLastNameEdit ? styles.editFieldValue : styles.fieldValue}
-            defaultValue={profileDetails.lastName}
-            onFocus={() => {
-              setIsLastNameEdit(true);
+            value={lname}
+            onChangeText={(newValue) => {
+              setLname(newValue);
+              setFieldChanged(true);
             }}
-            onBlur={handleLastNameChange}
+            style={styles.editFieldValue}
+            defaultValue={lname}
+            onFocus={() => {}}
           />
-          <Pressable
-            onPress={handleLastNameEditPress}
-            style={styles.editFieldButton}
-          >
-            <Feather name="edit" size={24} color="black" />
-          </Pressable>
         </View>
         <View style={styles.changeCanDrive}>
           <Text style={styles.fieldLabel}>Can you drive?</Text>
           <Switch
             style={{ height: 15, marginRight: 15 }}
-            value={profileDetails.canDrive}
+            value={canDrive}
             onValueChange={() => {
-              setProfileDetails((previousSettings) => {
-                const newSettings = { ...previousSettings };
-                newSettings.canDrive = !newSettings.canDrive;
-                return newSettings;
-              });
+              setCanDrive(!canDrive);
+              setFieldChanged(true);
             }}
           />
         </View>
         <View style={styles.submitFlexBox}>
           <View style={styles.dividerLine}></View>
-          <Pressable
-            style={
-              submitButtonPressed
-                ? styles.submitButtonPressed
-                : styles.submitButton
-            }
-            onPressIn={() => setSubmitButtonPressed(true)}
-            onPressOut={() => setSubmitButtonPressed(false)}
-          >
-            <Text style={{ fontSize: Platform.OS === "android" ? 14 : 11 }}>
+          <Pressable style={styles.submitButton} onPress={handleSubmitChanges}>
+            <Text style={{ fontSize: Platform.OS === "android" ? 16 : 11 }}>
               Submit Changes
             </Text>
           </Pressable>
@@ -185,13 +199,8 @@ export default function ProfileSettingsScreen({ navigation }) {
         <View style={styles.changePassword}>
           <Text style={styles.fieldLabel}>Send Password Reset Link:</Text>
           <Pressable
-            style={
-              passwordButtonPressed
-                ? styles.passwordResetButtonPressed
-                : styles.passwordResetButton
-            }
-            onPressIn={() => setPasswordButtonPressed(true)}
-            onPressOut={() => setPasswordButtonPressed(false)}
+            style={styles.passwordResetButton}
+            onPress={handleSendPasswordLink}
           >
             <MaterialCommunityIcons
               name="email-send-outline"
@@ -200,33 +209,36 @@ export default function ProfileSettingsScreen({ navigation }) {
             />
           </Pressable>
         </View>
+        <View style={styles.popUpMessage}>
+          {emailMessage ? (
+            <Text style={{ color: "#47C9AF" }}>{emailMessage}</Text>
+          ) : (
+            <></>
+          )}
+        </View>
         <View style={styles.logoutFlex}>
           <Text style={styles.fieldLabel}>Logout:</Text>
-          <Pressable
-            style={
-              logoutButtonPressed
-                ? styles.logoutButtonPressed
-                : styles.logoutButton
-            }
-            onPressIn={() => setLogoutButtonPressed(true)}
-            onPressOut={() => setLogoutButtonPressed(false)}
-          >
+          <Pressable style={styles.logoutButton} onPress={handleLogOut}>
             <SimpleLineIcons name="logout" size={24} color="black" />
           </Pressable>
         </View>
         <View style={styles.logoutFlex}>
           <Text style={styles.fieldLabel}>Delete Account:</Text>
-          <Pressable
-            style={
-              deleteButtonPressed
-                ? styles.deleteButtonPressed
-                : styles.deleteButton
-            }
-            onPressIn={() => setDeleteButtonPressed(true)}
-            onPressOut={() => setDeleteButtonPressed(false)}
-          >
+          <Pressable style={styles.deleteButton} onPress={handleDeleteAccount}>
             <AntDesign name="deleteuser" size={24} color="black" />
           </Pressable>
+        </View>
+        <View style={styles.actualDeleteContainer}>
+          {wantToDelete ? (
+            <Pressable
+              style={styles.actualDeleteButton}
+              onPress={definatelyDeleteAccount}
+            >
+              <Text>Delete account - Are you sure?</Text>
+            </Pressable>
+          ) : (
+            <></>
+          )}
         </View>
       </View>
       <NavBar navigation={navigation} />
@@ -384,6 +396,25 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 10,
     backgroundColor: "rgba(255, 58, 58, 0.72)",
+  },
+  actualDeleteButton: {
+    alignItems: "center",
+    marginRight: 16,
+    marginBottom: 16,
+    borderWidth: 0.5,
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: "rgba(255, 58, 58, 0.72)",
+    width: 300,
+  },
+  actualDeleteContainer: {
+    // flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  popUpMessage: {
+    color: "#47C9AF",
+    alignItems: "center",
   },
   deleteButtonPressed: {
     marginRight: 16,
