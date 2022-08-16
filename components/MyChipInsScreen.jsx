@@ -69,11 +69,11 @@ export default function MyChipInsScreen({ navigation }) {
                 </View>
                 <View style={styles.buttonsFlexBox}>
                   <Pressable
-                    onPress={() => {
+                    onPressIn={() => setEditButtonPressed(true)}
+                    onPressOut={() => {
+                      setEditButtonPressed(false);
                       handleRemoveName(errand.id);
                     }}
-                    onPressIn={() => setEditButtonPressed(true)}
-                    onPressOut={() => setEditButtonPressed(false)}
                     style={
                       editButtonPressed
                         ? styles.editButtonPressed
@@ -109,7 +109,7 @@ export default function MyChipInsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flex: 1,
+    flexGrow: 1,
   },
   listItem: {
     justifyContent: "space-evenly",
