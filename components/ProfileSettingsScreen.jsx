@@ -73,7 +73,7 @@ export default function ProfileSettingsScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <ScrollView contentContainerStyle={styles.pageContent} bounces={false}>
+      <View style={styles.pageContent}>
         <View style={styles.changeUsername}>
           <Text style={styles.fieldLabel}>Username:</Text>
           <TextInput
@@ -163,7 +163,9 @@ export default function ProfileSettingsScreen({ navigation }) {
         <View style={styles.submitFlexBox}>
           <View style={styles.dividerLine}></View>
           <Pressable style={styles.submitButton}>
-            <Text>Submit Changes</Text>
+            <Text style={{ fontSize: Platform.OS === "android" ? 16 : 11 }}>
+              Submit Changes
+            </Text>
           </Pressable>
           <View style={styles.dividerLine}></View>
         </View>
@@ -189,7 +191,7 @@ export default function ProfileSettingsScreen({ navigation }) {
             <AntDesign name="deleteuser" size={24} color="black" />
           </Pressable>
         </View>
-      </ScrollView>
+      </View>
       <NavBar navigation={navigation} />
     </View>
   );
@@ -201,12 +203,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   fieldLabel: {
-    fontSize: 16,
+    fontSize: Platform.OS === "android" ? 16 : 14,
     marginLeft: 15,
     flex: 1,
   },
   fieldValue: {
-    fontSize: 16,
+    fontSize: Platform.OS === "android" ? 16 : 14,
     marginRight: 15,
     borderRadius: 10,
     padding: 8,
@@ -216,7 +218,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   editFieldValue: {
-    fontSize: 16,
+    fontSize: Platform.OS === "android" ? 16 : 14,
     marginRight: 15,
     borderRadius: 10,
     padding: 8,

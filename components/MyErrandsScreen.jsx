@@ -51,6 +51,11 @@ export default function MyErrandsScreen({ navigation }) {
         });
       }
     );
+    const errandsArray = [...myErrands];
+    const newArray = errandsArray.filter((errand) => {
+      return errand.id !== errandID;
+    });
+    setMyErrands(newArray);
   }
 
   function handleCompleteErrand(errandID) {
@@ -76,9 +81,12 @@ export default function MyErrandsScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <View style={styles.pageContent}>
-        <ScrollView>
-          {myErrands.map((errand) => {
+      <ScrollView
+        contentContainerStyle={styles.pageContent}
+        keyboardShouldPersistTaps="always"
+      >
+        {myErrands.length > 0 ? (
+          myErrands.map((errand) => {
             return (
               <View key={errand.errandID} style={styles.listItem}>
                 <View style={styles.titleField}>
@@ -102,7 +110,7 @@ export default function MyErrandsScreen({ navigation }) {
                 <View style={styles.jobLengthField}>
                   <Text>Job length: {errand.timeFrame}</Text>
                 </View>
-                <View style={styles.jobLengthField}>
+                {/* <View style={styles.jobLengthField}>
                   <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
                   {errand.chippers.map((chipper) => {
                     return (
@@ -120,7 +128,7 @@ export default function MyErrandsScreen({ navigation }) {
                       </View>
                     );
                   })}
-                </View>
+                </View> */}
                 <View style={styles.buttonsFlexBox}>
                   <Pressable
                     style={styles.completeButton}
@@ -160,9 +168,18 @@ export default function MyErrandsScreen({ navigation }) {
                 </View>
               </View>
             );
-          })}
-        </ScrollView>
-      </View>
+          })
+        ) : (
+          <View style={styles.noErrandsPage}>
+            <View style={styles.noErrandsBubble}>
+              <Text style={{ textAlign: "center" }}>
+                You don't have any errands yet, if you need some help go and add
+                a new one! 📝
+              </Text>
+            </View>
+          </View>
+        )}
+      </ScrollView>
       <NavBar navigation={navigation} />
     </View>
   );
@@ -170,7 +187,7 @@ export default function MyErrandsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flex: 1,
+    flexGrow: 1,
   },
   listItem: {
     justifyContent: "space-evenly",
@@ -284,5 +301,18 @@ const styles = StyleSheet.create({
     borderColor: "black",
     width: 80,
     backgroundColor: "beige",
+  },
+  noErrandsPage: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noErrandsBubble: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 15,
+    margin: 10,
+    borderWidth: 0.5,
+    borderColor: "gray",
   },
 });

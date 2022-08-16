@@ -7,7 +7,8 @@ import {
   Pressable,
   Switch,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { signUpNewUser, userLogout, updateUserInfo } from "../firebase/config";
 import { convertLocationToLatLong } from "../utils/api";
 import { getInitials } from "../firebase/functions";
@@ -24,6 +25,13 @@ export default function SignUpScreen({ navigation }) {
   const [show, setShow] = useState(false);
 
   const [error, setError] = useState(false);
+
+  const lastNameRef = useRef();
+  const userNameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const bioRef = useRef();
+  const postcodeRef = useRef();
 
   function handleSignUpPress() {
     if (!fname || !lname || !username || !password || !location || !email) {
@@ -73,93 +81,125 @@ export default function SignUpScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require("../assets/chip-in-logo-large.png")}
-      />
-      <Text style={styles.subtitle}>Tell us a little about yourself...</Text>
-      <Text style={styles.requiredText}>* required fields</Text>
-      <TextInput
-        style={styles.textField}
-        onChangeText={setFname}
-        value={fname}
-        placeholder="* First name"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setLname}
-        value={lname}
-        placeholder="* Last name"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setUsername}
-        value={username}
-        placeholder="* Username (What others will see)"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setEmail}
-        value={email}
-        placeholder="* Email"
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-        value={password}
-        placeholder="* Password (Must be at least 6 characters)"
-      />
-      <TextInput
-        multiline={true}
-        style={styles.bio}
-        onChangeText={setBio}
-        value={bio}
-        placeholder="A brief description of your skills and abilities..."
-      />
-      <TextInput
-        style={styles.textField}
-        onChangeText={setLocation}
-        value={location}
-        placeholder="* Your postcode"
-      />
-      <View style={styles.doYouDrive}>
-        <Text style={{ fontSize: 15 }}>Do you drive?</Text>
-        <Switch
-          value={canDrive}
-          onValueChange={() => {
-            setCanDrive(!canDrive);
-          }}
-        />
-      </View>
-      {show ? (
-        <View>
-          <Text style={{ color: "red" }}>
-            Missing information, please check and try again
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <KeyboardAwareScrollView
+        enableOnAndroid={true}
+        extraScrollHeight={75}
+        keyboardShouldPersistTaps="always"
+      >
+        <View style={styles.container}>
+          <Image
+            style={styles.logo}
+            source={require("../assets/chip-in-logo-large.png")}
+          />
+          <Text style={styles.subtitle}>
+            Tell us a little about yourself...
           </Text>
+          <Text style={styles.requiredText}>* required fields</Text>
+          <TextInput
+            style={styles.textField}
+            onChangeText={setFname}
+            value={fname}
+            placeholder="* First name"
+            returnKeyType="next"
+            onSubmitEditing={() => lastNameRef.current.focus()}
+            blurOnSubmit={false}
+          />
+          <TextInput
+            style={styles.textField}
+            onChangeText={setLname}
+            value={lname}
+            placeholder="* Last name"
+            ref={lastNameRef}
+            returnKeyType="next"
+            onSubmitEditing={() => userNameRef.current.focus()}
+            blurOnSubmit={false}
+          />
+          <TextInput
+            style={styles.textField}
+            onChangeText={setUsername}
+            value={username}
+            placeholder="* Username (What others will see)"
+            ref={userNameRef}
+            returnKeyType="next"
+            onSubmitEditing={() => emailRef.current.focus()}
+            blurOnSubmit={false}
+          />
+          <TextInput
+            style={styles.textField}
+            onChangeText={setEmail}
+            value={email}
+            placeholder="* Email"
+            ref={emailRef}
+            returnKeyType="next"
+            onSubmitEditing={() => passwordRef.current.focus()}
+            blurOnSubmit={false}
+          />
+          <TextInput
+            style={styles.textField}
+            onChangeText={setPassword}
+            secureTextEntry={true}
+            value={password}
+            placeholder="* Password (Must be at least 6 characters)"
+            ref={passwordRef}
+            returnKeyType="next"
+            onSubmitEditing={() => bioRef.current.focus()}
+            blurOnSubmit={false}
+          />
+          <TextInput
+            multiline={true}
+            style={styles.bio}
+            onChangeText={setBio}
+            value={bio}
+            placeholder="A brief description of your skills and abilities..."
+            ref={bioRef}
+            onSubmitEditing={() => postcodeRef.current.focus()}
+            blurOnSubmit={false}
+          />
+          <TextInput
+            style={styles.textField}
+            onChangeText={setLocation}
+            value={location}
+            placeholder="* Your postcode"
+            ref={postcodeRef}
+            returnKeyType="done"
+          />
+          <View style={styles.doYouDrive}>
+            <Text style={{ fontSize: 15 }}>Do you drive?</Text>
+            <Switch
+              value={canDrive}
+              onValueChange={() => {
+                setCanDrive(!canDrive);
+              }}
+            />
+          </View>
+          {show ? (
+            <View>
+              <Text style={{ color: "red" }}>
+                Missing information, please check and try again
+              </Text>
+            </View>
+          ) : (
+            <></>
+          )}
+          {error ? (
+            <View>
+              <Text style={{ color: "red" }}>{error}</Text>
+            </View>
+          ) : (
+            <></>
+          )}
+          <Pressable style={styles.signUpButton} onPress={handleSignUpPress}>
+            <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
+          </Pressable>
         </View>
-      ) : (
-        <></>
-      )}
-      {error ? (
-        <View>
-          <Text style={{ color: "red" }}>{error}</Text>
-        </View>
-      ) : (
-        <></>
-      )}
-      <Pressable style={styles.signUpButton} onPress={handleSignUpPress}>
-        <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
-      </Pressable>
+      </KeyboardAwareScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },

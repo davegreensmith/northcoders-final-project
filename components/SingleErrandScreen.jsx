@@ -6,7 +6,7 @@ import {
   TextInput,
   FlatList,
   Pressable,
-  StyleSheet,
+  StyleSheet
 } from "react-native";
 import { useEffect, useState } from "react";
 import Header from "./Header";
@@ -15,7 +15,7 @@ import {
   fetchErrandByErrandID,
   getUsername,
   updateErrand,
-  addChipperToErrand,
+  addChipperToErrand
 } from "../firebase/config";
 
 export default function SingleErrandScreen({ route, navigation }) {
@@ -68,7 +68,7 @@ export default function SingleErrandScreen({ route, navigation }) {
               style={styles.avatar}
               source={require("../assets/placeholder-avatar.png")}
             /> */}
-              <Text>{singleErrand.author}</Text>
+              <Text style={{ fontSize: 11 }}>{singleErrand.author}</Text>
             </View>
           </View>
           <View style={styles.dividerLine}></View>
@@ -76,19 +76,19 @@ export default function SingleErrandScreen({ route, navigation }) {
             <Text>{singleErrand.description}</Text>
           </View>
           <View style={{ flex: 1, justifyContent: "space-around" }}>
-            <Text style={{ fontSize: 14, marginLeft: 17 }}>
-              On: {singleErrand.date}
+            <Text style={{ fontSize: 17, marginLeft: 17 }}>
+              chip-in on: {singleErrand.date}
             </Text>
-            <Text style={{ fontSize: 14, marginLeft: 17 }}>
-              For: {singleErrand.timeFrame} hours
+            <Text style={{ fontSize: 17, marginLeft: 17 }}>
+              You are neeeded for: {singleErrand.timeFrame} hours
             </Text>
-            <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            <Text style={{ fontSize: 17, marginLeft: 17 }}>
               What you will need: {singleErrand.requirements}
             </Text>
-            <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            <Text style={{ fontSize: 17, marginLeft: 17 }}>
               Type of job: {singleErrand.workType}
             </Text>
-            <Text style={{ fontSize: 14, marginLeft: 17 }}>
+            <Text style={{ fontSize: 17, marginLeft: 17 }}>
               How many have already volunteered to Chip In:{" "}
               {singleErrand.chippers.length}
             </Text>
@@ -114,29 +114,29 @@ export default function SingleErrandScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   pageContent: {
     flex: 1,
-    alignItems: "center",
+    alignItems: "center"
   },
   titleHeader: {
     flexDirection: "row",
     justifyContent: "space-",
-    paddingTop: 10,
+    paddingTop: 10
   },
   titleHeaderText: {
     justifyContent: "space-around",
     flex: 0.66,
-    marginLeft: 25,
+    marginLeft: 25
   },
   avatarFlexBox: {
     flex: 0.33,
-    alignItems: "center",
+    alignItems: "center"
   },
   avatar: {
-    borderRadius: 100,
+    borderRadius: 100
   },
   dividerLine: {
     borderBottomWidth: 2,
     paddingTop: 5,
-    width: "90%",
+    width: "90%"
   },
   descriptionBubble: {
     backgroundColor: "#fff",
@@ -144,15 +144,15 @@ const styles = StyleSheet.create({
     borderWidth: 0.7,
     width: "90%",
     marginTop: 20,
-    marginBottom: 40,
-    padding: 10,
+    marginBottom: 0,
+    padding: 10
   },
   chipInButton: {
     backgroundColor: "#47c9af",
     borderWidth: 1,
     borderRadius: 5,
-    width: 90,
-    margin: 20,
-    padding: 10,
-  },
+    width: 100,
+    margin: 30,
+    padding: 10
+  }
 });

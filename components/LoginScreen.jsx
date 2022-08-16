@@ -5,8 +5,10 @@ import {
   Text,
   View,
   Pressable,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useState } from "react";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { sendResetPasswordEmail, userLogin } from "../firebase/config";
 
 export default function LoginScreen({ navigation }) {
@@ -39,7 +41,11 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      keyboardShouldPersistTaps="always"
+      contentContainerStyle={styles.pageContent}
+      enableOnAndroid={true}
+    >
       <Image
         style={styles.logo}
         source={require("../assets/chip-in-logo-large.png")}
@@ -82,16 +88,16 @@ export default function LoginScreen({ navigation }) {
           <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up</Text>
         </Pressable>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  pageContent: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
   logo: {
     resizeMode: "cover",
