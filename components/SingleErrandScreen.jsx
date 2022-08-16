@@ -74,31 +74,60 @@ export default function SingleErrandScreen({ route, navigation }) {
             </View>
           </View>
           <View style={styles.dividerLine}></View>
-          <View style={styles.descriptionBubble}>
-            <Text>{singleErrand.description}</Text>
-          </View>
-          <View style={{ flex: 1, justifyContent: "space-around" }}>
-            <Text style={{ fontSize: 17, marginLeft: 17 }}>
-              chip-in on: {singleErrand.date}
-            </Text>
-            <Text style={{ fontSize: 17, marginLeft: 17 }}>
-              You are neeeded for: {singleErrand.timeFrame} hours
-            </Text>
-            <Text style={{ fontSize: 17, marginLeft: 17 }}>
-              What you will need: {singleErrand.requirements}
-            </Text>
-            <Text style={{ fontSize: 17, marginLeft: 17 }}>
-              Type of job: {singleErrand.workType}
-            </Text>
-            <Text style={{ fontSize: 17, marginLeft: 17 }}>
-              How many have already volunteered to Chip In:{" "}
-              {singleErrand.chippers.length}
-            </Text>
+          <View style={styles.errandInfo}>
+            <View style={styles.subtitleFlexBox}>
+              <Text style={styles.subtitle}>📝 Info</Text>
+              <View style={styles.subtitleDividerLine}></View>
+              <Text style={styles.description}>{singleErrand.description}</Text>
+            </View>
+            <View style={styles.dateAndTimeFlexBox}>
+              <Text style={styles.subtitle}>📅 Schedule</Text>
+              <View style={styles.subtitleDividerLine}></View>
+              <Text style={styles.description}>
+                Scheduled for {singleErrand.date}
+              </Text>
+              <Text style={styles.description}>
+                {singleErrand.timeFrame} hours work time
+              </Text>
+            </View>
+            {singleErrand.requirements ? (
+              <View style={styles.requirementsFlexBox}>
+                <Text style={styles.subtitle}>🧰 Good-To-Have's</Text>
+                <View style={styles.subtitleDividerLine}></View>
+                <Text style={styles.description}>
+                  {singleErrand.requirements}
+                </Text>
+              </View>
+            ) : (
+              <></>
+            )}
+            <View style={styles.categoryFlexBox}>
+              <Text style={styles.subtitle}>💪 Activity</Text>
+              <View style={styles.subtitleDividerLine}></View>
+              <Text style={styles.description}>{singleErrand.workType}</Text>
+            </View>
+            <View style={styles.chippersFlexBox}>
+              <Text style={styles.subtitle}>🙋 Fellow Chippers</Text>
+              <View style={styles.subtitleDividerLine}></View>
+              {singleErrand.chippers.length === 1 ? (
+                <Text style={styles.description}>
+                  {singleErrand.chippers.length} other person is currently
+                  chipping in on this errand
+                </Text>
+              ) : (
+                <Text style={styles.description}>
+                  {singleErrand.chippers.length} other people are currently
+                  chipping in on this errand
+                </Text>
+              )}
+            </View>
           </View>
           {hasChippedIn ? (
-            <Text>You've Chipped In!</Text>
+            <View style={styles.buttonFlexBox}>
+              <Text>You've Chipped In!</Text>
+            </View>
           ) : (
-            <View>
+            <View style={styles.buttonFlexBox}>
               <Pressable
                 style={
                   submitButtonPressed
@@ -113,7 +142,7 @@ export default function SingleErrandScreen({ route, navigation }) {
                   setSubmitButtonPressed(false);
                 }}
               >
-                <Text style={{ textAlign: "center", fontSize: 18 }}>
+                <Text style={{ textAlign: "center", fontSize: 16 }}>
                   Chip In
                 </Text>
               </Pressable>
@@ -150,24 +179,70 @@ const styles = StyleSheet.create({
   },
   dividerLine: {
     borderBottomWidth: 2,
-    paddingTop: 5,
+    marginTop: 5,
     width: "90%",
   },
-  descriptionBubble: {
+  errandInfo: {
+    flex: 1,
+    justifyContent: "space-around",
+    alignItems: "center",
     backgroundColor: "#fff",
     borderRadius: 6,
-    borderWidth: 0.7,
+    borderWidth: 0.5,
+    borderColor: "gray",
     width: "90%",
     marginTop: 20,
-    marginBottom: 0,
     padding: 10,
+  },
+  subtitleFlexBox: {
+    flex: 1,
+    width: "90%",
+    marginTop: 5,
+  },
+  subtitle: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  subtitleDividerLine: {
+    borderWidth: 0.7,
+    marginTop: 5,
+  },
+  description: {
+    marginTop: 5,
+    marginLeft: 28,
+    color: "gray",
+  },
+  dateAndTimeFlexBox: {
+    flex: 1,
+    width: "90%",
+    marginTop: 5,
+  },
+  requirementsFlexBox: {
+    flex: 1,
+    width: "90%",
+    marginTop: 5,
+  },
+  categoryFlexBox: {
+    flex: 1,
+    width: "90%",
+    marginTop: 5,
+  },
+  chippersFlexBox: {
+    flex: 1,
+    width: "90%",
+    marginTop: 5,
+    marginBottom: 5,
+  },
+  buttonFlexBox: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 80,
   },
   chipInButton: {
     backgroundColor: "#47c9af",
     borderWidth: 1,
     borderRadius: 5,
     width: 100,
-    margin: 30,
     padding: 10,
   },
   chipInButtonPressed: {
