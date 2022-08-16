@@ -33,6 +33,8 @@ export default function SignUpScreen({ navigation }) {
   const bioRef = useRef();
   const postcodeRef = useRef();
 
+  const [signupPressed, setSignupPressed] = useState(false);
+
   function handleSignUpPress() {
     if (!fname || !lname || !username || !password || !location || !email) {
       setShow(true);
@@ -190,9 +192,12 @@ export default function SignUpScreen({ navigation }) {
             <></>
           )}
           <Pressable
-            android_ripple={{ color: "white", borderless: false }}
-            style={styles.signUpButton}
+            style={
+              signupPressed ? styles.signupButtonPressed : styles.signUpButton
+            }
             onPress={handleSignUpPress}
+            onPressIn={() => setSignupPressed(true)}
+            onPressOut={() => setSignupPressed(false)}
           >
             <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
           </Pressable>
@@ -237,7 +242,14 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     backgroundColor: "#47c9af",
-    borderColor: "#000",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 100,
+    margin: 20,
+    padding: 10,
+  },
+  signupButtonPressed: {
+    backgroundColor: "#357568",
     borderWidth: 1,
     borderRadius: 5,
     width: 100,

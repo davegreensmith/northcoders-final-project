@@ -33,6 +33,10 @@ export default function ProfileScreen({ navigation }) {
     username: "",
   });
 
+  const [errandsButtonPressed, setErrandsButtonsPressed] = useState(false);
+  const [chipinButtonPressed, setchipinButtonsPressed] = useState(false);
+  const [settingsButtonPressed, setSettingsButtonsPressed] = useState(false);
+
   function handleErrandsListPress() {
     navigation.navigate("Errands List");
   }
@@ -87,26 +91,41 @@ export default function ProfileScreen({ navigation }) {
         </View>
         <View style={styles.buttonsFlexBox}>
           <Pressable
-            android_ripple={{ color: "white", borderless: false }}
             onPress={handleErrandsListPress}
-            style={styles.myErrandsButton}
+            style={
+              errandsButtonPressed
+                ? styles.myErrandsButtonPressed
+                : styles.myErrandsButton
+            }
+            onPressIn={() => setErrandsButtonsPressed(true)}
+            onPressOut={() => setErrandsButtonsPressed(false)}
           >
             <Text>My Errands</Text>
             <Ionicons name="md-list-outline" size={24} color="black" />
           </Pressable>
           <Pressable
-            android_ripple={{ color: "white", borderless: false }}
             onPress={handleChipInsPress}
-            style={styles.myErrandsButton}
+            style={
+              chipinButtonPressed
+                ? styles.myErrandsButtonPressed
+                : styles.myErrandsButton
+            }
+            onPressIn={() => setchipinButtonsPressed(true)}
+            onPressOut={() => setchipinButtonsPressed(false)}
           >
             <Text>My Chip Ins</Text>
             <Ionicons name="md-list-outline" size={24} color="black" />
           </Pressable>
           <View style={styles.iconFlexBox}>
             <Pressable
-              android_ripple={{ color: "white", borderless: false }}
-              style={styles.cogButton}
+              style={
+                settingsButtonPressed
+                  ? styles.cogButtonPressed
+                  : styles.cogButton
+              }
               onPress={handleSettingsPress}
+              onPressIn={() => setSettingsButtonsPressed(true)}
+              onPressOut={() => setSettingsButtonsPressed(false)}
             >
               <Ionicons name="cog-outline" size={36} color="black" />
             </Pressable>
@@ -178,6 +197,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
   },
+  myErrandsButtonPressed: {
+    backgroundColor: "#357568",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 130,
+    padding: 5,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  },
   iconFlexBox: {
     marginLeft: 1,
   },
@@ -188,6 +218,16 @@ const styles = StyleSheet.create({
     width: 40,
     borderRadius: 5,
     backgroundColor: "#47c9af",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cogButtonPressed: {
+    borderWidth: 1,
+    padding: 0,
+    height: 40,
+    width: 40,
+    borderRadius: 5,
+    backgroundColor: "#357568",
     justifyContent: "center",
     alignItems: "center",
   },

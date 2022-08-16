@@ -25,6 +25,8 @@ export default function SingleErrandScreen({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasChippedIn, setHasChippedIn] = useState(false);
 
+  const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
+
   function handleChipIn() {
     addChipperToErrand(id);
     setHasChippedIn(true);
@@ -96,9 +98,18 @@ export default function SingleErrandScreen({ route, navigation }) {
           ) : (
             <View>
               <Pressable
-                android_ripple={{ color: "white", borderless: false }}
-                style={styles.chipInButton}
+                style={
+                  submitButtonPressed
+                    ? styles.chipInButtonPressed
+                    : styles.chipInButton
+                }
                 onPress={handleChipIn}
+                onPressIn={() => {
+                  setSubmitButtonPressed(true);
+                }}
+                onPressOut={() => {
+                  setSubmitButtonPressed(false);
+                }}
               >
                 <Text style={{ textAlign: "center", fontSize: 18 }}>
                   Chip In
@@ -151,6 +162,14 @@ const styles = StyleSheet.create({
   },
   chipInButton: {
     backgroundColor: "#47c9af",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 100,
+    margin: 30,
+    padding: 10,
+  },
+  chipInButtonPressed: {
+    backgroundColor: "#357568",
     borderWidth: 1,
     borderRadius: 5,
     width: 100,

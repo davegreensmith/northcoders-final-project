@@ -121,7 +121,6 @@ export default function MapScreen({ navigation }) {
                 >
                   <Callout style={styles.callout}>
                     <Pressable
-                      android_ripple={{ color: "white", borderless: false }}
                       onPress={() => {
                         handleGoToErrand(id);
                       }}

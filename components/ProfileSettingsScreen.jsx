@@ -18,6 +18,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function ProfileSettingsScreen({ navigation }) {
+  const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
+  const [passwordButtonPressed, setPasswordButtonPressed] = useState(false);
+  const [logoutButtonPressed, setLogoutButtonPressed] = useState(false);
+  const [deleteButtonPressed, setDeleteButtonPressed] = useState(false);
+
   const [profileDetails, setProfileDetails] = useState({
     username: "pipe-smoking-rabbit",
     location: "M16 0AW",
@@ -86,7 +91,6 @@ export default function ProfileSettingsScreen({ navigation }) {
             onBlur={handleUsernameChange}
           />
           <Pressable
-            android_ripple={{ color: "white", borderless: false }}
             onPress={handleUsernameEditPress}
             style={styles.editFieldButton}
           >
@@ -105,7 +109,6 @@ export default function ProfileSettingsScreen({ navigation }) {
             onBlur={handleLocationChange}
           />
           <Pressable
-            android_ripple={{ color: "white", borderless: false }}
             onPress={handleLocationEditPress}
             style={styles.editFieldButton}
           >
@@ -124,7 +127,6 @@ export default function ProfileSettingsScreen({ navigation }) {
             onBlur={handleFirstNameChange}
           />
           <Pressable
-            android_ripple={{ color: "white", borderless: false }}
             onPress={handleFirstNameEditPress}
             style={styles.editFieldButton}
           >
@@ -143,7 +145,6 @@ export default function ProfileSettingsScreen({ navigation }) {
             onBlur={handleLastNameChange}
           />
           <Pressable
-            android_ripple={{ color: "white", borderless: false }}
             onPress={handleLastNameEditPress}
             style={styles.editFieldButton}
           >
@@ -167,10 +168,15 @@ export default function ProfileSettingsScreen({ navigation }) {
         <View style={styles.submitFlexBox}>
           <View style={styles.dividerLine}></View>
           <Pressable
-            android_ripple={{ color: "white", borderless: false }}
-            style={styles.submitButton}
+            style={
+              submitButtonPressed
+                ? styles.submitButtonPressed
+                : styles.submitButton
+            }
+            onPressIn={() => setSubmitButtonPressed(true)}
+            onPressOut={() => setSubmitButtonPressed(false)}
           >
-            <Text style={{ fontSize: Platform.OS === "android" ? 16 : 11 }}>
+            <Text style={{ fontSize: Platform.OS === "android" ? 14 : 11 }}>
               Submit Changes
             </Text>
           </Pressable>
@@ -179,8 +185,13 @@ export default function ProfileSettingsScreen({ navigation }) {
         <View style={styles.changePassword}>
           <Text style={styles.fieldLabel}>Send Password Reset Link:</Text>
           <Pressable
-            android_ripple={{ color: "white", borderless: false }}
-            style={styles.passwordResetButton}
+            style={
+              passwordButtonPressed
+                ? styles.passwordResetButtonPressed
+                : styles.passwordResetButton
+            }
+            onPressIn={() => setPasswordButtonPressed(true)}
+            onPressOut={() => setPasswordButtonPressed(false)}
           >
             <MaterialCommunityIcons
               name="email-send-outline"
@@ -192,8 +203,13 @@ export default function ProfileSettingsScreen({ navigation }) {
         <View style={styles.logoutFlex}>
           <Text style={styles.fieldLabel}>Logout:</Text>
           <Pressable
-            android_ripple={{ color: "white", borderless: false }}
-            style={styles.logoutButton}
+            style={
+              logoutButtonPressed
+                ? styles.logoutButtonPressed
+                : styles.logoutButton
+            }
+            onPressIn={() => setLogoutButtonPressed(true)}
+            onPressOut={() => setLogoutButtonPressed(false)}
           >
             <SimpleLineIcons name="logout" size={24} color="black" />
           </Pressable>
@@ -201,8 +217,13 @@ export default function ProfileSettingsScreen({ navigation }) {
         <View style={styles.logoutFlex}>
           <Text style={styles.fieldLabel}>Delete Account:</Text>
           <Pressable
-            android_ripple={{ color: "white", borderless: false }}
-            style={styles.deleteButton}
+            style={
+              deleteButtonPressed
+                ? styles.deleteButtonPressed
+                : styles.deleteButton
+            }
+            onPressIn={() => setDeleteButtonPressed(true)}
+            onPressOut={() => setDeleteButtonPressed(false)}
           >
             <AntDesign name="deleteuser" size={24} color="black" />
           </Pressable>
@@ -300,6 +321,16 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 5,
   },
+  submitButtonPressed: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#357568",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 120,
+    height: 40,
+    padding: 5,
+  },
   dividerLine: {
     borderWidth: 0.5,
     flex: 1,
@@ -319,6 +350,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
   },
+  passwordResetButtonPressed: {
+    marginRight: 16,
+    borderWidth: 0.5,
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: "gray",
+  },
   logoutFlex: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -333,11 +371,25 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
   },
+  logoutButtonPressed: {
+    marginRight: 16,
+    borderWidth: 0.5,
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: "gray",
+  },
   deleteButton: {
     marginRight: 16,
     borderWidth: 0.5,
     padding: 8,
     borderRadius: 10,
     backgroundColor: "rgba(255, 58, 58, 0.72)",
+  },
+  deleteButtonPressed: {
+    marginRight: 16,
+    borderWidth: 0.5,
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: "rgba(149, 37, 37, 0.9)",
   },
 });
