@@ -206,6 +206,7 @@ export default function AddErrandScreen({ navigation }) {
               <Picker.Item label="Charity" value={"charity"} />
               <Picker.Item label="Dog Walking" value={"dog walking"} />
               <Picker.Item label="Construction" value={"construction"} />
+              <Picker.Item label="Cleaning" value={"cleaning"} />
             </Picker>
             <Text
               style={{
