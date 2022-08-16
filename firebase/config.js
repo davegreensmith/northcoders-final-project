@@ -293,16 +293,20 @@ export function fetchErrandByErrandID(errandID) {
 
 export function fetchErrandsByUserID() {
   return fetchErrands().then((errands) => {
-    return Promise.all([getUsername(), errands]).then(([username, errands]) => {
-      const errandsList = [...errands];
-      let list = [];
-      errandsList.forEach((errand) => {
-        if (errand.chippers.includes(username)) {
-          list.push(errand);
-        }
-      });
-      return list;
-    });
+    return Promise.all([getUsername(), errands]).then(
+      ([{ user, id }, errands]) => {
+        const errandsList = [...errands];
+        let list = [];
+        errandsList.forEach((errand) => {
+          errand.chippers.forEach((chipper) => {
+            if (chipper.user === user) {
+              list.push(errand);
+            }
+          });
+        });
+        return list;
+      }
+    );
   });
 }
 
