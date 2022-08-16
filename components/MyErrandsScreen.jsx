@@ -28,6 +28,10 @@ export default function MyErrandsScreen({ navigation }) {
   const [refreshPage, setRefreshPage] = useState(true);
   const [completed, setCompleted] = useState(false);
 
+  const [completeButtonPressed, setCompleteButtonPressed] = useState(false);
+  const [editButtonPressed, setEditButtonPressed] = useState(false);
+  const [deleteButtonPressed, setDeleteButtonPressed] = useState(false);
+
   function handleEditErrand(errandID) {
     fetchErrandByErrandID(errandID);
   }
@@ -131,10 +135,16 @@ export default function MyErrandsScreen({ navigation }) {
                 </View> */}
                 <View style={styles.buttonsFlexBox}>
                   <Pressable
-                    style={styles.completeButton}
+                    style={
+                      completeButtonPressed
+                        ? styles.completeButtonPressed
+                        : styles.completeButton
+                    }
                     onPress={(e) => {
                       handleCompleteErrand(errand.errandID);
                     }}
+                    onPressIn={() => setCompleteButtonPressed(true)}
+                    onPressOut={() => setCompleteButtonPressed(false)}
                   >
                     <Text>Completed</Text>
                     <MaterialIcons
@@ -144,21 +154,31 @@ export default function MyErrandsScreen({ navigation }) {
                     />
                   </Pressable>
                   <Pressable
-                    android_ripple={{ color: "white", borderless: false }}
                     onPress={(e) => {
                       handleEditErrand(errand.errandID);
                     }}
-                    style={styles.editButton}
+                    onPressIn={() => setEditButtonPressed(true)}
+                    onPressOut={() => setEditButtonPressed(false)}
+                    style={
+                      editButtonPressed
+                        ? styles.editButtonPressed
+                        : styles.editButton
+                    }
                   >
                     <Text>Edit</Text>
                     <Feather name="edit" size={18} color="black" />
                   </Pressable>
                   <Pressable
-                    android_ripple={{ color: "white", borderless: false }}
+                    style={
+                      deleteButtonPressed
+                        ? styles.deleteButtonPressedIn
+                        : styles.deleteButton
+                    }
                     onPress={(e) => {
                       handleDeleteErrand(errand.errandID);
                     }}
-                    style={styles.deleteButton}
+                    onPressIn={() => setDeleteButtonPressed(true)}
+                    onPressOut={() => setDeleteButtonPressed(false)}
                   >
                     <Text>Delete</Text>
                     <MaterialIcons
@@ -260,11 +280,44 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
+  completeButton: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    backgroundColor: "#48e582b7",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 125,
+    padding: 5,
+  },
+  completeButtonPressed: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    backgroundColor: "#339457",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 125,
+    padding: 5,
+  },
   editButton: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     backgroundColor: "rgba(86, 232, 195, 0.7)",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 110,
+    padding: 5,
+  },
+  editButtonPressed: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    backgroundColor: "rgb(49, 151, 125)",
     borderWidth: 1,
     borderRadius: 5,
     height: 40,
@@ -282,15 +335,15 @@ const styles = StyleSheet.create({
     width: 100,
     padding: 5,
   },
-  completeButton: {
+  deleteButtonPressedIn: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    backgroundColor: "#48e582b7",
+    backgroundColor: "rgba(149, 37, 37, 1)",
     borderWidth: 1,
     borderRadius: 5,
     height: 40,
-    width: 125,
+    width: 100,
     padding: 5,
   },
   chipperList: {
