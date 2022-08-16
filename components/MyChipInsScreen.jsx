@@ -37,7 +37,7 @@ export default function MyChipInsScreen({ navigation }) {
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
       <View style={styles.pageContent}>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps="always">
           {myChipIns.map((errand) => {
             return (
               <View key={errand.id} style={styles.listItem}>

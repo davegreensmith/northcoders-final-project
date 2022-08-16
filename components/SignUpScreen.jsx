@@ -82,7 +82,11 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={75}>
+      <KeyboardAwareScrollView
+        enableOnAndroid={true}
+        extraScrollHeight={75}
+        keyboardShouldPersistTaps="always"
+      >
         <View style={styles.container}>
           <Image
             style={styles.logo}
