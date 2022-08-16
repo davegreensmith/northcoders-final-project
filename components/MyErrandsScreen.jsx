@@ -19,16 +19,17 @@ import {
   getUserInfo,
   loggedInUserId,
   updateUserErrandList,
+  getUsername,
+  giveKudosByUid,
 } from "../firebase/config";
 
 export default function MyErrandsScreen({ navigation }) {
   const [myErrands, setMyErrands] = useState([]);
   const [refreshPage, setRefreshPage] = useState(true);
+  const [completed, setCompleted] = useState(false);
 
   function handleEditErrand(errandID) {
-    fetchErrandByErrandID(errandID).then((errandData) => {
-      console.log(errandData, "errand data in MyErrandsScreen edit button");
-    });
+    fetchErrandByErrandID(errandID);
   }
 
   function handleDeleteErrand(errandID) {
@@ -57,6 +58,14 @@ export default function MyErrandsScreen({ navigation }) {
     setMyErrands(newArray);
   }
 
+  function handleCompleteErrand(errandID) {
+    setCompleted(true);
+  }
+
+  function giveKudos(id) {
+    giveKudosByUid(id);
+  }
+
   useEffect(() => {
     getUserInfo().then(({ userData }) => {
       const userErrands = userData.errands;
@@ -72,9 +81,12 @@ export default function MyErrandsScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <View style={styles.pageContent}>
-        <ScrollView keyboardShouldPersistTaps="always">
-          {myErrands.map((errand) => {
+      <ScrollView
+        contentContainerStyle={styles.pageContent}
+        keyboardShouldPersistTaps="always"
+      >
+        {myErrands.length > 0 ? (
+          myErrands.map((errand) => {
             return (
               <View key={errand.errandID} style={styles.listItem}>
                 <View style={styles.titleField}>
@@ -98,16 +110,31 @@ export default function MyErrandsScreen({ navigation }) {
                 <View style={styles.jobLengthField}>
                   <Text>Job length: {errand.timeFrame}</Text>
                 </View>
-                <View style={styles.jobLengthField}>
+                {/* <View style={styles.jobLengthField}>
                   <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
                   {errand.chippers.map((chipper) => {
-                    return <Text>{chipper}</Text>;
+                    return (
+                      <View key={chipper.id} style={styles.chipperList}>
+                        <Text>{chipper.user}</Text>
+                        <Pressable
+                          disabled={false}
+                          style={styles.kudosButton}
+                          onPress={(e) => {
+                            giveKudos(chipper.id);
+                          }}
+                        >
+                          <Text>Give kudos!</Text>
+                        </Pressable>
+                      </View>
+                    );
                   })}
-                </View>
+                </View> */}
                 <View style={styles.buttonsFlexBox}>
                   <Pressable
-                    android_ripple={{ color: "white", borderless: false }}
                     style={styles.completeButton}
+                    onPress={(e) => {
+                      handleCompleteErrand(errand.errandID);
+                    }}
                   >
                     <Text>Completed</Text>
                     <MaterialIcons
@@ -143,9 +170,18 @@ export default function MyErrandsScreen({ navigation }) {
                 </View>
               </View>
             );
-          })}
-        </ScrollView>
-      </View>
+          })
+        ) : (
+          <View style={styles.noErrandsPage}>
+            <View style={styles.noErrandsBubble}>
+              <Text style={{ textAlign: "center" }}>
+                You don't have any errands yet, if you need some help go and add
+                a new one! 📝
+              </Text>
+            </View>
+          </View>
+        )}
+      </ScrollView>
       <NavBar navigation={navigation} />
     </View>
   );
@@ -153,7 +189,7 @@ export default function MyErrandsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flex: 1,
+    flexGrow: 1,
   },
   listItem: {
     justifyContent: "space-evenly",
@@ -256,5 +292,29 @@ const styles = StyleSheet.create({
     height: 40,
     width: 125,
     padding: 5,
+  },
+  chipperList: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  kudosButton: {
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "black",
+    width: 80,
+    backgroundColor: "beige",
+  },
+  noErrandsPage: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noErrandsBubble: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 15,
+    margin: 10,
+    borderWidth: 0.5,
+    borderColor: "gray",
   },
 });

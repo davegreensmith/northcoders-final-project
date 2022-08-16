@@ -52,7 +52,7 @@ export default function AddErrandScreen({ navigation }) {
         .then(({ longLatData }) => {
           return Promise.all([getUsername(), longLatData]);
         })
-        .then(([username, longLatData]) => {
+        .then(([{ user, id }, longLatData]) => {
           const errandDetails = {
             ...longLatData,
             timeFrame,
@@ -62,7 +62,8 @@ export default function AddErrandScreen({ navigation }) {
             requirements,
             location,
             date,
-            author: username,
+            author: user,
+            authorId: id,
             chippers: [],
           };
           return errandDetails;
@@ -208,6 +209,7 @@ export default function AddErrandScreen({ navigation }) {
               <Picker.Item label="Charity" value={"charity"} />
               <Picker.Item label="Dog Walking" value={"dog walking"} />
               <Picker.Item label="Construction" value={"construction"} />
+              <Picker.Item label="Cleaning" value={"cleaning"} />
             </Picker>
             <Text
               style={{

@@ -28,7 +28,7 @@ export default function MyChipInsScreen({ navigation }) {
   }
 
   useEffect(() => {
-    return fetchErrandsByUserID().then((data) => {
+    fetchErrandsByUserID().then((data) => {
       setMyChipIns([...data]);
     });
   }, [refreshPage]);
@@ -36,9 +36,12 @@ export default function MyChipInsScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <View style={styles.pageContent}>
-        <ScrollView keyboardShouldPersistTaps="always">
-          {myChipIns.map((errand) => {
+      <ScrollView
+        contentContainerStyle={styles.pageContent}
+        keyboardShouldPersistTaps="always"
+      >
+        {myChipIns.length > 0 ? (
+          myChipIns.map((errand) => {
             return (
               <View key={errand.id} style={styles.listItem}>
                 <View style={styles.titleField}>
@@ -76,9 +79,18 @@ export default function MyChipInsScreen({ navigation }) {
                 </View>
               </View>
             );
-          })}
-        </ScrollView>
-      </View>
+          })
+        ) : (
+          <View style={styles.noChipInsPage}>
+            <View style={styles.noChipsInsBubble}>
+              <Text style={{ textAlign: "center" }}>
+                You aren't currently helping anyone, pull your finger out and
+                start volunteering! 😉
+              </Text>
+            </View>
+          </View>
+        )}
+      </ScrollView>
       <NavBar navigation={navigation} />
     </View>
   );
@@ -167,5 +179,18 @@ const styles = StyleSheet.create({
     height: 40,
     width: 160,
     padding: 5,
+  },
+  noChipInsPage: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noChipsInsBubble: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 15,
+    margin: 10,
+    borderWidth: 0.5,
+    borderColor: "gray",
   },
 });

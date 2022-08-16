@@ -69,7 +69,8 @@ export function getUsername() {
 
   return getDoc(docRef).then((doc) => {
     const user = doc.data();
-    return user.username;
+    const id = doc._key.path.segments[1];
+    return { user: user.username, id };
   });
 }
 
@@ -100,7 +101,7 @@ export function fetchUsers() {
 export function addUser(email, id) {
   const userRef = doc(db, "users", id);
 
-  return Promise.all([setDoc(userRef, { email, errands: [] }), id])
+  return Promise.all([setDoc(userRef, { email, errands: [], kudos: 0 }), id])
     .then(([undefined, id]) => {
       return { id };
     })
@@ -155,8 +156,8 @@ export function updateUserInfo(userId, userDetails) {
 }
 
 //get logged in user info
-export function getUserInfo() {
-  const userRef = doc(db, "users", loggedInUser.uid);
+export function getUserInfo(id = loggedInUser.uid) {
+  const userRef = doc(db, "users", id);
   return getDoc(userRef).then((data) => {
     const userData = { ...data.data() };
     return { userData };
@@ -210,10 +211,21 @@ export function addChipperToErrand(errandID) {
     updateDoc(errand, {
       chippers: arrayUnion(username),
     });
-    console.log(username, "<<< should be added to the list");
   });
 }
 
+//give kudos
+export function giveKudosByUid(id) {
+  return getUserInfo(id).then(({ userData }) => {
+    let kudos = userData.kudos;
+    kudos++;
+    const body = { kudos };
+    const userRef = doc(db, "users", id);
+    updateDoc(userRef, body);
+  });
+}
+
+//update errand
 export function updateErrand(errandID, updateBody) {
   const errandRef = doc(db, "errands", errandID);
   updateDoc(errandRef, updateBody);
@@ -281,16 +293,20 @@ export function fetchErrandByErrandID(errandID) {
 
 export function fetchErrandsByUserID() {
   return fetchErrands().then((errands) => {
-    return Promise.all([getUsername(), errands]).then(([username, errands]) => {
-      const errandsList = [...errands];
-      let list = [];
-      errandsList.forEach((errand) => {
-        if (errand.chippers.includes(username)) {
-          list.push(errand);
-        }
-      });
-      return list;
-    });
+    return Promise.all([getUsername(), errands]).then(
+      ([{ user, id }, errands]) => {
+        const errandsList = [...errands];
+        let list = [];
+        errandsList.forEach((errand) => {
+          errand.chippers.forEach((chipper) => {
+            if (chipper.user === user) {
+              list.push(errand);
+            }
+          });
+        });
+        return list;
+      }
+    );
   });
 }
 
