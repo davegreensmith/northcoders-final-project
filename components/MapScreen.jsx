@@ -38,10 +38,6 @@ export default function MapScreen({ navigation }) {
   ]);
   // const [radius, setRadius] = useState(1000)
 
-  function handleGiveHelpPress() {
-    navigation.navigate("Map");
-  }
-
   function handleGoToErrand(id) {
     navigation.navigate("Single Errand", { id });
   }
@@ -111,6 +107,7 @@ export default function MapScreen({ navigation }) {
             radius={value}
             fillColor={"rgba(27.8, 78.8, 68.6, 0.3)"}
           ></Circle>
+
           {latLongArray ? (
             latLongArray.map((errand) => {
               const latitude = errand.latitude;
@@ -119,22 +116,34 @@ export default function MapScreen({ navigation }) {
 
               return (
                 <Marker
+                  onCalloutPress={() => {
+                    handleGoToErrand(id);
+                  }}
                   coordinate={{
                     latitude,
                     longitude,
                   }}
                   key={errand.errandID}
                 >
-                  <Callout style={styles.callout}>
-                    <Pressable
-                      onPress={() => {
-                        handleGoToErrand(id);
-                      }}
-                    >
-                      <Text style={styles.heading}>{errand.errandName}</Text>
-                      <Text style={styles.paragraph}>{errand.author}</Text>
-                      <Text style={styles.date}>{errand.date}</Text>
-                    </Pressable>
+                  <Callout tooltip={true}>
+                    <View>
+                      <Pressable
+                        style={styles.markerBubble}
+                        onPress={() => {
+                          handleGoToErrand(id);
+                        }}
+                      >
+                        <Text style={styles.personAsking}>
+                          {errand.author} wants help with
+                        </Text>
+                        <Text style={styles.heading}>
+                          "{errand.errandName}"
+                        </Text>
+                        <Text style={styles.date}>on {errand.date}</Text>
+                        <Text style={styles.viewDetails}>Find Out More...</Text>
+                      </Pressable>
+                      <View style={styles.arrow}></View>
+                    </View>
                   </Callout>
                 </Marker>
               );
@@ -168,25 +177,49 @@ const styles = StyleSheet.create({
   dropdown: {
     width: Platform.OS === "android" ? 200 : 180,
   },
-  callout: {
-    flex: 1,
-    justifyContent: "center",
+  markerBubble: {
+    justifyContent: "space-evenly",
     alignItems: "center",
+    backgroundColor: "white",
+    borderColor: "#47c9af",
+    borderWidth: 4,
+    borderRightWidth: 8,
+    borderLeftWidth: 8,
+    borderBottomWidth: 10,
+    borderRadius: 30,
+    padding: 15,
+  },
+  arrow: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderLeftWidth: 30,
+    borderRightWidth: 30,
+    borderTopWidth: 20,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderTopColor: "#47c9af",
+    alignSelf: "center",
   },
   heading: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "bold",
-  },
-  paragraph: {
-    textAlign: "center",
-    // marginLeft: 10,
     marginTop: 5,
-    fontSize: 14,
+  },
+  personAsking: {
+    textAlign: "center",
+    fontSize: 13,
   },
   date: {
     textAlign: "center",
-    // marginLeft: 10,
     marginTop: 5,
     fontSize: 14,
+    color: "gray",
+  },
+  viewDetails: {
+    marginTop: 5,
+    color: "#4faf9c",
+    textDecorationLine: "underline",
   },
 });

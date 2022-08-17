@@ -14,6 +14,7 @@ import SingleErrandScreen from "./components/SingleErrandScreen";
 import NotificationsScreen from "./components/NotficationsScreen";
 import MessageBoard from "./components/MessageBoard";
 import MessageSingle from "./components/MessageSingle";
+import EditErrandScreen from "./components/EditErrandScreen";
 export default function App() {
   const Stack = createNativeStackNavigator();
 
@@ -83,6 +84,11 @@ export default function App() {
         <Stack.Screen
           name="MessageSingle"
           component={MessageSingle}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Edit Errand"
+          component={EditErrandScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

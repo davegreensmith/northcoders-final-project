@@ -227,7 +227,7 @@ export function giveKudosByUid(id) {
 }
 
 //update errand
-export function updateErrand(errandID, updateBody) {
+export function updateErrand(errandID, updatedBody) {
   const errandRef = doc(db, "errands", errandID);
   return updateDoc(errandRef, updateBody).then((result) => {
     return result;

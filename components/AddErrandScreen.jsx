@@ -142,13 +142,13 @@ export default function AddErrandScreen({ navigation }) {
             style={styles.descriptionField}
             onChangeText={setDescription}
             value={description}
-            placeholder="* Description of the work you need help with..."
+            placeholder="* Description of the work you need help with, give as much detail as possible..."
           />
           <TextInput
             style={styles.genericInputField}
             onChangeText={setRequirements}
             value={requirements}
-            placeholder="Requirements (optional)"
+            placeholder=" Volunteer Requirements (optional)"
           />
           <TextInput
             style={styles.genericInputField}
@@ -160,7 +160,7 @@ export default function AddErrandScreen({ navigation }) {
             style={styles.genericInputField}
             onChangeText={setDate}
             value={date}
-            placeholder="* Date (DD/MM/YYYY)"
+            placeholder="* Errand Date (DD/MM/YYYY)"
           />
           <View style={styles.dropdownFlexTime}>
             <Picker
@@ -172,13 +172,25 @@ export default function AddErrandScreen({ navigation }) {
                 setTimeFrame(itemValue);
               }}
             >
-              <Picker.Item label="- Select -" value={0} />
-              <Picker.Item label="Less than half an hour" value={0.5} />
-              <Picker.Item label="Around an hour" value={1} />
-              <Picker.Item label="A couple of hours" value={2} />
-              <Picker.Item label="A few hours" value={3} />
-              <Picker.Item label="Half a working day" value={4} />
-              <Picker.Item label="A full day's work" value={8} />
+              <Picker.Item label="- Select -" value={""} />
+              <Picker.Item
+                label="Less than half an hour"
+                value={"Less than half an hour"}
+              />
+              <Picker.Item label="Around an hour" value={"Around an hour"} />
+              <Picker.Item
+                label="A couple of hours"
+                value={"A couple of hours"}
+              />
+              <Picker.Item label="A few hours" value={"A few hours"} />
+              <Picker.Item
+                label="Half a working day"
+                value={"Half a working day"}
+              />
+              <Picker.Item
+                label="A full day's work"
+                value={"A full day's work"}
+              />
             </Picker>
             <Text
               style={{
@@ -200,16 +212,17 @@ export default function AddErrandScreen({ navigation }) {
                 setWorkType(itemValue);
               }}
             >
-              <Picker.Item label="- Select -" value={"none"} />
-              <Picker.Item label="Heavy Lifting" value={"heavy lifting"} />
-              <Picker.Item label="Gardening" value={"gardening"} />
-              <Picker.Item label="Shopping" value={"shopping"} />
-              <Picker.Item label="Transportation" value={"transportation"} />
-              <Picker.Item label="Entertainment" value={"entertainment"} />
-              <Picker.Item label="Charity" value={"charity"} />
-              <Picker.Item label="Dog Walking" value={"dog walking"} />
-              <Picker.Item label="Construction" value={"construction"} />
-              <Picker.Item label="Cleaning" value={"cleaning"} />
+              <Picker.Item label="- Select -" value={"None"} />
+              <Picker.Item label="Heavy Lifting" value={"Heavy Lifting"} />
+              <Picker.Item label="Gardening" value={"Gardening"} />
+              <Picker.Item label="Shopping" value={"Shopping"} />
+              <Picker.Item label="Transportation" value={"Transportation"} />
+              <Picker.Item label="Entertainment" value={"Entertainment"} />
+              <Picker.Item label="Charity" value={"Charity"} />
+              <Picker.Item label="Dog Walking" value={"Dog Walking"} />
+              <Picker.Item label="Construction" value={"Construction"} />
+              <Picker.Item label="Cleaning" value={"Cleaning"} />
+              <Picker.Item label="Other" value={"Other"} />
             </Picker>
             <Text
               style={{
