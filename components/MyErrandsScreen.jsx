@@ -22,6 +22,7 @@ import {
   getUsername,
   giveKudosByUid,
   deleteErrandByErrandID,
+  getUserErrands,
 } from "../firebase/config";
 
 export default function MyErrandsScreen({ navigation }) {
@@ -33,6 +34,7 @@ export default function MyErrandsScreen({ navigation }) {
   const [completeButtonPressed, setCompleteButtonPressed] = useState(false);
   const [editButtonPressed, setEditButtonPressed] = useState(false);
   const [deleteButtonPressed, setDeleteButtonPressed] = useState(false);
+  const [messagesButtonPressed, setMessagesButtonPressed] = useState(false);
 
   function handleEditErrand(errandID) {
     fetchErrandByErrandID(errandID);
@@ -62,16 +64,24 @@ export default function MyErrandsScreen({ navigation }) {
     giveKudosByUid(id);
   }
 
+  function handleMessagesErrand(errandID) {
+    navigation.navigate("MessageSingle", { errandID });
+  }
+
   useEffect(() => {
-    getUserInfo().then(({ userData }) => {
-      const userErrands = userData.errands;
-      const errandPromises = userErrands.map((errandID) => {
-        return fetchErrandByErrandID(errandID);
-      });
-      return Promise.all(errandPromises).then((fulfilledPromises) => {
-        setMyErrands([...fulfilledPromises]);
-      });
+    return getUserErrands().then((fulfilledPromises) => {
+      const errands = [...fulfilledPromises];
+      setMyErrands(errands);
     });
+    // getUserInfo().then(({ userData }) => {
+    //   const userErrands = userData.errands;
+    //   const errandPromises = userErrands.map((errandID) => {
+    //     return fetchErrandByErrandID(errandID);
+    //   });
+    //   return Promise.all(errandPromises).then((fulfilledPromises) => {
+    //     setMyErrands([...fulfilledPromises]);
+    //   });
+    // });
   }, [refreshPage]);
 
   return (
@@ -200,6 +210,24 @@ export default function MyErrandsScreen({ navigation }) {
                     />
                   </Pressable>
                 </View>
+                <View style={styles.messagesFlexbox}>
+                  <Pressable
+                    onPressIn={() => setMessagesButtonPressed(true)}
+                    onPressOut={() => {
+                      setMessagesButtonPressed(false);
+                      const id = errand.errandID;
+                      handleMessagesErrand(id);
+                    }}
+                    style={
+                      messagesButtonPressed
+                        ? styles.messagesButtonPressed
+                        : styles.messagesButton
+                    }
+                  >
+                    <Text>Messages </Text>
+                    <Feather name="message-circle" size={18} color="black" />
+                  </Pressable>
+                </View>
               </View>
             );
           })
@@ -221,16 +249,16 @@ export default function MyErrandsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   listItem: {
     justifyContent: "space-evenly",
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   titleField: {
     justifyContent: "flex-start",
     flexDirection: "row",
-    padding: 15
+    padding: 15,
   },
   descriptionField: {
     justifyContent: "center",
@@ -241,7 +269,7 @@ const styles = StyleSheet.create({
     padding: 10,
 
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   requirementsField: {
     justifyContent: "center",
@@ -252,7 +280,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   jobTypeField: {
     justifyContent: "center",
@@ -263,7 +291,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   locationField: {
     justifyContent: "center",
@@ -274,7 +302,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   dateField: {
     justifyContent: "center",
@@ -285,7 +313,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   jobLengthField: {
     justifyContent: "center",
@@ -296,14 +324,21 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   buttonsFlexBox: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 5,
+  },
+  messagesFlexbox: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    marginTop: 5,
+    marginBottom: 20,
   },
   completeButton: {
     flexDirection: "row",
@@ -314,7 +349,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 125,
-    padding: 5
+    padding: 5,
   },
   completeButtonPressed: {
     flexDirection: "row",
@@ -325,7 +360,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 125,
-    padding: 5
+    padding: 5,
   },
   editButton: {
     flexDirection: "row",
@@ -336,7 +371,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 110,
-    padding: 5
+    padding: 5,
   },
   editButtonPressed: {
     flexDirection: "row",
@@ -347,7 +382,29 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 110,
-    padding: 5
+    padding: 5,
+  },
+  messagesButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFAF0",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 350,
+    padding: 5,
+  },
+  messagesButtonPressed: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgb(49, 151, 125)",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 350,
+    padding: 5,
   },
   deleteButton: {
     flexDirection: "row",
@@ -358,7 +415,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 100,
-    padding: 5
+    padding: 5,
   },
   deleteButtonPressedIn: {
     flexDirection: "row",
@@ -369,23 +426,23 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 100,
-    padding: 5
+    padding: 5,
   },
   chipperList: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   kudosButton: {
     borderWidth: 1,
     borderRadius: 5,
     borderColor: "black",
     width: 80,
-    backgroundColor: "beige"
+    backgroundColor: "beige",
   },
   noErrandsPage: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   noErrandsBubble: {
     backgroundColor: "white",
@@ -393,12 +450,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     margin: 10,
     borderWidth: 0.5,
-    borderColor: "gray"
+    borderColor: "gray",
   },
   completed: {
     display: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 15
-  }
+    marginTop: 15,
+  },
 });

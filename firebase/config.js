@@ -60,6 +60,7 @@ export function sendResetPasswordEmail(email) {
 export const usersRef = collection(db, "users");
 export const errandsRef = collection(db, "errands");
 export const latlongsRef = collection(db, "latlongs");
+export const messagesRef = collection(db, "messages");
 
 //USER DATA
 //get logged in username
@@ -228,7 +229,9 @@ export function giveKudosByUid(id) {
 //update errand
 export function updateErrand(errandID, updatedBody) {
   const errandRef = doc(db, "errands", errandID);
-  updateDoc(errandRef, updatedBody);
+  return updateDoc(errandRef, updatedBody).then((result) => {
+    return result;
+  });
 }
 
 //delete errands
@@ -275,7 +278,15 @@ export function fetchErrands() {
 }
 
 //get all errands for the logged in user
-export function getUserErrands() {}
+export function getUserErrands() {
+  return getUserInfo().then(({ userData }) => {
+    const userErrands = userData.errands;
+    const errandPromises = userErrands.map((errandID) => {
+      return fetchErrandByErrandID(errandID);
+    });
+    return Promise.all(errandPromises);
+  });
+}
 
 //get all latlongs for errands
 export function fetchLatLongs() {
@@ -348,33 +359,174 @@ function deleteFoundLatLong(latlongID) {
 
 //CHAT MESSAGES
 //add message to db
-export function addMessage(message, userId1, userId2) {
-  const messageObj = { message, userId1, userId2 };
+export function addMessage(messageDetails) {
   const messageRef = collection(db, "messages");
 
-  addDoc(messageRef, messageObj)
+  return addDoc(messageRef, messageDetails)
     .then((data) => {
-      // console.log(data._key.path.segments[1], '<<< errand doc number');
-      // console.log(data.firestore._firestoreClient.user.uid, '<<< users UID');
+      const messageID = data._key.path.segments[1];
+      const messageUserId = data.firestore._firestoreClient.user.uid;
+      return { messageID, messageUserId };
     })
     .catch((err) => {
       console.log(err.message);
     });
 }
 
-// fetch messages in realtime
+// export function fetchMessageIdByErrandId(errandID) {
+//   const errandRef = doc(db, "errands", errandID);
 
-// export function fetchMessage(messageId) {}
-
-// export function fetchErrands() {
-//   getDocs(errandsRef)
-//     .then((snapshot) => {
-//       let errands = [];
-//       snapshot.docs.forEach((doc) => {
-//         errands.push({ ...doc.data(), id: doc.id });
-//       });
+//   getDoc(errandRef, errandID)
+//     .then((data) => {
+//       const errandData = { ...data.data(), errandID };
+//       return errandData;
 //     })
-//     .catch((err) => {
-//       console.log(err.message, '<<< errands errors');
+//     .then((errandData) => {
+//       console.log(errandData, "<<< errand data in config");
 //     });
 // }
+
+export function addChipperToMessages(messageID, chipperData) {
+  const messages = doc(db, "messages", messageID);
+  updateDoc(messages, {
+    chippers: arrayUnion(chipperData),
+  });
+}
+
+export function fetchMessagesAllMessages() {
+  return getDocs(messagesRef)
+    .then((snapshot) => {
+      let messages = [];
+      snapshot.docs.forEach((doc) => {
+        messages.push({ ...doc.data(), id: doc.id });
+      });
+      return messages;
+    })
+    .catch((err) => {
+      console.log(err.message, "<<< errands errors");
+    });
+}
+
+export function fetchMessagesByMessageID(messageID) {
+  const messageRef = doc(db, "messages", messageID);
+  return Promise.all([getDoc(messageRef, messageID), messageID]).then(
+    ([data, messageID]) => {
+      const messageData = { ...data.data(), messageID };
+      return messageData;
+    }
+  );
+}
+
+export function postMessageByMessageID(messageID, addMessage) {
+  const message = doc(db, "messages", messageID);
+  updateDoc(message, {
+    body: arrayUnion(addMessage),
+  });
+}
+
+export function updateMessagePropertyByMessageID(messageID, updateBody) {
+  const messagesRef = doc(db, "messages", messageID);
+  updateDoc(messagesRef, updateBody);
+}
+
+//get all message
+export function fetchMessages() {
+  return getDocs(messagesRef)
+    .then((snapshot) => {
+      let messages = [];
+      snapshot.docs.forEach((doc) => {
+        messages.push({ ...doc.data(), id: doc.id });
+      });
+      return messages;
+    })
+    .catch((err) => {
+      console.log(err.message, "<<< messages errors");
+    });
+}
+
+export function fetchMessagesByUserID(userID) {
+  return Promise.all([fetchMessages(), userID]).then(([messages, userID]) => {
+    const errandOwnerOf = [];
+    const errandChipperIn = [];
+    messages.forEach((errand) => {
+      if (userID === errand.errandOwner.id) {
+        errandOwnerOf.push(errand);
+      } else {
+        errand.chippers.forEach((chipper) => {
+          if (userID === chipper.userID) {
+            errandChipperIn.push(errand);
+          }
+        });
+      }
+    });
+    const applicableMessages = { errandOwnerOf, errandChipperIn };
+    return applicableMessages;
+  });
+}
+
+// export function addErrandToUser(errandID, errandUserID) {
+//
+//
+// }
+
+// ***   DO NOT USE, NOW REDUNDANT!!  ***
+// ***   DO NOT USE, NOW REDUNDANT!!  ***
+// ***   DO NOT USE, NOW REDUNDANT!!  ***
+// ***   DO NOT USE, NOW REDUNDANT!!  ***
+export function createMessageAndAddIdToExistingErrands() {
+  const messagesRef = collection(db, "messages");
+
+  return Promise.all([fetchErrands(), messagesRef]).then(
+    ([errands, messagesRef]) => {
+      errands.map((errand) => {
+        const id = errand.authorId;
+        const username = errand.author;
+        const errandID = errand.id;
+        const messageDetails = {
+          chippers: [
+            { userID: "1UlM7MeNhbQbIKXaek321vvntiG3", username: "Greeners" },
+          ],
+          errandOwner: { id, username },
+          body: [
+            {
+              message: "Hi there, please bring muscles",
+              msgAuthor: "Greeners",
+            },
+          ],
+          errandID,
+        };
+
+        return Promise.all([addDoc(messagesRef, messageDetails), errand])
+          .then(([data, errand]) => {
+            const messageID = data._key.path.segments[1];
+            const errandDetails = { messageID: messageID };
+            const errandID = errand.id;
+            return updateErrand(errandID, errandDetails).then((mystery) => {});
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      });
+
+      return { complete: true };
+    }
+  );
+}
+
+export function updateMessageForErrandNames() {
+  return fetchMessages().then((data) => {
+    console.log(data, "<<< data from fetch messages");
+    data.forEach((message) => {
+      errandID = message.errandID;
+      return fetchErrandByErrandID(errandID).then((errand) => {
+        console.log(errand, "<<< errand");
+        console.log(message.id, "<<< related message ID");
+        console.log("-------------------------------");
+        const messageID = message.id;
+        const errandName = errand.errandName;
+        const body = { errandName };
+        updateMessagePropertyByMessageID(messageID, body);
+      });
+    });
+  });
+}

@@ -20,6 +20,8 @@ import {
   getUsername,
   updateLatLong,
   updateErrand,
+  addMessage,
+  updateMessagePropertyByMessageID,
 } from "../firebase/config";
 import { convertLocationToLatLong } from "../utils/api";
 
@@ -53,6 +55,19 @@ export default function AddErrandScreen({ navigation }) {
           return Promise.all([getUsername(), longLatData]);
         })
         .then(([{ user, id }, longLatData]) => {
+          const messageDetails = {
+            body: [],
+            chippers: [],
+            errandName,
+            errandOwner: { id, username: user },
+          };
+          return Promise.all([
+            addMessage(messageDetails),
+            { user, id },
+            longLatData,
+          ]);
+        })
+        .then(([{ messageID, messageUserId }, { user, id }, longLatData]) => {
           const errandDetails = {
             ...longLatData,
             timeFrame,
@@ -65,6 +80,7 @@ export default function AddErrandScreen({ navigation }) {
             author: user,
             authorId: id,
             chippers: [],
+            messageID,
           };
           return errandDetails;
         })
@@ -72,6 +88,9 @@ export default function AddErrandScreen({ navigation }) {
           return Promise.all([addErrand(errand), errand]);
         })
         .then(([{ errandID, errandUserId }, errand]) => {
+          const { messageID } = errand;
+          const messageBody = { errandID };
+          updateMessagePropertyByMessageID(messageID, messageBody);
           addErrandToUser(errandID, errandUserId);
           return Promise.all([
             convertLocationToLatLong(errand.location),
@@ -125,7 +144,7 @@ export default function AddErrandScreen({ navigation }) {
               marginLeft: 8,
               marginBottom: 10,
               marginTop: 10,
-              fontSize: 16
+              fontSize: 16,
             }}
           >
             What is it you would like help with?
@@ -196,7 +215,7 @@ export default function AddErrandScreen({ navigation }) {
               style={{
                 fontSize: Platform.OS === "android" ? 20 : 16,
                 flex: 1,
-                marginLeft: 10
+                marginLeft: 10,
               }}
             >
               How long will it take?
@@ -228,7 +247,7 @@ export default function AddErrandScreen({ navigation }) {
               style={{
                 fontSize: Platform.OS === "android" ? 20 : 16,
                 flex: 1,
-                marginLeft: 10
+                marginLeft: 10,
               }}
             >
               What type of work is involved?
@@ -274,7 +293,7 @@ export default function AddErrandScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   genericInputField: {
     backgroundColor: "#FFF",
@@ -287,7 +306,7 @@ const styles = StyleSheet.create({
     padding: 5,
     fontSize: 15,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   titleField: {
     backgroundColor: "#FFF",
@@ -300,24 +319,24 @@ const styles = StyleSheet.create({
     padding: 5,
     fontSize: 15,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   dropdownFlexTime: {
     flexDirection: Platform.OS === "android" ? "row" : "column-reverse",
     alignItems: "center",
     marginBottom: Platform.OS === "android" ? 10 : 0,
-    marginTop: Platform.OS === "android" ? 10 : 25
+    marginTop: Platform.OS === "android" ? 10 : 25,
   },
   dropdownFlexWorkType: {
     flexDirection: Platform.OS === "android" ? "row" : "column-reverse",
     alignItems: "center",
-    marginTop: Platform.OS === "android" ? 10 : 0
+    marginTop: Platform.OS === "android" ? 10 : 0,
   },
   dropdownMenu: {
     margin: 5,
     backgroundColor: Platform.OS === "android" ? "#FFF" : "#0000",
     width: Platform.OS === "android" ? 200 : "70%",
-    marginLeft: Platform.OS === "android" ? 9 : 0
+    marginLeft: Platform.OS === "android" ? 9 : 0,
   },
   descriptionField: {
     backgroundColor: "#FFF",
@@ -332,12 +351,12 @@ const styles = StyleSheet.create({
     padding: 5,
     fontSize: 15,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   submitButtonFlex: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   submitButton: {
     backgroundColor: "#47c9af",
@@ -345,7 +364,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: Platform.OS === "android" ? 125 : 150,
     marginBottom: 30,
-    padding: 10
+    padding: 10,
   },
   submitButtonPressed: {
     backgroundColor: "#357568",
@@ -353,14 +372,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: Platform.OS === "android" ? 125 : 150,
     marginBottom: 30,
-    padding: 10
+    padding: 10,
   },
   requiredText: {
     margin: 5,
-    fontSize: 12
+    fontSize: 12,
   },
   errorText: {
     alignItems: "center",
-    marginBottom: 8
-  }
+    marginBottom: 8,
+  },
 });

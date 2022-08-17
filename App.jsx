@@ -12,7 +12,8 @@ import MapScreen from "./components/MapScreen";
 import ProfileSettingsScreen from "./components/ProfileSettingsScreen";
 import SingleErrandScreen from "./components/SingleErrandScreen";
 import NotificationsScreen from "./components/NotficationsScreen";
-import MessageScreen from "./components/MessageScreen";
+import MessageBoard from "./components/MessageBoard";
+import MessageSingle from "./components/MessageSingle";
 import EditErrandScreen from "./components/EditErrandScreen";
 import AnotherUserProfile from "./components/AnotherUserProfile";
 export default function App() {
@@ -77,9 +78,14 @@ export default function App() {
           options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
-          name="Chats"
-          component={MessageScreen}
-          options={{ headerShown: false, animation: "none" }}
+          name="MessageBoard"
+          component={MessageBoard}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MessageSingle"
+          component={MessageSingle}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Edit Errand"
