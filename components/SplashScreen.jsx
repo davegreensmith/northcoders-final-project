@@ -26,7 +26,7 @@ export default function SplashScreen({ navigation }) {
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
       <View style={{ flex: 1, alignItems: "center" }}>
-        <Text style={styles.introText}>What are you looking for...</Text>
+        <Text style={styles.introText}>What are you looking for ?</Text>
         <View style={styles.pageContent}>
           <Pressable
             style={
@@ -39,7 +39,7 @@ export default function SplashScreen({ navigation }) {
             onPressOut={() => setVolunteerButtonPressed(false)}
           >
             <Text style={{ textAlign: "center", fontSize: 20 }}>
-              Volunteer your time?
+              Be a Volunteer
             </Text>
           </Pressable>
           <View style={styles.dividerFlex}>
@@ -56,7 +56,7 @@ export default function SplashScreen({ navigation }) {
             onPressOut={() => setHelpButtonPressed(false)}
           >
             <Text style={{ textAlign: "center", fontSize: 20 }}>
-              Need help?
+              Find a Volunteer
             </Text>
           </Pressable>
         </View>
