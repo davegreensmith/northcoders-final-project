@@ -38,52 +38,52 @@ export default function App() {
         <Stack.Screen
           name="Add Errand"
           component={AddErrandScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
           name="Profile Settings"
           component={ProfileSettingsScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
           name="Errands List"
           component={MyErrandsScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
           name="Chip Ins List"
           component={MyChipInsScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
           name="Map"
           component={MapScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
           name="Single Errand"
           component={SingleErrandScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
           name="Notifications"
           component={NotificationsScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
           name="Chats"
           component={MessageScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
           name="Edit Errand"
           component={EditErrandScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
