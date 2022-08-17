@@ -229,7 +229,7 @@ export function giveKudosByUid(id) {
 //update errand
 export function updateErrand(errandID, updatedBody) {
   const errandRef = doc(db, "errands", errandID);
-  return updateDoc(errandRef, updateBody).then((result) => {
+  return updateDoc(errandRef, updatedBody).then((result) => {
     return result;
   });
 }
@@ -359,6 +359,39 @@ function deleteFoundLatLong(latlongID) {
 
 //CHAT MESSAGES
 //add message to db
+export function addMessage(messageDetails) {
+  const messageRef = collection(db, "messages");
+
+  return addDoc(messageRef, messageDetails)
+    .then((data) => {
+      const messageID = data._key.path.segments[1];
+      const messageUserId = data.firestore._firestoreClient.user.uid;
+      return { messageID, messageUserId };
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
+// export function fetchMessageIdByErrandId(errandID) {
+//   const errandRef = doc(db, "errands", errandID);
+
+//   getDoc(errandRef, errandID)
+//     .then((data) => {
+//       const errandData = { ...data.data(), errandID };
+//       return errandData;
+//     })
+//     .then((errandData) => {
+//       console.log(errandData, "<<< errand data in config");
+//     });
+// }
+
+export function addChipperToMessages(messageID, chipperData) {
+  const messages = doc(db, "messages", messageID);
+  updateDoc(messages, {
+    chippers: arrayUnion(chipperData),
+  });
+}
 
 export function fetchMessagesAllMessages() {
   return getDocs(messagesRef)
