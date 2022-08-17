@@ -8,8 +8,9 @@ import {
   Pressable,
   StyleSheet,
   KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
-import { useState, useRef } from "react";
 import { CommonActions } from "@react-navigation/native";
 import { useState, useRef, useEffect } from "react";
 import Header from "./Header";
@@ -129,7 +130,7 @@ export default function ProfileSettingsScreen({ navigation }) {
 
   function handleUsernameEditPress() {
     setIsUsernameEdit(true);
-    username.current.focus();
+    usernameRef.current.focus();
   }
   function handleUsernameBlur() {
     setIsUsernameEdit(false);
@@ -140,7 +141,7 @@ export default function ProfileSettingsScreen({ navigation }) {
 
   function handleLocationEditPress() {
     setIsLocationEdit(true);
-    location.current.focus();
+    locationRef.current.focus();
   }
   function handleLocationBlur() {
     setIsLocationEdit(false);
@@ -151,7 +152,7 @@ export default function ProfileSettingsScreen({ navigation }) {
 
   function handleFirstNameEditPress() {
     setIsFirstNameEdit(true);
-    firstName.current.focus();
+    firstNameRef.current.focus();
   }
   function handleFirstNameBlur() {
     setIsFirstNameEdit(false);
@@ -162,7 +163,7 @@ export default function ProfileSettingsScreen({ navigation }) {
 
   function handleLastNameEditPress() {
     setIsLastNameEdit(true);
-    lastName.current.focus();
+    lastNameRef.current.focus();
   }
   function handleLastNameBlur() {
     setIsLastNameEdit(false);
@@ -171,203 +172,207 @@ export default function ProfileSettingsScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <View style={styles.pageContent}>
-        <View style={styles.changeUsername}>
-          <Text style={styles.fieldLabel}>Username:</Text>
-          <TextInput
-            ref={usernameRef}
-            style={isUsernameEdit ? styles.editFieldValue : styles.fieldValue}
-            value={username}
-            onChangeText={(newValue) => {
-              setUsername(newValue);
-              setFieldChanged(true);
-            }}
-            onFocus={() => {
-              setIsUsernameEdit(true);
-            }}
-            onBlur={handleUsernameBlur}
-          />
-          <Pressable
-            onPress={handleUsernameEditPress}
-            style={styles.editFieldButton}
-          >
-            <Feather name="edit" size={24} color="black" />
-          </Pressable>
-        </View>
-        <View style={styles.changeLocation}>
-          <Text style={styles.fieldLabel}>Your Location:</Text>
-          <TextInput
-            ref={locationRef}
-            style={isLocationEdit ? styles.editFieldValue : styles.fieldValue}
-            value={location}
-            onChangeText={(newValue) => {
-              setLocation(newValue);
-              setFieldChanged(true);
-            }}
-            onFocus={() => {
-              setIsLocationEdit(true);
-            }}
-            onBlur={handleLocationBlur}
-          />
-          <Pressable
-            onPress={handleLocationEditPress}
-            style={styles.editFieldButton}
-          >
-            <Feather name="edit" size={24} color="black" />
-          </Pressable>
-        </View>
-        <View style={styles.changeFirstname}>
-          <Text style={styles.fieldLabel}>First Name:</Text>
-          <TextInput
-            ref={firstNameRef}
-            style={isFirstNameEdit ? styles.editFieldValue : styles.fieldValue}
-            value={fname}
-            onChangeText={(newValue) => {
-              setFieldChanged(true);
-              setFname(newValue);
-            }}
-            onFocus={() => {
-              setIsFirstNameEdit(true);
-            }}
-            onBlur={handleFirstNameBlur}
-          />
-          <Pressable
-            onPress={handleFirstNameEditPress}
-            style={styles.editFieldButton}
-          >
-            <Feather name="edit" size={24} color="black" />
-          </Pressable>
-        </View>
-        <View style={styles.changeLastname}>
-          <Text style={styles.fieldLabel}>Last Name:</Text>
-          <TextInput
-            ref={lastNameRef}
-            style={isLastNameEdit ? styles.editFieldValue : styles.fieldValue}
-            value={lname}
-            onChangeText={(newValue) => {
-              setLname(newValue);
-              setFieldChanged(true);
-            }}
-            onFocus={() => {
-              setIsLastNameEdit(true);
-            }}
-            onBlur={handleLastNameBlur}
-          />
-          <Pressable
-            onPress={handleLastNameEditPress}
-            style={styles.editFieldButton}
-          >
-            <Feather name="edit" size={24} color="black" />
-          </Pressable>
-        </View>
-        <View style={styles.changeCanDrive}>
-          <Text style={styles.fieldLabel}>Can you drive?</Text>
-          <Switch
-            style={{ height: 15, marginRight: 15 }}
-            value={canDrive}
-            onValueChange={() => {
-              setProfileDetails(() => {
-                setCanDrive(!canDrive);
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.pageContent}>
+          <View style={styles.changeUsername}>
+            <Text style={styles.fieldLabel}>Username:</Text>
+            <TextInput
+              ref={usernameRef}
+              style={isUsernameEdit ? styles.editFieldValue : styles.fieldValue}
+              value={username}
+              onChangeText={(newValue) => {
+                setUsername(newValue);
                 setFieldChanged(true);
-              });
-            }}
-          />
-        </View>
-        <View style={styles.submitFlexBox}>
-          <View style={styles.dividerLine}></View>
-          <Pressable
-            style={
-              submitButtonPressed
-                ? styles.submitButtonPressed
-                : styles.submitButton
-            }
-            onPressIn={() => setSubmitButtonPressed(true)}
-            onPressOut={() => {
-              setSubmitButtonPressed(false);
-              handleSubmitChanges();
-            }}
-          >
-            <Text style={{ fontSize: Platform.OS === "android" ? 13 : 11 }}>
-              Submit Changes
-            </Text>
-          </Pressable>
-          <View style={styles.dividerLine}></View>
-        </View>
-        <View style={styles.changePassword}>
-          <Text style={styles.fieldLabel}>Send Password Reset Link:</Text>
-          <Pressable
-            style={
-              passwordButtonPressed
-                ? styles.passwordResetButtonPressed
-                : styles.passwordResetButton
-            }
-            onPressIn={() => setPasswordButtonPressed(true)}
-            onPressOut={() => {
-              setPasswordButtonPressed(false);
-              handleSendPasswordLink();
-            }}
-          >
-            <MaterialCommunityIcons
-              name="email-send-outline"
-              size={26}
-              color="black"
+              }}
+              onFocus={() => {
+                setIsUsernameEdit(true);
+              }}
+              onBlur={handleUsernameBlur}
             />
-          </Pressable>
-        </View>
-        <View style={styles.popUpMessage}>
-          {emailMessage ? (
-            <Text style={{ color: "#47C9AF" }}>{emailMessage}</Text>
-          ) : (
-            <></>
-          )}
-        </View>
-        <View style={styles.logoutFlex}>
-          <Text style={styles.fieldLabel}>Logout:</Text>
-          <Pressable
-            style={
-              logoutButtonPressed
-                ? styles.logoutButtonPressed
-                : styles.logoutButton
-            }
-            onPressIn={() => setLogoutButtonPressed(true)}
-            onPressOut={() => {
-              setLogoutButtonPressed(false);
-              handleLogOut();
-            }}
-          >
-            <SimpleLineIcons name="logout" size={24} color="black" />
-          </Pressable>
-        </View>
-        <View style={styles.logoutFlex}>
-          <Text style={styles.fieldLabel}>Delete Account:</Text>
-          <Pressable
-            style={
-              deleteButtonPressed
-                ? styles.deleteButtonPressed
-                : styles.deleteButton
-            }
-            onPressIn={() => setDeleteButtonPressed(true)}
-            onPressOut={() => {
-              setDeleteButtonPressed(false);
-              handleDeleteAccount();
-            }}
-          >
-            <AntDesign name="deleteuser" size={24} color="black" />
-          </Pressable>
-        </View>
-        <View style={styles.actualDeleteContainer}>
-          {wantToDelete ? (
             <Pressable
-              style={styles.actualDeleteButton}
-              onPress={definatelyDeleteAccount}
+              onPress={handleUsernameEditPress}
+              style={styles.editFieldButton}
             >
-              <Text>Delete account - Are you sure?</Text>
+              <Feather name="edit" size={24} color="black" />
             </Pressable>
-          ) : (
-            <></>
-          )}
+          </View>
+          <View style={styles.changeLocation}>
+            <Text style={styles.fieldLabel}>Your Location:</Text>
+            <TextInput
+              ref={locationRef}
+              style={isLocationEdit ? styles.editFieldValue : styles.fieldValue}
+              value={location}
+              onChangeText={(newValue) => {
+                setLocation(newValue);
+                setFieldChanged(true);
+              }}
+              onFocus={() => {
+                setIsLocationEdit(true);
+              }}
+              onBlur={handleLocationBlur}
+            />
+            <Pressable
+              onPress={handleLocationEditPress}
+              style={styles.editFieldButton}
+            >
+              <Feather name="edit" size={24} color="black" />
+            </Pressable>
+          </View>
+          <View style={styles.changeFirstname}>
+            <Text style={styles.fieldLabel}>First Name:</Text>
+            <TextInput
+              ref={firstNameRef}
+              style={
+                isFirstNameEdit ? styles.editFieldValue : styles.fieldValue
+              }
+              value={fname}
+              onChangeText={(newValue) => {
+                setFieldChanged(true);
+                setFname(newValue);
+              }}
+              onFocus={() => {
+                setIsFirstNameEdit(true);
+              }}
+              onBlur={handleFirstNameBlur}
+            />
+            <Pressable
+              onPress={handleFirstNameEditPress}
+              style={styles.editFieldButton}
+            >
+              <Feather name="edit" size={24} color="black" />
+            </Pressable>
+          </View>
+          <View style={styles.changeLastname}>
+            <Text style={styles.fieldLabel}>Last Name:</Text>
+            <TextInput
+              ref={lastNameRef}
+              style={isLastNameEdit ? styles.editFieldValue : styles.fieldValue}
+              value={lname}
+              onChangeText={(newValue) => {
+                setLname(newValue);
+                setFieldChanged(true);
+              }}
+              onFocus={() => {
+                setIsLastNameEdit(true);
+              }}
+              onBlur={handleLastNameBlur}
+            />
+            <Pressable
+              onPress={handleLastNameEditPress}
+              style={styles.editFieldButton}
+            >
+              <Feather name="edit" size={24} color="black" />
+            </Pressable>
+          </View>
+          <View style={styles.changeCanDrive}>
+            <Text style={styles.fieldLabel}>Can you drive?</Text>
+            <Switch
+              style={{ height: 15, marginRight: 15 }}
+              value={canDrive}
+              onValueChange={() => {
+                setProfileDetails(() => {
+                  setCanDrive(!canDrive);
+                  setFieldChanged(true);
+                });
+              }}
+            />
+          </View>
+          <View style={styles.submitFlexBox}>
+            <View style={styles.dividerLine}></View>
+            <Pressable
+              style={
+                submitButtonPressed
+                  ? styles.submitButtonPressed
+                  : styles.submitButton
+              }
+              onPressIn={() => setSubmitButtonPressed(true)}
+              onPressOut={() => {
+                setSubmitButtonPressed(false);
+                handleSubmitChanges();
+              }}
+            >
+              <Text style={{ fontSize: Platform.OS === "android" ? 13 : 11 }}>
+                Submit Changes
+              </Text>
+            </Pressable>
+            <View style={styles.dividerLine}></View>
+          </View>
+          <View style={styles.changePassword}>
+            <Text style={styles.fieldLabel}>Send Password Reset Link:</Text>
+            <Pressable
+              style={
+                passwordButtonPressed
+                  ? styles.passwordResetButtonPressed
+                  : styles.passwordResetButton
+              }
+              onPressIn={() => setPasswordButtonPressed(true)}
+              onPressOut={() => {
+                setPasswordButtonPressed(false);
+                handleSendPasswordLink();
+              }}
+            >
+              <MaterialCommunityIcons
+                name="email-send-outline"
+                size={26}
+                color="black"
+              />
+            </Pressable>
+          </View>
+          <View style={styles.popUpMessage}>
+            {emailMessage ? (
+              <Text style={{ color: "#47C9AF" }}>{emailMessage}</Text>
+            ) : (
+              <></>
+            )}
+          </View>
+          <View style={styles.logoutFlex}>
+            <Text style={styles.fieldLabel}>Logout:</Text>
+            <Pressable
+              style={
+                logoutButtonPressed
+                  ? styles.logoutButtonPressed
+                  : styles.logoutButton
+              }
+              onPressIn={() => setLogoutButtonPressed(true)}
+              onPressOut={() => {
+                setLogoutButtonPressed(false);
+                handleLogOut();
+              }}
+            >
+              <SimpleLineIcons name="logout" size={24} color="black" />
+            </Pressable>
+          </View>
+          <View style={styles.logoutFlex}>
+            <Text style={styles.fieldLabel}>Delete Account:</Text>
+            <Pressable
+              style={
+                deleteButtonPressed
+                  ? styles.deleteButtonPressed
+                  : styles.deleteButton
+              }
+              onPressIn={() => setDeleteButtonPressed(true)}
+              onPressOut={() => {
+                setDeleteButtonPressed(false);
+                handleDeleteAccount();
+              }}
+            >
+              <AntDesign name="deleteuser" size={24} color="black" />
+            </Pressable>
+          </View>
+          <View style={styles.actualDeleteContainer}>
+            {wantToDelete ? (
+              <Pressable
+                style={styles.actualDeleteButton}
+                onPress={definatelyDeleteAccount}
+              >
+                <Text>Delete account - Are you sure?</Text>
+              </Pressable>
+            ) : (
+              <></>
+            )}
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
       <NavBar navigation={navigation} />
     </View>
   );
