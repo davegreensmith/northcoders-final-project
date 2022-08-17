@@ -125,16 +125,25 @@ export default function MapScreen({ navigation }) {
                   }}
                   key={errand.errandID}
                 >
-                  <Callout style={styles.callout}>
-                    <Pressable
-                      onPress={() => {
-                        handleGoToErrand(id);
-                      }}
-                    >
-                      <Text style={styles.heading}>{errand.errandName}</Text>
-                      <Text style={styles.paragraph}>{errand.author}</Text>
-                      <Text style={styles.date}>{errand.date}</Text>
-                    </Pressable>
+                  <Callout tooltip={true}>
+                    <View>
+                      <Pressable
+                        style={styles.markerBubble}
+                        onPress={() => {
+                          handleGoToErrand(id);
+                        }}
+                      >
+                        <Text style={styles.personAsking}>
+                          {errand.author} wants help with
+                        </Text>
+                        <Text style={styles.heading}>
+                          "{errand.errandName}"
+                        </Text>
+                        <Text style={styles.date}>on {errand.date}</Text>
+                        <Text style={styles.viewDetails}>Find Out More...</Text>
+                      </Pressable>
+                      <View style={styles.arrow}></View>
+                    </View>
                   </Callout>
                 </Marker>
               );
@@ -168,23 +177,49 @@ const styles = StyleSheet.create({
   dropdown: {
     width: Platform.OS === "android" ? 200 : 180,
   },
-  callout: {
-    flex: 1,
-    justifyContent: "center",
+  markerBubble: {
+    justifyContent: "space-evenly",
     alignItems: "center",
+    backgroundColor: "white",
+    borderColor: "#47c9af",
+    borderWidth: 4,
+    borderRightWidth: 8,
+    borderLeftWidth: 8,
+    borderBottomWidth: 10,
+    borderRadius: 30,
+    padding: 15,
+  },
+  arrow: {
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderLeftWidth: 30,
+    borderRightWidth: 30,
+    borderTopWidth: 20,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderTopColor: "#47c9af",
+    alignSelf: "center",
   },
   heading: {
-    fontSize: 15,
-    fontWeight: "bold",
-  },
-  paragraph: {
-    textAlign: "center",
-    marginTop: 5,
     fontSize: 14,
+    fontWeight: "bold",
+    marginTop: 5,
+  },
+  personAsking: {
+    textAlign: "center",
+    fontSize: 13,
   },
   date: {
     textAlign: "center",
     marginTop: 5,
     fontSize: 14,
+    color: "gray",
+  },
+  viewDetails: {
+    marginTop: 5,
+    color: "#4faf9c",
+    textDecorationLine: "underline",
   },
 });
