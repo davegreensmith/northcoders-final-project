@@ -89,7 +89,7 @@ export default function MyErrandsScreen({ navigation }) {
       <Header navigation={navigation} />
       <ScrollView
         contentContainerStyle={styles.pageContent}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
       >
         {myErrands.length > 0 ? (
           myErrands.map((errand) => {

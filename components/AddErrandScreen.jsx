@@ -136,7 +136,7 @@ export default function AddErrandScreen({ navigation }) {
       <KeyboardAwareScrollView
         enableOnAndroid={true}
         extraScrollHeight={50}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
       >
         <View style={styles.pageContent}>
           <Text

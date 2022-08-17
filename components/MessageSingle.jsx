@@ -74,7 +74,7 @@ export default function MessageBoard({ navigation, route }) {
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
       <KeyboardAwareScrollView
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.pageContent}
         enableOnAndroid={true}
       >
