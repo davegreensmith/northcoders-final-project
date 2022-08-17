@@ -93,9 +93,9 @@ export default function MyErrandsScreen({ navigation }) {
                   <Text>Date: {errand.date}</Text>
                 </View>
                 <View style={styles.jobLengthField}>
-                  <Text>Job length: {errand.timeFrame}</Text>
+                  <Text>Job length: {errand.timeFrame} hours</Text>
                 </View>
-                {/* <View style={styles.jobLengthField}>
+                <View style={styles.jobLengthField}>
                   <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
                   {errand.chippers.map((chipper) => {
                     return (
@@ -113,7 +113,7 @@ export default function MyErrandsScreen({ navigation }) {
                       </View>
                     );
                   })}
-                </View> */}
+                </View>
                 <View style={styles.buttonsFlexBox}>
                   <Pressable
                     style={
@@ -138,7 +138,8 @@ export default function MyErrandsScreen({ navigation }) {
                     onPressIn={() => setEditButtonPressed(true)}
                     onPressOut={() => {
                       setEditButtonPressed(false);
-                      handleEditErrand(errand.errandID);
+                      const id = errand.errandID;
+                      navigation.navigate("Edit Errand", { id });
                     }}
                     style={
                       editButtonPressed
