@@ -83,134 +83,147 @@ export default function SignUpScreen({ navigation }) {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <KeyboardAwareScrollView
-        enableOnAndroid={true}
-        extraScrollHeight={75}
-        keyboardShouldPersistTaps="always"
-      >
-        <View style={styles.container}>
-          <Image
-            style={styles.logo}
-            source={require("../assets/chip-in-logo-large.png")}
+    <KeyboardAwareScrollView
+      enableOnAndroid={true}
+      extraScrollHeight={75}
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={styles.pageContent}
+    >
+      <View style={styles.section}>
+        <Image
+          style={styles.logo}
+          source={require("../assets/chip-in-logo-large.png")}
+        />
+      </View>
+      <View style={styles.subtitleFlexBox}>
+        <Text style={styles.subtitle}>Tell us a little about yourself...</Text>
+        <Text style={styles.requiredText}>* required fields</Text>
+      </View>
+      <View style={styles.section}>
+        <TextInput
+          style={styles.textField}
+          onChangeText={setFname}
+          value={fname}
+          placeholder="* First name"
+          returnKeyType="next"
+          onSubmitEditing={() => lastNameRef.current.focus()}
+          blurOnSubmit={false}
+        />
+        <TextInput
+          style={styles.textField}
+          onChangeText={setLname}
+          value={lname}
+          placeholder="* Last name"
+          ref={lastNameRef}
+          returnKeyType="next"
+          onSubmitEditing={() => userNameRef.current.focus()}
+          blurOnSubmit={false}
+        />
+        <TextInput
+          style={styles.textField}
+          onChangeText={setUsername}
+          value={username}
+          placeholder="* Username (What others will see)"
+          ref={userNameRef}
+          returnKeyType="next"
+          onSubmitEditing={() => emailRef.current.focus()}
+          blurOnSubmit={false}
+        />
+        <TextInput
+          style={styles.textField}
+          onChangeText={setEmail}
+          value={email}
+          placeholder="* Email"
+          ref={emailRef}
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current.focus()}
+          blurOnSubmit={false}
+        />
+        <TextInput
+          style={styles.textField}
+          onChangeText={setPassword}
+          secureTextEntry={true}
+          value={password}
+          placeholder="* Password (Minimum 6 characters)"
+          ref={passwordRef}
+          returnKeyType="next"
+          onSubmitEditing={() => bioRef.current.focus()}
+          blurOnSubmit={false}
+        />
+        <TextInput
+          multiline={true}
+          style={styles.bio}
+          onChangeText={setBio}
+          value={bio}
+          placeholder="* Your bio, this should tell others all about you and your skills..."
+          ref={bioRef}
+          onSubmitEditing={() => postcodeRef.current.focus()}
+          blurOnSubmit={false}
+        />
+        <TextInput
+          style={styles.textField}
+          onChangeText={setLocation}
+          value={location}
+          placeholder="* Your postcode"
+          ref={postcodeRef}
+          returnKeyType="done"
+        />
+        <View style={styles.doYouDrive}>
+          <Text style={{ fontSize: 15 }}>Do you drive?</Text>
+          <Switch
+            value={canDrive}
+            onValueChange={() => {
+              setCanDrive(!canDrive);
+            }}
           />
-          <Text style={styles.subtitle}>
-            Tell us a little about yourself...
-          </Text>
-          <Text style={styles.requiredText}>* required fields</Text>
-          <TextInput
-            style={styles.textField}
-            onChangeText={setFname}
-            value={fname}
-            placeholder="* First name"
-            returnKeyType="next"
-            onSubmitEditing={() => lastNameRef.current.focus()}
-            blurOnSubmit={false}
-          />
-          <TextInput
-            style={styles.textField}
-            onChangeText={setLname}
-            value={lname}
-            placeholder="* Last name"
-            ref={lastNameRef}
-            returnKeyType="next"
-            onSubmitEditing={() => userNameRef.current.focus()}
-            blurOnSubmit={false}
-          />
-          <TextInput
-            style={styles.textField}
-            onChangeText={setUsername}
-            value={username}
-            placeholder="* Username (What others will see)"
-            ref={userNameRef}
-            returnKeyType="next"
-            onSubmitEditing={() => emailRef.current.focus()}
-            blurOnSubmit={false}
-          />
-          <TextInput
-            style={styles.textField}
-            onChangeText={setEmail}
-            value={email}
-            placeholder="* Email"
-            ref={emailRef}
-            returnKeyType="next"
-            onSubmitEditing={() => passwordRef.current.focus()}
-            blurOnSubmit={false}
-          />
-          <TextInput
-            style={styles.textField}
-            onChangeText={setPassword}
-            secureTextEntry={true}
-            value={password}
-            placeholder="* Password (Minimum 6 characters)"
-            ref={passwordRef}
-            returnKeyType="next"
-            onSubmitEditing={() => bioRef.current.focus()}
-            blurOnSubmit={false}
-          />
-          <TextInput
-            multiline={true}
-            style={styles.bio}
-            onChangeText={setBio}
-            value={bio}
-            placeholder="* Your bio, this should tell others all about you and your skills..."
-            ref={bioRef}
-            onSubmitEditing={() => postcodeRef.current.focus()}
-            blurOnSubmit={false}
-          />
-          <TextInput
-            style={styles.textField}
-            onChangeText={setLocation}
-            value={location}
-            placeholder="* Your postcode"
-            ref={postcodeRef}
-            returnKeyType="done"
-          />
-          <View style={styles.doYouDrive}>
-            <Text style={{ fontSize: 15 }}>Do you drive?</Text>
-            <Switch
-              value={canDrive}
-              onValueChange={() => {
-                setCanDrive(!canDrive);
-              }}
-            />
-          </View>
-          {show ? (
-            <View>
-              <Text style={{ color: "red" }}>
-                Missing information, please check and try again
-              </Text>
-            </View>
-          ) : (
-            <></>
-          )}
-          {error ? (
-            <View>
-              <Text style={{ color: "red" }}>{error}</Text>
-            </View>
-          ) : (
-            <></>
-          )}
-          <Pressable
-            style={
-              signupPressed ? styles.signupButtonPressed : styles.signUpButton
-            }
-            onPress={handleSignUpPress}
-            onPressIn={() => setSignupPressed(true)}
-            onPressOut={() => setSignupPressed(false)}
-          >
-            <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
-          </Pressable>
         </View>
-      </KeyboardAwareScrollView>
-    </View>
+      </View>
+      {show ? (
+        <View style={styles.section}>
+          <Text style={{ color: "red" }}>
+            Missing information, please check and try again
+          </Text>
+        </View>
+      ) : (
+        <View style={styles.section} />
+      )}
+      {error ? (
+        <View>
+          <Text style={{ color: "red" }}>{error}</Text>
+        </View>
+      ) : (
+        <></>
+      )}
+      <View style={styles.section}>
+        <Pressable
+          style={
+            signupPressed ? styles.signupButtonPressed : styles.signUpButton
+          }
+          onPress={handleSignUpPress}
+          onPressIn={() => setSignupPressed(true)}
+          onPressOut={() => setSignupPressed(false)}
+        >
+          <Text style={{ textAlign: "center", fontSize: 16 }}>Sign Up!</Text>
+        </Pressable>
+      </View>
+    </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  pageContent: {
+    flex: 1,
+    backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
+  },
+  section: {
+    alignItems: "center",
+    flexGrow: 1,
+  },
+  subtitleFlexBox: {
+    alignItems: "flex-start",
+    width: 300,
   },
   textField: {
     borderWidth: 0.7,
@@ -245,32 +258,28 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     width: 100,
-    margin: 20,
     padding: 10,
+    marginBottom: 10,
   },
   signupButtonPressed: {
     backgroundColor: "#357568",
     borderWidth: 1,
     borderRadius: 5,
     width: 100,
-    margin: 20,
     padding: 10,
+    marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    right: 47,
     margin: 5,
   },
   doYouDrive: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    right: 80,
   },
   requiredText: {
     margin: 5,
-    marginBottom: 0,
-    right: 110,
     fontSize: 12,
     color: "red",
   },
