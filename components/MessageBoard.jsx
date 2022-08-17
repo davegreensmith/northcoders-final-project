@@ -14,6 +14,7 @@ import {
   fetchMessages,
   fetchMessagesByUserID,
   getUsername,
+  updateMessageForErrandNames,
 } from "../firebase/config";
 import { useEffect, useState } from "react";
 import Header from "./Header";
@@ -28,7 +29,6 @@ export default function MessageBoard({ navigation }) {
   const [messagesButtonPressed, setMessagesButtonPressed] = useState(false);
 
   function handleMessagesErrand(errandID) {
-    console.log(errandID);
     navigation.navigate("MessageSingle", { errandID });
   }
 
@@ -42,14 +42,14 @@ export default function MessageBoard({ navigation }) {
           setChipperMessages(errandChipperIn);
           setErrandOwnerMessages(errandOwnerOf);
           setIsLoading(false);
-          console.log(chipperMessages);
+          console.log(errandChipperIn);
         }
       );
     });
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, alignItems: "center" }}>
       <Header navigation={navigation} />
       <ScrollView
         contentContainerStyle={styles.pageContent}
@@ -62,8 +62,8 @@ export default function MessageBoard({ navigation }) {
             <Text style={styles.headerH1}>Messages from My Errands</Text>
             {errandOwnerMessages.map((message) => {
               return (
-                <View key={message.messageID} style={styles.messageInfo}>
-                  <View>
+                <View key={message.id} style={styles.messageInfo}>
+                  <View style={styles.summaryContainer}>
                     <Text style={styles.errandTitle}>{message.errandName}</Text>
                     {message.body.length === 1 ? (
                       <Text>There is {message.body.length} message</Text>
@@ -93,7 +93,7 @@ export default function MessageBoard({ navigation }) {
             {chipperMessages.map((message) => {
               return (
                 <View key={message.id} style={styles.messageInfo}>
-                  <View>
+                  <View style={styles.summaryContainer}>
                     <Text style={styles.errandTitle}>{message.errandName}</Text>
                     {message.body.length === 1 ? (
                       <Text>There is {message.body.length} message</Text>
@@ -146,11 +146,25 @@ const styles = StyleSheet.create({
   },
   messageInfo: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     padding: 5,
     backgroundColor: "#fff",
     width: 350,
+    height: 65,
     margin: 5,
+    borderWidth: 1,
+    borderColor: "#4faf9c",
+    borderRadius: 5,
+  },
+  summaryContainer: {
+    width: 200,
+  },
+  descriptionField: {
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    marginLeft: 15,
+    marginRight: 15,
+    padding: 10,
   },
   titleField: {
     justifyContent: "center",

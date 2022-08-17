@@ -391,6 +391,11 @@ export function postMessageByMessageID(messageID, addMessage) {
   });
 }
 
+export function updateMessagePropertyByMessageID(messageID, updateBody) {
+  const messagesRef = doc(db, "messages", messageID);
+  updateDoc(messagesRef, updateBody);
+}
+
 //get all message
 export function fetchMessages() {
   return getDocs(messagesRef)
@@ -440,8 +445,6 @@ export function createMessageAndAddIdToExistingErrands() {
 
   return Promise.all([fetchErrands(), messagesRef]).then(
     ([errands, messagesRef]) => {
-      console.log(errands, "<<< errands after PromiseAll");
-
       errands.map((errand) => {
         const id = errand.authorId;
         const username = errand.author;
@@ -472,9 +475,25 @@ export function createMessageAndAddIdToExistingErrands() {
           });
       });
 
-      console.log(messageDetails, "<<< message details");
-
       return { complete: true };
     }
   );
+}
+
+export function updateMessageForErrandNames() {
+  return fetchMessages().then((data) => {
+    console.log(data, "<<< data from fetch messages");
+    data.forEach((message) => {
+      errandID = message.errandID;
+      return fetchErrandByErrandID(errandID).then((errand) => {
+        console.log(errand, "<<< errand");
+        console.log(message.id, "<<< related message ID");
+        console.log("-------------------------------");
+        const messageID = message.id;
+        const errandName = errand.errandName;
+        const body = { errandName };
+        updateMessagePropertyByMessageID(messageID, body);
+      });
+    });
+  });
 }

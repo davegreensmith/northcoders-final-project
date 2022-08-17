@@ -65,7 +65,6 @@ export default function MyErrandsScreen({ navigation }) {
   }
 
   function handleMessagesErrand(errandID) {
-    console.log(errandID);
     navigation.navigate("MessageSingle", { errandID });
   }
 

@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import { Feather } from "@expo/vector-icons";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import {
   fetchErrandByErrandID,
   fetchMessagesByErrandID,
@@ -28,32 +30,41 @@ export default function MessageBoard({ navigation, route }) {
   const [fieldChanged, setFieldChanged] = useState(false);
   const [messagesButtonPressed, setMessagesButtonPressed] = useState(false);
   const [loggedInUsername, setLoggedInUserName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const { errandID } = route.params;
 
   function handleSendMessage(message) {
-    const body = { msgAuthor: loggedInUsername, message };
-    const { messageID } = currentMessage;
-    postMessageByMessageID(messageID, body);
+    if (message === "") {
+    } else {
+      const body = { msgAuthor: loggedInUsername, message };
+      const { messageID } = currentMessage;
+      postMessageByMessageID(messageID, body);
 
-    const messagesOnScreen = [...messagesArray];
-    messagesOnScreen.push(body);
-    setMessagesArray([...messagesOnScreen]);
+      const messagesOnScreen = [...messagesArray];
+      messagesOnScreen.push(body);
+      setMessagesArray([...messagesOnScreen]);
+    }
   }
-
+  function clickAway(userID) {
+    navigation.navigate("Another User", { userId: userID });
+  }
   useEffect(() => {
-    fetchErrandByErrandID(errandID).then((errandData) => {
-      setCurrentErrand({ ...errandData });
-      const messageID = errandData.messageID;
-      fetchMessagesByMessageID(messageID)
-        .then((messageData) => {
-          console.log(messageData);
+    setIsLoading(true);
+    fetchErrandByErrandID(errandID)
+      .then((errandData) => {
+        setCurrentErrand({ ...errandData });
+        const messageID = errandData.messageID;
+        fetchMessagesByMessageID(messageID).then((messageData) => {
           setCurrentMessage({ ...messageData });
           const messageBodyArr = [...messageData.body];
           setMessagesArray(messageBodyArr);
-        })
-        .then(() => {});
-    });
+          setIsLoading(false);
+        });
+      })
+      .catch((err) => {
+        console.log(error);
+      });
     getUsername().then(({ user }) => {
       setLoggedInUserName(user);
     });
@@ -62,51 +73,42 @@ export default function MessageBoard({ navigation, route }) {
   return (
     <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
-      <ScrollView
-        contentContainerStyle={styles.pageContent}
+      <KeyboardAwareScrollView
         keyboardShouldPersistTaps="always"
+        contentContainerStyle={styles.pageContent}
+        enableOnAndroid={true}
       >
         <View key={currentErrand.errandID} style={styles.listItem}>
           <View style={styles.titleField}>
             <Text style={{ fontSize: 22 }}>{currentErrand.errandName}</Text>
           </View>
-          {/* <View style={styles.descriptionField}>
-            <Text>{currentErrand.description}</Text>
-          </View> */}
-          {/* <View style={styles.requirementsField}>
-            <Text>Helper Requirements: {currentErrand.requirements}</Text>
-          </View> */}
-          {/* <View style={styles.jobTypeField}>
-            <Text>Job Type: {currentErrand.workType}</Text>
-          </View> */}
           <View style={styles.locationField}>
             <Text>Location: {currentErrand.area}</Text>
           </View>
           <View style={styles.dateField}>
             <Text>Date: {currentErrand.date}</Text>
           </View>
-          {/* <View style={styles.jobLengthField}>
-            <Text>Job length: {currentErrand.timeFrame}</Text>
-          </View> */}
-          {/* <View style={styles.jobLengthField}>
-                <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
-                {currentErrand.chippers.map((chipper) => {
-                  return (
-                    <View key={chipper.id} style={styles.chipperList}>
-                      <Text>{chipper.user}</Text>
-                      <Pressable
-                        disabled={false}
-                        style={styles.kudosButton}
-                        onPress={(e) => {
-                          giveKudos(chipper.id);
-                        }}
-                      >
-                        <Text>Give kudos!</Text>
-                      </Pressable>
-                    </View>
-                  );
-                })}
-              </View> */}
+          {isLoading ? (
+            <></>
+          ) : (
+            <View style={styles.chipperContainer}>
+              <Text style={styles.chipperSubTitle}>Current Chippers:</Text>
+              {currentErrand.chippers.map((chipper) => {
+                return (
+                  <View key={chipper.id}>
+                    <Pressable
+                      onPress={() => {
+                        clickAway(chipper.id);
+                      }}
+                      style={{ fontSize: 11 }}
+                    >
+                      <Text style={styles.chipperUName}>{chipper.user}</Text>
+                    </Pressable>
+                  </View>
+                );
+              })}
+            </View>
+          )}
           <View style={styles.buttonsFlexBox}></View>
         </View>
         <View style={styles.titleField}>
@@ -114,7 +116,7 @@ export default function MessageBoard({ navigation, route }) {
         </View>
         {messagesArray.map((message) => {
           return (
-            <View style={styles.message}>
+            <View style={styles.message} key={message.messageID}>
               <Text style={{ fontSize: 11 }}>{message.msgAuthor}:</Text>
               <Text style={{ fontSize: 15 }}>{message.message}</Text>
             </View>
@@ -135,7 +137,6 @@ export default function MessageBoard({ navigation, route }) {
             onPressOut={() => {
               setMessagesButtonPressed(false);
               handleSendMessage(addMessage);
-              // handleMessagesErrand(errand.errandID);
             }}
             style={
               messagesButtonPressed
@@ -146,7 +147,7 @@ export default function MessageBoard({ navigation, route }) {
             <Feather name="send" size={18} color="black" />
           </Pressable>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
       <NavBar navigation={navigation} />
     </View>
   );
@@ -200,6 +201,28 @@ const styles = StyleSheet.create({
 
     padding: 5,
     paddingLeft: 15,
+  },
+  chipperContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+
+    marginTop: 5,
+    marginLeft: 15,
+    marginRight: 15,
+    borderRadius: 5,
+    padding: 5,
+  },
+  chipperSubTitle: {
+    backgroundColor: "#fff",
+    padding: 5,
+    borderRadius: 5,
+    margin: 5,
+  },
+  chipperUName: {
+    backgroundColor: "rgba(86, 232, 195, 0.7)",
+    padding: 5,
+    borderRadius: 5,
+    margin: 5,
   },
   descriptionField: {
     justifyContent: "center",
