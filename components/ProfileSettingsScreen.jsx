@@ -28,7 +28,6 @@ import {
   removeUserFromErrand,
 } from "../firebase/config";
 import { getAuth, deleteUser } from "firebase/auth";
-import { FirebaseError } from "firebase/app";
 
 export default function ProfileSettingsScreen({ navigation }) {
   const [username, setUsername] = useState("");
@@ -252,7 +251,7 @@ export default function ProfileSettingsScreen({ navigation }) {
             onFocus={() => {
               setIsLastNameEdit(true);
             }}
-            onBlur={handleLastNameChange}
+            onBlur={handleLastNameBlur}
           />
           <Pressable
             onPress={handleLastNameEditPress}
