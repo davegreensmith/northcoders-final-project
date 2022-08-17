@@ -11,18 +11,35 @@ import {
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
+import { Feather } from "@expo/vector-icons";
 import {
   fetchErrandByErrandID,
   fetchMessagesByErrandID,
   fetchMessagesByMessageID,
+  getUsername,
+  postMessageByMessageID,
 } from "../firebase/config";
 
 export default function MessageBoard({ navigation, route }) {
   const [currentMessage, setCurrentMessage] = useState(false);
   const [currentErrand, setCurrentErrand] = useState(false);
   const [messagesArray, setMessagesArray] = useState([]);
+  const [addMessage, setAddMessage] = useState("");
+  const [fieldChanged, setFieldChanged] = useState(false);
+  const [messagesButtonPressed, setMessagesButtonPressed] = useState(false);
+  const [loggedInUsername, setLoggedInUserName] = useState("");
 
   const { errandID } = route.params;
+
+  function handleSendMessage(message) {
+    const body = { msgAuthor: loggedInUsername, message };
+    const { messageID } = currentMessage;
+    postMessageByMessageID(messageID, body);
+
+    const messagesOnScreen = [...messagesArray];
+    messagesOnScreen.push(body);
+    setMessagesArray([...messagesOnScreen]);
+  }
 
   useEffect(() => {
     fetchErrandByErrandID(errandID).then((errandData) => {
@@ -36,6 +53,9 @@ export default function MessageBoard({ navigation, route }) {
           setMessagesArray(messageBodyArr);
         })
         .then(() => {});
+    });
+    getUsername().then(({ user }) => {
+      setLoggedInUserName(user);
     });
   }, []);
 
@@ -87,26 +107,10 @@ export default function MessageBoard({ navigation, route }) {
                   );
                 })}
               </View> */}
-          <View style={styles.buttonsFlexBox}>
-            {/* <Pressable
-              onPressIn={() => setMessagesButtonPressed(true)}
-              onPressOut={() => {
-                setMessagesButtonPressed(false);
-                handleMessagesErrand(errand.errandID);
-              }}
-              style={
-                messagesButtonPressed
-                  ? styles.messagesButtonPressed
-                  : styles.messagesButton
-              }
-            >
-              <Text>Messages </Text>
-              <Feather name="message-circle" size={18} color="black" />
-            </Pressable> */}
-          </View>
+          <View style={styles.buttonsFlexBox}></View>
         </View>
         <View style={styles.titleField}>
-          <Text style={{ fontSize: 22 }}>Messages:</Text>
+          <Text style={{ fontSize: 22 }}>Message board</Text>
         </View>
         {messagesArray.map((message) => {
           return (
@@ -116,6 +120,32 @@ export default function MessageBoard({ navigation, route }) {
             </View>
           );
         })}
+        <View style={styles.changeAddMessage}>
+          <TextInput
+            value={addMessage}
+            onChangeText={(newValue) => {
+              setAddMessage(newValue);
+              setFieldChanged(true);
+            }}
+            style={styles.editFieldValue}
+            onFocus={() => {}}
+          />
+          <Pressable
+            onPressIn={() => setMessagesButtonPressed(true)}
+            onPressOut={() => {
+              setMessagesButtonPressed(false);
+              handleSendMessage(addMessage);
+              // handleMessagesErrand(errand.errandID);
+            }}
+            style={
+              messagesButtonPressed
+                ? styles.messagesButtonPressed
+                : styles.messagesButton
+            }
+          >
+            <Feather name="send" size={18} color="black" />
+          </Pressable>
+        </View>
       </ScrollView>
       <NavBar navigation={navigation} />
     </View>
@@ -126,6 +156,41 @@ const styles = StyleSheet.create({
   pageContent: {
     flexGrow: 1,
   },
+
+  message: {
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    marginTop: 5,
+    marginLeft: 15,
+    marginRight: 15,
+    borderRadius: 5,
+    padding: 10,
+  },
+  fieldLabel: {
+    fontSize: Platform.OS === "android" ? 16 : 14,
+    marginLeft: 15,
+    flex: 1,
+  },
+  changeAddMessage: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    marginTop: 10,
+    flex: 1,
+    marginBottom: 10,
+  },
+  editFieldValue: {
+    fontSize: Platform.OS === "android" ? 16 : 14,
+    marginRight: 15,
+    borderRadius: 10,
+    padding: 8,
+    width: 300,
+    height: 40,
+    borderColor: "#47c9af",
+    borderWidth: 1,
+    backgroundColor: "white",
+    textAlign: "center",
+  },
   listItem: {
     justifyContent: "space-evenly",
     borderBottomWidth: 1,
@@ -133,7 +198,8 @@ const styles = StyleSheet.create({
   titleField: {
     justifyContent: "center",
 
-    padding: 15,
+    padding: 5,
+    paddingLeft: 15,
   },
   descriptionField: {
     justifyContent: "center",
@@ -254,7 +320,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     height: 40,
-    width: 350,
+    width: 40,
     padding: 5,
   },
   messagesButtonPressed: {
@@ -265,7 +331,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     height: 40,
-    width: 350,
+    width: 40,
     padding: 5,
   },
   deleteButton: {
@@ -313,15 +379,5 @@ const styles = StyleSheet.create({
     margin: 10,
     borderWidth: 0.5,
     borderColor: "gray",
-  },
-
-  message: {
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    marginTop: 10,
-    marginLeft: 15,
-    marginRight: 15,
-    borderRadius: 5,
-    padding: 10,
   },
 });

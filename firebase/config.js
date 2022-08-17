@@ -384,6 +384,18 @@ export function fetchMessagesByMessageID(messageID) {
   );
 }
 
+export function postMessageByMessageID(messageID, addMessage) {
+  const message = doc(db, "messages", messageID);
+  updateDoc(message, {
+    body: arrayUnion(addMessage),
+  });
+}
+
+// export function addErrandToUser(errandID, errandUserID) {
+//
+//
+// }
+
 // ***   DO NOT USE, NOW REDUNDANT!!  ***
 // ***   DO NOT USE, NOW REDUNDANT!!  ***
 // ***   DO NOT USE, NOW REDUNDANT!!  ***
