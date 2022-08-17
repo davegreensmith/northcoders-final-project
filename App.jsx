@@ -12,7 +12,8 @@ import MapScreen from "./components/MapScreen";
 import ProfileSettingsScreen from "./components/ProfileSettingsScreen";
 import SingleErrandScreen from "./components/SingleErrandScreen";
 import NotificationsScreen from "./components/NotficationsScreen";
-import MessageScreen from "./components/MessageScreen";
+import MessageBoard from "./components/MessageBoard";
+import MessageSingle from "./components/MessageSingle";
 export default function App() {
   const Stack = createNativeStackNavigator();
 
@@ -75,8 +76,13 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Chats"
-          component={MessageScreen}
+          name="MessageBoard"
+          component={MessageBoard}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MessageSingle"
+          component={MessageSingle}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

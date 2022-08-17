@@ -60,6 +60,7 @@ export function sendResetPasswordEmail(email) {
 export const usersRef = collection(db, "users");
 export const errandsRef = collection(db, "errands");
 export const latlongsRef = collection(db, "latlongs");
+export const messagesRef = collection(db, "messages");
 
 //USER DATA
 //get logged in username
@@ -228,7 +229,9 @@ export function giveKudosByUid(id) {
 //update errand
 export function updateErrand(errandID, updateBody) {
   const errandRef = doc(db, "errands", errandID);
-  updateDoc(errandRef, updateBody);
+  return updateDoc(errandRef, updateBody).then((result) => {
+    return result;
+  });
 }
 
 //delete errands
@@ -275,7 +278,15 @@ export function fetchErrands() {
 }
 
 //get all errands for the logged in user
-export function getUserErrands() {}
+export function getUserErrands() {
+  return getUserInfo().then(({ userData }) => {
+    const userErrands = userData.errands;
+    const errandPromises = userErrands.map((errandID) => {
+      return fetchErrandByErrandID(errandID);
+    });
+    return Promise.all(errandPromises);
+  });
+}
 
 //get all latlongs for errands
 export function fetchLatLongs() {
@@ -378,3 +389,51 @@ export function addMessage(message, userId1, userId2) {
 //       console.log(err.message, '<<< errands errors');
 //     });
 // }
+
+// ***   DO NOT USE, NOW REDUNDANT!!  ***
+// ***   DO NOT USE, NOW REDUNDANT!!  ***
+// ***   DO NOT USE, NOW REDUNDANT!!  ***
+// ***   DO NOT USE, NOW REDUNDANT!!  ***
+export function createMessageAndAddIdToExistingErrands() {
+  const messagesRef = collection(db, "messages");
+
+  return Promise.all([fetchErrands(), messagesRef]).then(
+    ([errands, messagesRef]) => {
+      console.log(errands, "<<< errands after PromiseAll");
+
+      errands.map((errand) => {
+        const id = errand.authorId;
+        const username = errand.author;
+        const errandID = errand.id;
+        const messageDetails = {
+          chippers: [
+            { userID: "1UlM7MeNhbQbIKXaek321vvntiG3", username: "Greeners" },
+          ],
+          errandOwner: { id, username },
+          body: [
+            {
+              message: "Hi there, please bring muscles",
+              msgAuthor: "Greeners",
+            },
+          ],
+          errandID,
+        };
+
+        return Promise.all([addDoc(messagesRef, messageDetails), errand])
+          .then(([data, errand]) => {
+            const messageID = data._key.path.segments[1];
+            const errandDetails = { messageID: messageID };
+            const errandID = errand.id;
+            return updateErrand(errandID, errandDetails).then((mystery) => {});
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      });
+
+      console.log(messageDetails, "<<< message details");
+
+      return { complete: true };
+    }
+  );
+}

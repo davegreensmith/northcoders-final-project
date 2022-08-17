@@ -22,6 +22,7 @@ import {
   getUsername,
   giveKudosByUid,
   deleteErrandByErrandID,
+  getUserErrands,
 } from "../firebase/config";
 
 export default function MyErrandsScreen({ navigation }) {
@@ -32,6 +33,7 @@ export default function MyErrandsScreen({ navigation }) {
   const [completeButtonPressed, setCompleteButtonPressed] = useState(false);
   const [editButtonPressed, setEditButtonPressed] = useState(false);
   const [deleteButtonPressed, setDeleteButtonPressed] = useState(false);
+  const [messagesButtonPressed, setMessagesButtonPressed] = useState(false);
 
   function handleEditErrand(errandID) {
     fetchErrandByErrandID(errandID);
@@ -51,16 +53,26 @@ export default function MyErrandsScreen({ navigation }) {
     giveKudosByUid(id);
   }
 
+  function handleMessagesErrand(errandID) {
+    console.log(errandID);
+    navigation.navigate("MessageSingle", { errandID });
+  }
+
   useEffect(() => {
-    getUserInfo().then(({ userData }) => {
-      const userErrands = userData.errands;
-      const errandPromises = userErrands.map((errandID) => {
-        return fetchErrandByErrandID(errandID);
-      });
-      return Promise.all(errandPromises).then((fulfilledPromises) => {
-        setMyErrands([...fulfilledPromises]);
-      });
+    return getUserErrands().then((fulfilledPromises) => {
+      console.log(fulfilledPromises, "<<< user errands");
+      const errands = [...fulfilledPromises];
+      setMyErrands(errands);
     });
+    // getUserInfo().then(({ userData }) => {
+    //   const userErrands = userData.errands;
+    //   const errandPromises = userErrands.map((errandID) => {
+    //     return fetchErrandByErrandID(errandID);
+    //   });
+    //   return Promise.all(errandPromises).then((fulfilledPromises) => {
+    //     setMyErrands([...fulfilledPromises]);
+    //   });
+    // });
   }, [refreshPage]);
 
   return (
@@ -169,6 +181,23 @@ export default function MyErrandsScreen({ navigation }) {
                     />
                   </Pressable>
                 </View>
+                <View style={styles.messagesFlexbox}>
+                  <Pressable
+                    onPressIn={() => setMessagesButtonPressed(true)}
+                    onPressOut={() => {
+                      setMessagesButtonPressed(false);
+                      handleMessagesErrand(errand.errandID);
+                    }}
+                    style={
+                      messagesButtonPressed
+                        ? styles.messagesButtonPressed
+                        : styles.messagesButton
+                    }
+                  >
+                    <Text>Messages </Text>
+                    <Feather name="message-circle" size={18} color="black" />
+                  </Pressable>
+                </View>
               </View>
             );
           })
@@ -259,6 +288,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: 20,
+    marginBottom: 5,
+  },
+  messagesFlexbox: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    marginTop: 5,
     marginBottom: 20,
   },
   completeButton: {
@@ -303,6 +339,28 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 110,
+    padding: 5,
+  },
+  messagesButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFAF0",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 350,
+    padding: 5,
+  },
+  messagesButtonPressed: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgb(49, 151, 125)",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 350,
     padding: 5,
   },
   deleteButton: {

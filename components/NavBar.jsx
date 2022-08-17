@@ -19,12 +19,11 @@ export default function NavBar({ navigation }) {
     navigation.navigate("Add Errand");
   }
   function handleChatsPress() {
-    navigation.navigate("Chats");
+    navigation.navigate("MessageBoard");
   }
   function handleProfilePress() {
     navigation.navigate("Profile");
   }
- 
 
   return (
     <View style={styles.navBarContainer}>
