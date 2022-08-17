@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   heading: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "bold",
     marginTop: 5,
   },
