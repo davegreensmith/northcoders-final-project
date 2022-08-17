@@ -56,7 +56,7 @@ export default function ProfileScreen({ navigation }) {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "rgb(248, 248, 247)" }}>
       <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <View style={styles.avatarFlexBox}>
@@ -73,7 +73,7 @@ export default function ProfileScreen({ navigation }) {
           <Text
             style={{
               fontSize: Platform.OS === "android" ? 28 : 26,
-              color: "#B2B2B2",
+              color: "#B2B2B2"
             }}
           >
             {profileInfo.longLatData.area}
@@ -81,9 +81,10 @@ export default function ProfileScreen({ navigation }) {
         </View>
         <View style={styles.bioContainer}>
           <Text
+            multiline={true}
             style={{
               fontSize: Platform.OS === "android" ? 16 : 14,
-              color: "#333333",
+              color: "#333333"
             }}
           >
             {profileInfo.bio}
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
   userDetailsFlexBox: {
     flexDirection: "column",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 15,
   },
   bioContainer: {
     width: "90%",
@@ -176,7 +177,9 @@ const styles = StyleSheet.create({
     paddingBottom: 22,
     paddingLeft: 8,
     paddingRight: 8,
-    margin: 10,
+    marginTop: 30
+,
+    
   },
   buttonsFlexBox: {
     flex: 1,

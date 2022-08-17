@@ -15,7 +15,7 @@ import NavBar from "./NavBar";
 export default function MessageScreen({ navigation }) {
   
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "rgb(248, 248, 247)" }}>
       <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <View style={styles.messageContainer}>

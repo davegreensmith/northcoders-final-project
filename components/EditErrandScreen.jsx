@@ -56,7 +56,7 @@ export default function EditErrandScreen({ route, navigation }) {
     return <Text>Loading...</Text>;
   } else {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: "rgb(248, 248, 247)" }}>
         <Header navigation={navigation} />
         <ScrollView
           contentContainerStyle={styles.pageContent}
@@ -92,7 +92,7 @@ export default function EditErrandScreen({ route, navigation }) {
                 style={{
                   fontSize: Platform.OS === "android" ? 20 : 16,
                   flex: 1,
-                  marginLeft: 10,
+                  marginLeft: 10
                 }}
               >
                 How long will it take?
@@ -132,7 +132,7 @@ export default function EditErrandScreen({ route, navigation }) {
                 style={{
                   fontSize: Platform.OS === "android" ? 20 : 16,
                   flex: 1,
-                  marginLeft: 10,
+                  marginLeft: 10
                 }}
               >
                 What type of work is involved?
@@ -165,7 +165,7 @@ export default function EditErrandScreen({ route, navigation }) {
                   flexDirection: "row",
                   justifyContent: "center",
                   alignContent: "center",
-                  marginTop: 15,
+                  marginTop: 15
                 }}
               >
                 <Text>Errand updated!</Text>
@@ -215,16 +215,16 @@ export default function EditErrandScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   listItem: {
     justifyContent: "space-evenly",
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
   },
   titleField: {
     justifyContent: "center",
 
-    padding: 15,
+    padding: 15
   },
   descriptionField: {
     justifyContent: "center",
@@ -233,6 +233,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 5,
     padding: 10,
+    borderWidth: 1,
+    borderColor: "#4faf9c"
   },
   requirementsField: {
     justifyContent: "center",
@@ -242,6 +244,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 5,
     padding: 10,
+    borderWidth: 1,
+    borderColor: "#4faf9c"
   },
   jobTypeField: {
     justifyContent: "center",
@@ -251,6 +255,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 5,
     padding: 10,
+    borderWidth: 1,
+    borderColor: "#4faf9c"
   },
   locationField: {
     justifyContent: "center",
@@ -260,6 +266,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 5,
     padding: 10,
+    borderWidth: 1,
+    borderColor: "#4faf9c"
   },
   dateField: {
     justifyContent: "center",
@@ -269,6 +277,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 5,
     padding: 10,
+    borderWidth: 1,
+    borderColor: "#4faf9c"
   },
   jobLengthField: {
     justifyContent: "center",
@@ -277,14 +287,14 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     borderRadius: 5,
-    padding: 10,
+    padding: 10
   },
   buttonsFlexBox: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
   completeButton: {
     flexDirection: "row",
@@ -295,7 +305,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 125,
-    padding: 5,
+    padding: 5
   },
   completeButtonPressed: {
     flexDirection: "row",
@@ -306,7 +316,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 125,
-    padding: 5,
+    padding: 5
   },
   editButton: {
     flexDirection: "row",
@@ -317,7 +327,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 110,
-    padding: 5,
+    padding: 5
   },
   editButtonPressed: {
     flexDirection: "row",
@@ -328,7 +338,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 110,
-    padding: 5,
+    padding: 5
   },
   deleteButton: {
     flexDirection: "row",
@@ -339,7 +349,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 100,
-    padding: 5,
+    padding: 5
   },
   deleteButtonPressedIn: {
     flexDirection: "row",
@@ -350,23 +360,23 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 100,
-    padding: 5,
+    padding: 5
   },
   chipperList: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   kudosButton: {
     borderWidth: 1,
     borderRadius: 5,
     borderColor: "black",
     width: 80,
-    backgroundColor: "beige",
+    backgroundColor: "beige"
   },
   noErrandsPage: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   noErrandsBubble: {
     backgroundColor: "white",
@@ -374,13 +384,13 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     margin: 10,
     borderWidth: 0.5,
-    borderColor: "gray",
+    borderColor: "gray"
   },
   dropdown: {
     backgroundColor: "white",
     paddingVertical: 10,
     borderRadius: 8,
     marginTop: 10,
-    marginHorizontal: 15,
-  },
+    marginHorizontal: 15
+  }
 });

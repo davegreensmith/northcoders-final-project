@@ -23,7 +23,7 @@ export default function SplashScreen({ navigation }) {
     navigation.navigate("Add Errand");
   }
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "rgb(248, 248, 247)" }}>
       <Header navigation={navigation} />
       <View style={{ flex: 1, alignItems: "center" }}>
         <Text style={styles.introText}>What are you looking for ?</Text>
@@ -70,12 +70,13 @@ const styles = StyleSheet.create({
   introText: {
     fontSize: 18,
     marginTop: 50,
+    
   },
   pageContent: {
     flex: 1,
     alignItems: "center",
     justifyContent: "space-evenly",
-    paddingBottom: 40,
+    paddingBottom: 40
   },
   volunteerButton: {
     justifyContent: "center",
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 260,
     height: 85,
-    padding: 10,
+    padding: 10
   },
   volunteerButtonPressed: {
     justifyContent: "center",
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 260,
     height: 85,
-    padding: 10,
+    padding: 10
   },
   helpButton: {
     justifyContent: "center",
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 260,
     height: 85,
-    padding: 10,
+    padding: 10
   },
   helpButtonPressed: {
     justifyContent: "center",
@@ -111,20 +112,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 260,
     height: 85,
-    padding: 10,
+    padding: 10
   },
   dividerFlex: {
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-evenly",
-    width: "100%",
+    width: "100%"
   },
   dividerLine: {
     borderWidth: 1.5,
     width: 100,
-    bottom: 10,
+    bottom: 10
   },
   dividerText: {
-    fontSize: 20,
-  },
+    fontSize: 20
+  }
 });
