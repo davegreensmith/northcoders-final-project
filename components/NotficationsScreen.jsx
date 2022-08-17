@@ -37,7 +37,7 @@ export default function NotificationsScreen({ navigation }) {
   ];
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "rgb(248, 248, 247)" }}>
       <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <Text style={styles.header}>Notifications</Text>
