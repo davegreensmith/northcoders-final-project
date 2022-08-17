@@ -142,7 +142,7 @@ export default function SignUpScreen({ navigation }) {
             onChangeText={setPassword}
             secureTextEntry={true}
             value={password}
-            placeholder="* Password (Must be at least 6 characters)"
+            placeholder="* Password (Minimum 6 characters)"
             ref={passwordRef}
             returnKeyType="next"
             onSubmitEditing={() => bioRef.current.focus()}
@@ -153,7 +153,7 @@ export default function SignUpScreen({ navigation }) {
             style={styles.bio}
             onChangeText={setBio}
             value={bio}
-            placeholder="A brief description of your skills and abilities..."
+            placeholder="* Your bio, this should tell others all about you and your skills..."
             ref={bioRef}
             onSubmitEditing={() => postcodeRef.current.focus()}
             blurOnSubmit={false}
