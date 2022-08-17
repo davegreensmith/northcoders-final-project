@@ -33,6 +33,10 @@ export default function SingleErrandScreen({ route, navigation }) {
     setHasChippedIn(true);
   }
 
+  function clickAway() {
+    navigation.navigate("Another User", { userId: userID });
+  }
+
   useEffect(() => {
     fetchErrandByErrandID(id).then((errandData) => {
       return getUsername().then((username) => {
@@ -68,13 +72,7 @@ export default function SingleErrandScreen({ route, navigation }) {
               </View>
             </View>
             <View style={styles.avatarFlexBox}>
-              <Pressable
-                onPress={() => {
-                  const id = userID;
-                  navigation.navigate("Another User", { id });
-                }}
-                style={{ fontSize: 11 }}
-              >
+              <Pressable onPress={clickAway} style={{ fontSize: 11 }}>
                 <Text>{singleErrand.author}</Text>
               </Pressable>
             </View>
