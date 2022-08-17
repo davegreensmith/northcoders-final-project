@@ -39,7 +39,7 @@ export default function SplashScreen({ navigation }) {
             onPressOut={() => setVolunteerButtonPressed(false)}
           >
             <Text style={{ textAlign: "center", fontSize: 20 }}>
-              Be a Volunteer
+              Be a Volunteer 🙋‍♂️
             </Text>
           </Pressable>
           <View style={styles.dividerFlex}>
@@ -56,7 +56,7 @@ export default function SplashScreen({ navigation }) {
             onPressOut={() => setHelpButtonPressed(false)}
           >
             <Text style={{ textAlign: "center", fontSize: 20 }}>
-              Find a Volunteer
+              Find a Volunteer 🔎
             </Text>
           </Pressable>
         </View>

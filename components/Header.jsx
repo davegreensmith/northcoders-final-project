@@ -7,7 +7,7 @@ import {
   Pressable,
   SafeAreaView,
 } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Header({ navigation }) {
   function handleBellPress() {
@@ -24,7 +24,7 @@ export default function Header({ navigation }) {
       </View>
       <View style={styles.iconFlex}>
         <Pressable onPress={handleBellPress} style={styles.iconButton}>
-          <FontAwesome5 name="bell" size={35} color="black" />
+          <Ionicons name="notifications-outline" size={32} color="black" />
         </Pressable>
       </View>
     </View>
