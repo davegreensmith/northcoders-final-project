@@ -24,12 +24,17 @@ export default function SingleErrandScreen({ route, navigation }) {
   const [singleErrand, setSingleErrand] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [hasChippedIn, setHasChippedIn] = useState(false);
+  const [userID, setUserID] = useState("");
 
   const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
 
   function handleChipIn() {
     addChipperToErrand(id);
     setHasChippedIn(true);
+  }
+
+  function clickAway() {
+    navigation.navigate("Another User", { userId: userID });
   }
 
   useEffect(() => {
@@ -42,10 +47,11 @@ export default function SingleErrandScreen({ route, navigation }) {
           }
         });
         setSingleErrand({ ...errandData });
+        setUserID(singleErrand.authorId);
         setIsLoading(false);
       });
     });
-  }, [hasChippedIn]);
+  }, [hasChippedIn, singleErrand]);
 
   if (isLoading) {
     return <Text>Loading...</Text>;
@@ -66,11 +72,9 @@ export default function SingleErrandScreen({ route, navigation }) {
               </View>
             </View>
             <View style={styles.avatarFlexBox}>
-              {/* <Image
-              style={styles.avatar}
-              source={require("../assets/placeholder-avatar.png")}
-            /> */}
-              <Text style={{ fontSize: 11 }}>{singleErrand.author}</Text>
+              <Pressable onPress={clickAway} style={{ fontSize: 11 }}>
+                <Text>{singleErrand.author}</Text>
+              </Pressable>
             </View>
           </View>
           <View style={styles.dividerLine}></View>

@@ -1,21 +1,11 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TextInput,
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Image,
-  Platform,
-} from "react-native";
+import { View, Text, ScrollView, StyleSheet, Platform } from "react-native";
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
 import { Ionicons } from "@expo/vector-icons";
 import { getUserInfo } from "../firebase/config";
 
-export default function ProfileScreen({ navigation }) {
+export default function ProfileScreen({ route, navigation }) {
   const [profileInfo, setProfileInfo] = useState({
     avatar: "",
     bio: "",
@@ -33,38 +23,20 @@ export default function ProfileScreen({ navigation }) {
     username: "",
   });
 
-  const [errandsButtonPressed, setErrandsButtonsPressed] = useState(false);
-  const [chipinButtonPressed, setchipinButtonsPressed] = useState(false);
-  const [settingsButtonPressed, setSettingsButtonsPressed] = useState(false);
-
-  function handleErrandsListPress() {
-    navigation.navigate("Errands List");
-  }
-
-  function handleChipInsPress() {
-    navigation.navigate("Chip Ins List");
-  }
+  const { userId } = route.params;
 
   useEffect(() => {
-    getUserInfo().then(({ userData }) => {
+    getUserInfo(userId).then(({ userData }) => {
       setProfileInfo(userData);
     });
   }, []);
 
-  function handleSettingsPress() {
-    navigation.navigate("Profile Settings");
-  }
-
   return (
-    <View style={{ flex: 1, backgroundColor: "rgb(248, 248, 247)" }}>
+    <View style={{ flex: 1 }}>
       <Header navigation={navigation} />
       <View style={styles.pageContent}>
         <View style={styles.avatarFlexBox}>
           <Text style={styles.avatarInitials}>{profileInfo.avatar}</Text>
-          {/* <Image
-            style={styles.avatar}
-            source={require("../assets/jan-profile-avatar.png")}
-          /> */}
         </View>
         <View style={styles.userDetailsFlexBox}>
           <Text style={{ fontSize: Platform.OS === "android" ? 35 : 25 }}>
@@ -73,65 +45,22 @@ export default function ProfileScreen({ navigation }) {
           <Text
             style={{
               fontSize: Platform.OS === "android" ? 28 : 26,
-              color: "#B2B2B2"
+              color: "#B2B2B2",
             }}
           >
             {profileInfo.longLatData.area}
           </Text>
         </View>
-        <View style={styles.bioContainer}>
+        <ScrollView style={styles.bioContainer}>
           <Text
-            multiline={true}
             style={{
               fontSize: Platform.OS === "android" ? 16 : 14,
-              color: "#333333"
+              color: "#333333",
             }}
           >
             {profileInfo.bio}
           </Text>
-        </View>
-        <View style={styles.buttonsFlexBox}>
-          <Pressable
-            onPress={handleErrandsListPress}
-            style={
-              errandsButtonPressed
-                ? styles.myErrandsButtonPressed
-                : styles.myErrandsButton
-            }
-            onPressIn={() => setErrandsButtonsPressed(true)}
-            onPressOut={() => setErrandsButtonsPressed(false)}
-          >
-            <Text>My Errands</Text>
-            <Ionicons name="md-list-outline" size={24} color="black" />
-          </Pressable>
-          <Pressable
-            onPress={handleChipInsPress}
-            style={
-              chipinButtonPressed
-                ? styles.myErrandsButtonPressed
-                : styles.myErrandsButton
-            }
-            onPressIn={() => setchipinButtonsPressed(true)}
-            onPressOut={() => setchipinButtonsPressed(false)}
-          >
-            <Text>My Chip Ins</Text>
-            <Ionicons name="md-list-outline" size={24} color="black" />
-          </Pressable>
-          <View style={styles.iconFlexBox}>
-            <Pressable
-              style={
-                settingsButtonPressed
-                  ? styles.cogButtonPressed
-                  : styles.cogButton
-              }
-              onPress={handleSettingsPress}
-              onPressIn={() => setSettingsButtonsPressed(true)}
-              onPressOut={() => setSettingsButtonsPressed(false)}
-            >
-              <Ionicons name="cog-outline" size={36} color="black" />
-            </Pressable>
-          </View>
-        </View>
+        </ScrollView>
       </View>
       <NavBar navigation={navigation} />
     </View>
@@ -165,21 +94,18 @@ const styles = StyleSheet.create({
   userDetailsFlexBox: {
     flexDirection: "column",
     alignItems: "center",
-    marginTop: 15,
+    marginTop: 10,
   },
   bioContainer: {
     width: "90%",
     flex: 1,
     borderWidth: 0.6,
-    borderRadius: 30,
+    borderRadius: 15,
     backgroundColor: "#FFF",
-    paddingTop: 22,
-    paddingBottom: 22,
-    paddingLeft: 8,
-    paddingRight: 8,
-    marginTop: 30
-,
-    
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    margin: 20,
+    marginBottom: 230,
   },
   buttonsFlexBox: {
     flex: 1,

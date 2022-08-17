@@ -86,7 +86,7 @@ export default function MyErrandsScreen({ navigation }) {
   }, [refreshPage]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "rgb(248, 248, 247)" }}>
       <Header navigation={navigation} />
       <ScrollView
         contentContainerStyle={styles.pageContent}
@@ -268,6 +268,9 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 5,
     padding: 10,
+
+    borderWidth: 1,
+    borderColor: "#4faf9c",
   },
   requirementsField: {
     justifyContent: "center",
@@ -277,6 +280,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 5,
     padding: 10,
+    borderWidth: 1,
+    borderColor: "#4faf9c",
   },
   jobTypeField: {
     justifyContent: "center",
@@ -286,6 +291,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 5,
     padding: 10,
+    borderWidth: 1,
+    borderColor: "#4faf9c",
   },
   locationField: {
     justifyContent: "center",
@@ -295,6 +302,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 5,
     padding: 10,
+    borderWidth: 1,
+    borderColor: "#4faf9c",
   },
   dateField: {
     justifyContent: "center",
@@ -304,6 +313,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 5,
     padding: 10,
+    borderWidth: 1,
+    borderColor: "#4faf9c",
   },
   jobLengthField: {
     justifyContent: "center",
@@ -313,6 +324,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderRadius: 5,
     padding: 10,
+    borderWidth: 1,
+    borderColor: "#4faf9c",
   },
   buttonsFlexBox: {
     flexDirection: "row",
