@@ -104,7 +104,7 @@ export default function MyErrandsScreen({ navigation }) {
                   <Text>Date: {errand.date}</Text>
                 </View>
                 <View style={styles.jobLengthField}>
-                  <Text>Job length: {errand.timeFrame}</Text>
+                  <Text>Job length: {errand.timeFrame} hours</Text>
                 </View>
                 <View style={styles.jobLengthField}>
                   <Text style={{ fontWeight: "bold", marginBottom: 5 }}>
@@ -168,7 +168,8 @@ export default function MyErrandsScreen({ navigation }) {
                     onPressIn={() => setEditButtonPressed(true)}
                     onPressOut={() => {
                       setEditButtonPressed(false);
-                      handleEditErrand(errand.errandID);
+                      const id = errand.errandID;
+                      navigation.navigate("Edit Errand", { id });
                     }}
                     style={
                       editButtonPressed
