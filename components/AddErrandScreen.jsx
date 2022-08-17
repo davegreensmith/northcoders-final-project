@@ -142,13 +142,13 @@ export default function AddErrandScreen({ navigation }) {
             style={styles.descriptionField}
             onChangeText={setDescription}
             value={description}
-            placeholder="* Description of the work you need help with..."
+            placeholder="* Description of the work you need help with, give as much detail as possible..."
           />
           <TextInput
             style={styles.genericInputField}
             onChangeText={setRequirements}
             value={requirements}
-            placeholder="Requirements (optional)"
+            placeholder=" Volunteer Requirements (optional)"
           />
           <TextInput
             style={styles.genericInputField}
@@ -160,7 +160,7 @@ export default function AddErrandScreen({ navigation }) {
             style={styles.genericInputField}
             onChangeText={setDate}
             value={date}
-            placeholder="* Date (DD/MM/YYYY)"
+            placeholder="* Errand Date (DD/MM/YYYY)"
           />
           <View style={styles.dropdownFlexTime}>
             <Picker
