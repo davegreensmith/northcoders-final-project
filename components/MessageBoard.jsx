@@ -8,13 +8,45 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
-import { createMessageAndAddIdToExistingErrands } from "../firebase/config";
+import {
+  createMessageAndAddIdToExistingErrands,
+  fetchErrandByErrandID,
+  fetchMessages,
+  fetchMessagesByUserID,
+  getUsername,
+} from "../firebase/config";
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
+import { Feather } from "@expo/vector-icons";
 
 export default function MessageBoard({ navigation }) {
-  useEffect(() => {}, []);
+  const [loggedInUser, setLoggedInUser] = useState();
+  const [chipperMessages, setChipperMessages] = useState();
+  const [errandOwnerMessages, setErrandOwnerMessages] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [messagesButtonPressed, setMessagesButtonPressed] = useState(false);
+
+  function handleMessagesErrand(errandID) {
+    console.log(errandID);
+    navigation.navigate("MessageSingle", { errandID });
+  }
+
+  useEffect(() => {
+    setIsLoading(true);
+    getUsername().then((username) => {
+      setLoggedInUser(username);
+      const userID = username.id;
+      fetchMessagesByUserID(userID).then(
+        ({ errandOwnerOf, errandChipperIn }) => {
+          setChipperMessages(errandChipperIn);
+          setErrandOwnerMessages(errandOwnerOf);
+          setIsLoading(false);
+          console.log(chipperMessages);
+        }
+      );
+    });
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -23,151 +55,102 @@ export default function MessageBoard({ navigation }) {
         contentContainerStyle={styles.pageContent}
         keyboardShouldPersistTaps="always"
       >
-        <View>
-          <Text>message board</Text>
-        </View>
+        {isLoading ? (
+          <Text>Loading message board</Text>
+        ) : (
+          <View>
+            <Text style={styles.headerH1}>Messages from My Errands</Text>
+            {errandOwnerMessages.map((message) => {
+              return (
+                <View key={message.messageID} style={styles.messageInfo}>
+                  <View>
+                    <Text style={styles.errandTitle}>{message.errandName}</Text>
+                    {message.body.length === 1 ? (
+                      <Text>There is {message.body.length} message</Text>
+                    ) : (
+                      <Text>There are {message.body.length} messages</Text>
+                    )}
+                  </View>
+                  <Pressable
+                    // onPressIn={() => setMessagesButtonPressed(true)}
+                    onPressOut={() => {
+                      setMessagesButtonPressed(false);
+                      handleMessagesErrand(message.errandID);
+                    }}
+                    style={
+                      messagesButtonPressed
+                        ? styles.messagesButtonPressed
+                        : styles.messagesButton
+                    }
+                  >
+                    <Text>Messages </Text>
+                    <Feather name="message-circle" size={18} color="black" />
+                  </Pressable>
+                </View>
+              );
+            })}
+            <Text style={styles.headerH1}>Messages from My ChipIns</Text>
+            {chipperMessages.map((message) => {
+              return (
+                <View key={message.id} style={styles.messageInfo}>
+                  <View>
+                    <Text style={styles.errandTitle}>{message.errandName}</Text>
+                    {message.body.length === 1 ? (
+                      <Text>There is {message.body.length} message</Text>
+                    ) : (
+                      <Text>There are {message.body.length} messages</Text>
+                    )}
+                  </View>
+                  <Pressable
+                    // onPressIn={() => setMessagesButtonPressed(true)}
+                    onPressOut={() => {
+                      setMessagesButtonPressed(false);
+                      handleMessagesErrand(message.errandID);
+                    }}
+                    style={
+                      messagesButtonPressed
+                        ? styles.messagesButtonPressed
+                        : styles.messagesButton
+                    }
+                  >
+                    <Text>Messages </Text>
+                    <Feather name="message-circle" size={18} color="black" />
+                  </Pressable>
+                </View>
+              );
+            })}
+          </View>
+        )}
       </ScrollView>
       <NavBar navigation={navigation} />
     </View>
   );
-  //     {myErrands.length > 0 ? (
-  //       myErrands.map((errand) => {
-  //         return (
-  //           <View key={errand.errandID} style={styles.listItem}>
-  //             <View style={styles.titleField}>
-  //               <Text style={{ fontSize: 22 }}>{errand.errandName}</Text>
-  //             </View>
-  //             <View style={styles.descriptionField}>
-  //               <Text>{errand.description}</Text>
-  //             </View>
-  //             <View style={styles.requirementsField}>
-  //               <Text>Helper Requirements: {errand.requirements}</Text>
-  //             </View>
-  //             <View style={styles.jobTypeField}>
-  //               <Text>Job Type: {errand.workType}</Text>
-  //             </View>
-  //             <View style={styles.locationField}>
-  //               <Text>Location: {errand.area}</Text>
-  //             </View>
-  //             <View style={styles.dateField}>
-  //               <Text>Date: {errand.date}</Text>
-  //             </View>
-  //             <View style={styles.jobLengthField}>
-  //               <Text>Job length: {errand.timeFrame}</Text>
-  //             </View>
-  //             {/* <View style={styles.jobLengthField}>
-  //               <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
-  //               {errand.chippers.map((chipper) => {
-  //                 return (
-  //                   <View key={chipper.id} style={styles.chipperList}>
-  //                     <Text>{chipper.user}</Text>
-  //                     <Pressable
-  //                       disabled={false}
-  //                       style={styles.kudosButton}
-  //                       onPress={(e) => {
-  //                         giveKudos(chipper.id);
-  //                       }}
-  //                     >
-  //                       <Text>Give kudos!</Text>
-  //                     </Pressable>
-  //                   </View>
-  //                 );
-  //               })}
-  //             </View> */}
-  //             <View style={styles.buttonsFlexBox}>
-  //               <Pressable
-  //                 style={
-  //                   completeButtonPressed
-  //                     ? styles.completeButtonPressed
-  //                     : styles.completeButton
-  //                 }
-  //                 onPressIn={() => setCompleteButtonPressed(true)}
-  //                 onPressOut={() => {
-  //                   setCompleteButtonPressed(false);
-  //                   handleCompleteErrand(errand.errandID);
-  //                 }}
-  //               >
-  //                 <Text>Completed</Text>
-  //                 <MaterialIcons
-  //                   name="done-outline"
-  //                   size={18}
-  //                   color="black"
-  //                 />
-  //               </Pressable>
-  //               <Pressable
-  //                 onPressIn={() => setEditButtonPressed(true)}
-  //                 onPressOut={() => {
-  //                   setEditButtonPressed(false);
-  //                   handleEditErrand(errand.errandID);
-  //                 }}
-  //                 style={
-  //                   editButtonPressed
-  //                     ? styles.editButtonPressed
-  //                     : styles.editButton
-  //                 }
-  //               >
-  //                 <Text>Edit</Text>
-  //                 <Feather name="edit" size={18} color="black" />
-  //               </Pressable>
-  //               <Pressable
-  //                 style={
-  //                   deleteButtonPressed
-  //                     ? styles.deleteButtonPressedIn
-  //                     : styles.deleteButton
-  //                 }
-  //                 onPressIn={() => setDeleteButtonPressed(true)}
-  //                 onPressOut={() => {
-  //                   setDeleteButtonPressed(false);
-  //                   handleDeleteErrand(errand.errandID);
-  //                 }}
-  //               >
-  //                 <Text>Delete</Text>
-  //                 <MaterialIcons
-  //                   name="delete-outline"
-  //                   size={22}
-  //                   color="black"
-  //                 />
-  //               </Pressable>
-  //             </View>
-  //             <View style={styles.messagesFlexbox}>
-  //               <Pressable
-  //                 onPressIn={() => setMessagesButtonPressed(true)}
-  //                 onPressOut={() => {
-  //                   setMessagesButtonPressed(false);
-  //                   handleMessagesErrand(errand.errandID);
-  //                 }}
-  //                 style={
-  //                   messagesButtonPressed
-  //                     ? styles.messagesButtonPressed
-  //                     : styles.messagesButton
-  //                 }
-  //               >
-  //                 <Text>Messages </Text>
-  //                 <Feather name="message-circle" size={18} color="black" />
-  //               </Pressable>
-  //             </View>
-  //           </View>
-  //         );
-  //       })
-  //     ) : (
-  //       <View style={styles.noErrandsPage}>
-  //         <View style={styles.noErrandsBubble}>
-  //           <Text style={{ textAlign: "center" }}>
-  //             You don't have any errands yet, if you need some help go and add
-  //             a new one! 📝
-  //           </Text>
-  //         </View>
-  //       </View>
-  //     )}
 }
 
 const styles = StyleSheet.create({
   pageContent: {
     flexGrow: 1,
   },
+  headerH1: {
+    fontSize: 20,
+    borderBottomWidth: 2,
+    margin: 10,
+  },
+  errandTitle: {
+    fontSize: 15,
+    fontWeight: "bold",
+  },
   listItem: {
     justifyContent: "space-evenly",
     borderBottomWidth: 1,
+  },
+  messageInfo: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    padding: 5,
+    backgroundColor: "#fff",
+    width: 350,
+    margin: 5,
   },
   titleField: {
     justifyContent: "center",
@@ -289,11 +272,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(86, 232, 195, 0.7)",
+    backgroundColor: "#FFFAF0",
     borderWidth: 1,
     borderRadius: 5,
-    height: 40,
-    width: 350,
+    height: 30,
+    width: 100,
     padding: 5,
   },
   messagesButtonPressed: {
@@ -303,8 +286,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(49, 151, 125)",
     borderWidth: 1,
     borderRadius: 5,
-    height: 40,
-    width: 350,
+    height: 30,
+    width: 100,
     padding: 5,
   },
   deleteButton: {

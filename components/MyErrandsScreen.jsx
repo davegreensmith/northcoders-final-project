@@ -71,7 +71,6 @@ export default function MyErrandsScreen({ navigation }) {
 
   useEffect(() => {
     return getUserErrands().then((fulfilledPromises) => {
-      console.log(fulfilledPromises, "<<< user errands");
       const errands = [...fulfilledPromises];
       setMyErrands(errands);
     });
@@ -217,7 +216,8 @@ export default function MyErrandsScreen({ navigation }) {
                     onPressIn={() => setMessagesButtonPressed(true)}
                     onPressOut={() => {
                       setMessagesButtonPressed(false);
-                      handleMessagesErrand(errand.errandID);
+                      const id = errand.errandID;
+                      handleMessagesErrand(id);
                     }}
                     style={
                       messagesButtonPressed

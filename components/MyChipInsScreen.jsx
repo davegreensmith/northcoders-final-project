@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import {
   deleteErrand,
   deleteLatLongByErrandId,
@@ -17,6 +17,7 @@ import {
 export default function MyChipInsScreen({ navigation }) {
   const [myChipIns, setMyChipIns] = useState([]);
   const [refreshPage, setRefreshPage] = useState(true);
+  const [messagesButtonPressed, setMessagesButtonPressed] = useState(false);
 
   const [editButtonPressed, setEditButtonPressed] = useState(false);
 
@@ -27,6 +28,11 @@ export default function MyChipInsScreen({ navigation }) {
       return errand.id !== errandID;
     });
     setMyChipIns(newArray);
+  }
+
+  function handleMessagesErrand(errandID) {
+    console.log(errandID);
+    navigation.navigate("MessageSingle", { errandID });
   }
 
   useEffect(() => {
@@ -86,6 +92,21 @@ export default function MyChipInsScreen({ navigation }) {
                       size={22}
                       color="black"
                     />
+                  </Pressable>
+                  <Pressable
+                    onPressIn={() => setMessagesButtonPressed(true)}
+                    onPressOut={() => {
+                      setMessagesButtonPressed(false);
+                      handleMessagesErrand(errand.id);
+                    }}
+                    style={
+                      messagesButtonPressed
+                        ? styles.messagesButtonPressed
+                        : styles.messagesButton
+                    }
+                  >
+                    <Text>Messages </Text>
+                    <Feather name="message-circle" size={18} color="black" />
                   </Pressable>
                 </View>
               </View>
@@ -214,5 +235,27 @@ const styles = StyleSheet.create({
     margin: 10,
     borderWidth: 0.5,
     borderColor: "gray",
+  },
+  messagesButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFAF0",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 120,
+    padding: 5,
+  },
+  messagesButtonPressed: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgb(49, 151, 125)",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 120,
+    padding: 5,
   },
 });

@@ -391,6 +391,41 @@ export function postMessageByMessageID(messageID, addMessage) {
   });
 }
 
+//get all message
+export function fetchMessages() {
+  return getDocs(messagesRef)
+    .then((snapshot) => {
+      let messages = [];
+      snapshot.docs.forEach((doc) => {
+        messages.push({ ...doc.data(), id: doc.id });
+      });
+      return messages;
+    })
+    .catch((err) => {
+      console.log(err.message, "<<< messages errors");
+    });
+}
+
+export function fetchMessagesByUserID(userID) {
+  return Promise.all([fetchMessages(), userID]).then(([messages, userID]) => {
+    const errandOwnerOf = [];
+    const errandChipperIn = [];
+    messages.forEach((errand) => {
+      if (userID === errand.errandOwner.id) {
+        errandOwnerOf.push(errand);
+      } else {
+        errand.chippers.forEach((chipper) => {
+          if (userID === chipper.userID) {
+            errandChipperIn.push(errand);
+          }
+        });
+      }
+    });
+    const applicableMessages = { errandOwnerOf, errandChipperIn };
+    return applicableMessages;
+  });
+}
+
 // export function addErrandToUser(errandID, errandUserID) {
 //
 //
