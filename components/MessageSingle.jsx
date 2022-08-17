@@ -11,10 +11,32 @@ import {
 import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
+import {
+  fetchErrandByErrandID,
+  fetchMessagesByErrandID,
+  fetchMessagesByMessageID,
+} from "../firebase/config";
 
-export default function MessageBoard({ navigation }, route) {
+export default function MessageBoard({ navigation, route }) {
+  const [currentMessage, setCurrentMessage] = useState(false);
+  const [currentErrand, setCurrentErrand] = useState(false);
+  const [messagesArray, setMessagesArray] = useState([]);
+
+  const { errandID } = route.params;
+
   useEffect(() => {
-    console.log(route);
+    fetchErrandByErrandID(errandID).then((errandData) => {
+      setCurrentErrand({ ...errandData });
+      const messageID = errandData.messageID;
+      fetchMessagesByMessageID(messageID)
+        .then((messageData) => {
+          console.log(messageData);
+          setCurrentMessage({ ...messageData });
+          const messageBodyArr = [...messageData.body];
+          setMessagesArray(messageBodyArr);
+        })
+        .then(() => {});
+    });
   }, []);
 
   return (
@@ -24,142 +46,80 @@ export default function MessageBoard({ navigation }, route) {
         contentContainerStyle={styles.pageContent}
         keyboardShouldPersistTaps="always"
       >
-        <View>
-          <Text>message single</Text>
+        <View key={currentErrand.errandID} style={styles.listItem}>
+          <View style={styles.titleField}>
+            <Text style={{ fontSize: 22 }}>{currentErrand.errandName}</Text>
+          </View>
+          {/* <View style={styles.descriptionField}>
+            <Text>{currentErrand.description}</Text>
+          </View> */}
+          {/* <View style={styles.requirementsField}>
+            <Text>Helper Requirements: {currentErrand.requirements}</Text>
+          </View> */}
+          {/* <View style={styles.jobTypeField}>
+            <Text>Job Type: {currentErrand.workType}</Text>
+          </View> */}
+          <View style={styles.locationField}>
+            <Text>Location: {currentErrand.area}</Text>
+          </View>
+          <View style={styles.dateField}>
+            <Text>Date: {currentErrand.date}</Text>
+          </View>
+          {/* <View style={styles.jobLengthField}>
+            <Text>Job length: {currentErrand.timeFrame}</Text>
+          </View> */}
+          {/* <View style={styles.jobLengthField}>
+                <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
+                {currentErrand.chippers.map((chipper) => {
+                  return (
+                    <View key={chipper.id} style={styles.chipperList}>
+                      <Text>{chipper.user}</Text>
+                      <Pressable
+                        disabled={false}
+                        style={styles.kudosButton}
+                        onPress={(e) => {
+                          giveKudos(chipper.id);
+                        }}
+                      >
+                        <Text>Give kudos!</Text>
+                      </Pressable>
+                    </View>
+                  );
+                })}
+              </View> */}
+          <View style={styles.buttonsFlexBox}>
+            {/* <Pressable
+              onPressIn={() => setMessagesButtonPressed(true)}
+              onPressOut={() => {
+                setMessagesButtonPressed(false);
+                handleMessagesErrand(errand.errandID);
+              }}
+              style={
+                messagesButtonPressed
+                  ? styles.messagesButtonPressed
+                  : styles.messagesButton
+              }
+            >
+              <Text>Messages </Text>
+              <Feather name="message-circle" size={18} color="black" />
+            </Pressable> */}
+          </View>
         </View>
+        <View style={styles.titleField}>
+          <Text style={{ fontSize: 22 }}>Messages:</Text>
+        </View>
+        {messagesArray.map((message) => {
+          return (
+            <View style={styles.message}>
+              <Text style={{ fontSize: 11 }}>{message.msgAuthor}:</Text>
+              <Text style={{ fontSize: 15 }}>{message.message}</Text>
+            </View>
+          );
+        })}
       </ScrollView>
       <NavBar navigation={navigation} />
     </View>
   );
-  //     {myErrands.length > 0 ? (
-  //       myErrands.map((errand) => {
-  //         return (
-  //           <View key={errand.errandID} style={styles.listItem}>
-  //             <View style={styles.titleField}>
-  //               <Text style={{ fontSize: 22 }}>{errand.errandName}</Text>
-  //             </View>
-  //             <View style={styles.descriptionField}>
-  //               <Text>{errand.description}</Text>
-  //             </View>
-  //             <View style={styles.requirementsField}>
-  //               <Text>Helper Requirements: {errand.requirements}</Text>
-  //             </View>
-  //             <View style={styles.jobTypeField}>
-  //               <Text>Job Type: {errand.workType}</Text>
-  //             </View>
-  //             <View style={styles.locationField}>
-  //               <Text>Location: {errand.area}</Text>
-  //             </View>
-  //             <View style={styles.dateField}>
-  //               <Text>Date: {errand.date}</Text>
-  //             </View>
-  //             <View style={styles.jobLengthField}>
-  //               <Text>Job length: {errand.timeFrame}</Text>
-  //             </View>
-  //             {/* <View style={styles.jobLengthField}>
-  //               <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
-  //               {errand.chippers.map((chipper) => {
-  //                 return (
-  //                   <View key={chipper.id} style={styles.chipperList}>
-  //                     <Text>{chipper.user}</Text>
-  //                     <Pressable
-  //                       disabled={false}
-  //                       style={styles.kudosButton}
-  //                       onPress={(e) => {
-  //                         giveKudos(chipper.id);
-  //                       }}
-  //                     >
-  //                       <Text>Give kudos!</Text>
-  //                     </Pressable>
-  //                   </View>
-  //                 );
-  //               })}
-  //             </View> */}
-  //             <View style={styles.buttonsFlexBox}>
-  //               <Pressable
-  //                 style={
-  //                   completeButtonPressed
-  //                     ? styles.completeButtonPressed
-  //                     : styles.completeButton
-  //                 }
-  //                 onPressIn={() => setCompleteButtonPressed(true)}
-  //                 onPressOut={() => {
-  //                   setCompleteButtonPressed(false);
-  //                   handleCompleteErrand(errand.errandID);
-  //                 }}
-  //               >
-  //                 <Text>Completed</Text>
-  //                 <MaterialIcons
-  //                   name="done-outline"
-  //                   size={18}
-  //                   color="black"
-  //                 />
-  //               </Pressable>
-  //               <Pressable
-  //                 onPressIn={() => setEditButtonPressed(true)}
-  //                 onPressOut={() => {
-  //                   setEditButtonPressed(false);
-  //                   handleEditErrand(errand.errandID);
-  //                 }}
-  //                 style={
-  //                   editButtonPressed
-  //                     ? styles.editButtonPressed
-  //                     : styles.editButton
-  //                 }
-  //               >
-  //                 <Text>Edit</Text>
-  //                 <Feather name="edit" size={18} color="black" />
-  //               </Pressable>
-  //               <Pressable
-  //                 style={
-  //                   deleteButtonPressed
-  //                     ? styles.deleteButtonPressedIn
-  //                     : styles.deleteButton
-  //                 }
-  //                 onPressIn={() => setDeleteButtonPressed(true)}
-  //                 onPressOut={() => {
-  //                   setDeleteButtonPressed(false);
-  //                   handleDeleteErrand(errand.errandID);
-  //                 }}
-  //               >
-  //                 <Text>Delete</Text>
-  //                 <MaterialIcons
-  //                   name="delete-outline"
-  //                   size={22}
-  //                   color="black"
-  //                 />
-  //               </Pressable>
-  //             </View>
-  //             <View style={styles.messagesFlexbox}>
-  //               <Pressable
-  //                 onPressIn={() => setMessagesButtonPressed(true)}
-  //                 onPressOut={() => {
-  //                   setMessagesButtonPressed(false);
-  //                   handleMessagesErrand(errand.errandID);
-  //                 }}
-  //                 style={
-  //                   messagesButtonPressed
-  //                     ? styles.messagesButtonPressed
-  //                     : styles.messagesButton
-  //                 }
-  //               >
-  //                 <Text>Messages </Text>
-  //                 <Feather name="message-circle" size={18} color="black" />
-  //               </Pressable>
-  //             </View>
-  //           </View>
-  //         );
-  //       })
-  //     ) : (
-  //       <View style={styles.noErrandsPage}>
-  //         <View style={styles.noErrandsBubble}>
-  //           <Text style={{ textAlign: "center" }}>
-  //             You don't have any errands yet, if you need some help go and add
-  //             a new one! 📝
-  //           </Text>
-  //         </View>
-  //       </View>
-  //     )}
 }
 
 const styles = StyleSheet.create({
@@ -353,5 +313,15 @@ const styles = StyleSheet.create({
     margin: 10,
     borderWidth: 0.5,
     borderColor: "gray",
+  },
+
+  message: {
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    marginTop: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    borderRadius: 5,
+    padding: 10,
   },
 });

@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
 
-export default function MessageBoard({ navigation }, { route }) {
+export default function MessageBoard({ navigation }) {
   useEffect(() => {}, []);
 
   return (

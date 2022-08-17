@@ -359,36 +359,30 @@ function deleteFoundLatLong(latlongID) {
 
 //CHAT MESSAGES
 //add message to db
-export function addMessage(message, userId1, userId2) {
-  const messageObj = { message, userId1, userId2 };
-  const messageRef = collection(db, "messages");
 
-  addDoc(messageRef, messageObj)
-    .then((data) => {
-      // console.log(data._key.path.segments[1], '<<< errand doc number');
-      // console.log(data.firestore._firestoreClient.user.uid, '<<< users UID');
+export function fetchMessagesAllMessages() {
+  return getDocs(messagesRef)
+    .then((snapshot) => {
+      let messages = [];
+      snapshot.docs.forEach((doc) => {
+        messages.push({ ...doc.data(), id: doc.id });
+      });
+      return messages;
     })
     .catch((err) => {
-      console.log(err.message);
+      console.log(err.message, "<<< errands errors");
     });
 }
 
-// fetch messages in realtime
-
-// export function fetchMessage(messageId) {}
-
-// export function fetchErrands() {
-//   getDocs(errandsRef)
-//     .then((snapshot) => {
-//       let errands = [];
-//       snapshot.docs.forEach((doc) => {
-//         errands.push({ ...doc.data(), id: doc.id });
-//       });
-//     })
-//     .catch((err) => {
-//       console.log(err.message, '<<< errands errors');
-//     });
-// }
+export function fetchMessagesByMessageID(messageID) {
+  const messageRef = doc(db, "messages", messageID);
+  return Promise.all([getDoc(messageRef, messageID), messageID]).then(
+    ([data, messageID]) => {
+      const messageData = { ...data.data(), messageID };
+      return messageData;
+    }
+  );
+}
 
 // ***   DO NOT USE, NOW REDUNDANT!!  ***
 // ***   DO NOT USE, NOW REDUNDANT!!  ***
