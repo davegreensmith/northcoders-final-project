@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   titleHeader: {
     flexDirection: "row",
-    justifyContent: "space-",
+    justifyContent: "space-around",
     paddingTop: 10,
   },
   titleHeaderText: {

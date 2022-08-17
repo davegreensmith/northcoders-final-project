@@ -38,10 +38,6 @@ export default function MapScreen({ navigation }) {
   ]);
   // const [radius, setRadius] = useState(1000)
 
-  function handleGiveHelpPress() {
-    navigation.navigate("Map");
-  }
-
   function handleGoToErrand(id) {
     navigation.navigate("Single Errand", { id });
   }
@@ -111,6 +107,7 @@ export default function MapScreen({ navigation }) {
             radius={value}
             fillColor={"rgba(27.8, 78.8, 68.6, 0.3)"}
           ></Circle>
+
           {latLongArray ? (
             latLongArray.map((errand) => {
               const latitude = errand.latitude;
@@ -119,6 +116,9 @@ export default function MapScreen({ navigation }) {
 
               return (
                 <Marker
+                  onCalloutPress={() => {
+                    handleGoToErrand(id);
+                  }}
                   coordinate={{
                     latitude,
                     longitude,
@@ -179,13 +179,11 @@ const styles = StyleSheet.create({
   },
   paragraph: {
     textAlign: "center",
-    // marginLeft: 10,
     marginTop: 5,
     fontSize: 14,
   },
   date: {
     textAlign: "center",
-    // marginLeft: 10,
     marginTop: 5,
     fontSize: 14,
   },
