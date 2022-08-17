@@ -27,6 +27,7 @@ export default function EditErrandScreen({ route, navigation }) {
   const [description, setDescription] = useState("");
   const [area, setArea] = useState("");
   const [date, setDate] = useState("");
+  const [updated, setUpdated] = useState(false);
 
   const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
   const [backButtonPressed, setBackButtonPressed] = useState(false);
@@ -34,8 +35,9 @@ export default function EditErrandScreen({ route, navigation }) {
   const { id } = route.params;
 
   function handleUpdateErrand(errandID) {
-    const body = {};
+    const body = { timeFrame, workType, description, area, date };
     updateErrand(errandID, body);
+    setUpdated(true);
   }
 
   useEffect(() => {
@@ -85,7 +87,16 @@ export default function EditErrandScreen({ route, navigation }) {
                 onChangeText={(newValue) => setDate(newValue)}
               />
             </View>
-            <View style={styles.dropdownFlexTime}>
+            <View style={styles.dropdown}>
+              <Text
+                style={{
+                  fontSize: Platform.OS === "android" ? 20 : 16,
+                  flex: 1,
+                  marginLeft: 10,
+                }}
+              >
+                How long will it take?
+              </Text>
               <Picker
                 style={styles.dropdownMenu}
                 itemStyle={{ fontSize: 16 }}
@@ -103,6 +114,8 @@ export default function EditErrandScreen({ route, navigation }) {
                 <Picker.Item label="Half a working day" value={4} />
                 <Picker.Item label="A full day's work" value={8} />
               </Picker>
+            </View>
+            <View style={styles.dropdown}>
               <Text
                 style={{
                   fontSize: Platform.OS === "android" ? 20 : 16,
@@ -110,10 +123,8 @@ export default function EditErrandScreen({ route, navigation }) {
                   marginLeft: 10,
                 }}
               >
-                How long will it take?
+                What type of work is involved?
               </Text>
-            </View>
-            <View style={styles.dropdownFlexWorkType}>
               <Picker
                 style={styles.dropdownMenu}
                 itemStyle={{ fontSize: 16 }}
@@ -134,16 +145,22 @@ export default function EditErrandScreen({ route, navigation }) {
                 <Picker.Item label="Construction" value={"construction"} />
                 <Picker.Item label="Cleaning" value={"cleaning"} />
               </Picker>
-              <Text
+            </View>
+            {updated ? (
+              <View
                 style={{
-                  fontSize: Platform.OS === "android" ? 20 : 16,
-                  flex: 1,
-                  marginLeft: 10,
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  marginTop: 15,
                 }}
               >
-                What type of work is involved?
-              </Text>
-            </View>
+                <Text>Errand updated!</Text>
+              </View>
+            ) : (
+              <></>
+            )}
+            <View></View>
             <View style={styles.buttonsFlexBox}>
               <Pressable
                 style={
@@ -345,5 +362,12 @@ const styles = StyleSheet.create({
     margin: 10,
     borderWidth: 0.5,
     borderColor: "gray",
+  },
+  dropdown: {
+    backgroundColor: "white",
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginTop: 10,
+    marginHorizontal: 15,
   },
 });

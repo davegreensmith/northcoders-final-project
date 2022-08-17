@@ -226,9 +226,9 @@ export function giveKudosByUid(id) {
 }
 
 //update errand
-export function updateErrand(errandID, updateBody) {
+export function updateErrand(errandID, updatedBody) {
   const errandRef = doc(db, "errands", errandID);
-  updateDoc(errandRef, updateBody);
+  updateDoc(errandRef, updatedBody);
 }
 
 //delete errands
