@@ -93,9 +93,9 @@ export default function MessageBoard({ navigation, route }) {
           ) : (
             <View style={styles.chipperContainer}>
               <Text style={styles.chipperSubTitle}>Current Chippers:</Text>
-              {currentErrand.chippers.map((chipper) => {
+              {currentErrand.chippers.map((chipper, index) => {
                 return (
-                  <View key={chipper.id}>
+                  <View key={index}>
                     <Pressable
                       onPress={() => {
                         clickAway(chipper.id);

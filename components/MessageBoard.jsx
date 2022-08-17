@@ -91,7 +91,7 @@ export default function MessageBoard({ navigation }) {
             <Text style={styles.headerH1}>Messages from My ChipIns</Text>
             {chipperMessages.map((message) => {
               return (
-                <View key={message.userID} style={styles.messageInfo}>
+                <View key={message.id} style={styles.messageInfo}>
                   <View style={styles.summaryContainer}>
                     <Text style={styles.errandTitle}>{message.errandName}</Text>
                     {message.body.length === 1 ? (
