@@ -384,12 +384,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   fieldLabel: {
-    fontSize: Platform.OS === "android" ? 16 : 14,
+    fontSize: Platform.OS === "android" ? 16 : 13,
     marginLeft: 15,
     flex: 1,
   },
   fieldValue: {
-    fontSize: Platform.OS === "android" ? 16 : 14,
+    fontSize: Platform.OS === "android" ? 16 : 13,
     marginRight: 15,
     borderRadius: 10,
     padding: 8,
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   editFieldValue: {
-    fontSize: Platform.OS === "android" ? 16 : 14,
+    fontSize: Platform.OS === "android" ? 16 : 13,
     marginRight: 15,
     borderRadius: 10,
     padding: 8,
