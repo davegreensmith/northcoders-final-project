@@ -28,6 +28,7 @@ export default function MyErrandsScreen({ navigation }) {
   const [myErrands, setMyErrands] = useState([]);
   const [refreshPage, setRefreshPage] = useState(true);
   const [completed, setCompleted] = useState(false);
+  const [id, setId] = useState(null);
 
   const [completeButtonPressed, setCompleteButtonPressed] = useState(false);
   const [editButtonPressed, setEditButtonPressed] = useState(false);
@@ -43,8 +44,18 @@ export default function MyErrandsScreen({ navigation }) {
     });
   }
 
-  function handleCompleteErrand(errandID) {
+  function handleCompleteErrand(id) {
     setCompleted(true);
+    setId(id);
+    // handleDeleteErrand(errandID);
+    // const newList = myErrands.filter((errand) => {
+    //   return errand.errandID !== errandID;
+    // });
+    // setMyErrands([...newList]).then(() => {
+    //   console.log(errandID);
+    //   console.log(myErrands);
+    // });
+    // delete errand via config function
   }
 
   function giveKudos(id) {
@@ -96,24 +107,41 @@ export default function MyErrandsScreen({ navigation }) {
                   <Text>Job length: {errand.timeFrame} hours</Text>
                 </View>
                 <View style={styles.jobLengthField}>
-                  <Text style={{ fontWeight: "bold" }}>Volunteers:</Text>
+                  <Text style={{ fontWeight: "bold", marginBottom: 5 }}>
+                    Volunteers:
+                  </Text>
                   {errand.chippers.map((chipper) => {
                     return (
                       <View key={chipper.id} style={styles.chipperList}>
                         <Text>{chipper.user}</Text>
-                        <Pressable
-                          disabled={false}
-                          style={styles.kudosButton}
-                          onPress={(e) => {
-                            giveKudos(chipper.id);
-                          }}
-                        >
-                          <Text>Give kudos!</Text>
-                        </Pressable>
+                        {completed && errand.errandID === id ? (
+                          <Pressable
+                            disabled={false}
+                            style={styles.kudosButton}
+                            onPress={(e) => {
+                              giveKudos(chipper.id);
+                            }}
+                          >
+                            <Text>Give kudos!</Text>
+                          </Pressable>
+                        ) : (
+                          <></>
+                        )}
                       </View>
                     );
                   })}
                 </View>
+                {completed && errand.errandID === id ? (
+                  <View style={styles.completed}>
+                    <Text>
+                      Don't forget to give out kudos to those that helped you!
+                    </Text>
+                  </View>
+                ) : (
+                  <View>
+                    <></>
+                  </View>
+                )}
                 <View style={styles.buttonsFlexBox}>
                   <Pressable
                     style={
@@ -121,10 +149,12 @@ export default function MyErrandsScreen({ navigation }) {
                         ? styles.completeButtonPressed
                         : styles.completeButton
                     }
+                    onPress={() => {
+                      handleCompleteErrand(errand.errandID);
+                    }}
                     onPressIn={() => setCompleteButtonPressed(true)}
                     onPressOut={() => {
                       setCompleteButtonPressed(false);
-                      handleCompleteErrand(errand.errandID);
                     }}
                   >
                     <Text>Completed</Text>
@@ -198,8 +228,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   titleField: {
-    justifyContent: "center",
-
+    justifyContent: "flex-start",
+    flexDirection: "row",
     padding: 15,
   },
   descriptionField: {
@@ -351,5 +381,11 @@ const styles = StyleSheet.create({
     margin: 10,
     borderWidth: 0.5,
     borderColor: "gray",
+  },
+  completed: {
+    display: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 15,
   },
 });
