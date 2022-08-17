@@ -47,7 +47,7 @@ export default function SingleErrandScreen({ route, navigation }) {
         setIsLoading(false);
       });
     });
-  }, [hasChippedIn]);
+  }, [hasChippedIn, singleErrand]);
 
   if (isLoading) {
     return <Text>Loading...</Text>;
