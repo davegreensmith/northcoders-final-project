@@ -45,13 +45,29 @@ export default function NavBar({ navigation }) {
         )}
       </Pressable>
       <Pressable style={styles.navBarIcon} onPress={handleAddErrandPress}>
-        <Feather name="plus-square" size={35} color="black" />
+        {route.name === "Add Errand" ? (
+          <FontAwesome name="plus-square" size={36} color="#47C9AF" />
+        ) : (
+          <FontAwesome name="plus-square-o" size={36} color="black" />
+        )}
       </Pressable>
       <Pressable style={styles.navBarIcon} onPress={handleChatsPress}>
-        <AntDesign name="message1" size={35} color="black" />
+        {route.name === "Chats" ? (
+          <Ionicons name="chatbubble-ellipses" size={35} color="#47C9AF" />
+        ) : (
+          <Ionicons
+            name="chatbubble-ellipses-outline"
+            size={35}
+            color="black"
+          />
+        )}
       </Pressable>
       <Pressable style={styles.navBarIcon} onPress={handleProfilePress}>
-        <AntDesign name="user" size={35} color="black" />
+        {route.name === "Profile" ? (
+          <FontAwesome5 name="user-alt" size={30} color="#47C9AF" />
+        ) : (
+          <FontAwesome5 name="user" size={30} color="black" />
+        )}
       </Pressable>
     </View>
   );
@@ -59,19 +75,19 @@ export default function NavBar({ navigation }) {
 
 const styles = StyleSheet.create({
   navBarContainer: {
-    position: "relative",
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    paddingBottom: Platform.OS === "android" ? 5 : 25,
     bottom: 0,
     backgroundColor: "#fff",
+    borderTopWidth: 0.7,
   },
   navBarIcon: {
     flex: 1,
     padding: 15,
-    paddingBottom: Platform.OS === "android" ? 15 : 35,
     flexDirection: "row",
     justifyContent: "center",
-    borderTopWidth: 0.7,
   },
 });
 
