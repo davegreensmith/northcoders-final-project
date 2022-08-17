@@ -45,7 +45,7 @@ export default function SingleErrandScreen({ route, navigation }) {
         setIsLoading(false);
       });
     });
-  }, [hasChippedIn]);
+  }, [hasChippedIn, singleErrand]);
 
   if (isLoading) {
     return <Text>Loading...</Text>;
@@ -66,10 +66,6 @@ export default function SingleErrandScreen({ route, navigation }) {
               </View>
             </View>
             <View style={styles.avatarFlexBox}>
-              {/* <Image
-              style={styles.avatar}
-              source={require("../assets/placeholder-avatar.png")}
-            /> */}
               <Text style={{ fontSize: 11 }}>{singleErrand.author}</Text>
             </View>
           </View>
