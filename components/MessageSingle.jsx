@@ -31,24 +31,39 @@ export default function MessageBoard({ navigation, route }) {
   const [messagesButtonPressed, setMessagesButtonPressed] = useState(false);
   const [loggedInUsername, setLoggedInUserName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [loggedInUserId, setLoggedInUserId] = useState();
 
   const { errandID } = route.params;
 
   function handleSendMessage(message) {
+    console.log(messagesArray);
+    const messageBodyID = messagesArray.length + 1;
+    console.log(messageBodyID);
+
     if (message === "") {
     } else {
-      const body = { msgAuthor: loggedInUsername, message };
+      const body = {
+        msgAuthor: loggedInUsername,
+        message,
+        msgId: messageBodyID,
+      };
       const { messageID } = currentMessage;
       postMessageByMessageID(messageID, body);
 
       const messagesOnScreen = [...messagesArray];
       messagesOnScreen.push(body);
       setMessagesArray([...messagesOnScreen]);
+      setAddMessage("");
     }
   }
   function clickAway(userID) {
-    navigation.navigate("Another User", { userId: userID });
+    if (userID === loggedInUserId) {
+      navigation.navigate("Profile");
+    } else {
+      navigation.navigate("Another User", { userId: userID });
+    }
   }
+
   useEffect(() => {
     setIsLoading(true);
     fetchErrandByErrandID(errandID)
@@ -65,8 +80,9 @@ export default function MessageBoard({ navigation, route }) {
       .catch((err) => {
         console.log(error);
       });
-    getUsername().then(({ user }) => {
+    getUsername().then(({ user, id }) => {
       setLoggedInUserName(user);
+      setLoggedInUserId(id);
     });
   }, []);
 
@@ -95,7 +111,7 @@ export default function MessageBoard({ navigation, route }) {
               <Text style={styles.chipperSubTitle}>Current Chippers:</Text>
               {currentErrand.chippers.map((chipper, index) => {
                 return (
-                  <View key={index}>
+                  <View key={chipper.msgId}>
                     <Pressable
                       onPress={() => {
                         clickAway(chipper.id);
