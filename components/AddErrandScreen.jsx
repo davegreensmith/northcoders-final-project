@@ -135,7 +135,7 @@ export default function AddErrandScreen({ navigation }) {
       <Header navigation={navigation} />
       <KeyboardAwareScrollView
         enableOnAndroid={true}
-        extraScrollHeight={50}
+        extraScrollHeight={75}
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.pageContent}>
@@ -145,7 +145,6 @@ export default function AddErrandScreen({ navigation }) {
               marginBottom: 10,
               marginTop: 10,
               fontSize: 18,
-
             }}
           >
             What is it you would like help with?
@@ -182,7 +181,7 @@ export default function AddErrandScreen({ navigation }) {
             value={date}
             placeholder="* Errand Date (DD/MM/YYYY)"
           />
-          <View style={styles.dropdownWorkType}>
+          <View style={styles.dropDownFlex}>
             <Picker
               style={styles.dropdownMenu}
               itemStyle={{ fontSize: 16 }}
@@ -222,7 +221,7 @@ export default function AddErrandScreen({ navigation }) {
               How long will it take?
             </Text>
           </View>
-          <View style={styles.dropdownWorkType}>
+          <View style={styles.dropDownFlex}>
             <Picker
               style={styles.dropdownMenu}
               itemStyle={{ fontSize: 16 }}
@@ -295,20 +294,17 @@ export default function AddErrandScreen({ navigation }) {
 const styles = StyleSheet.create({
   pageContent: {
     flexGrow: 1,
-    width: "90%",
-    marginLeft: 5,
-
   },
   genericInputField: {
     backgroundColor: "#FFF",
     borderWidth: 0.4,
     borderRadius: 5,
-    width: Platform.OS === "android" ? 375 : 355,
+    width: "90%",
     height: 35,
     marginTop: 10,
     marginHorizontal: 20,
     textAlign: "left",
-    padding: 10,
+    padding: 8,
     fontSize: 15,
     borderWidth: 1,
     borderColor: "#4faf9c",
@@ -317,7 +313,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     borderWidth: 0.4,
     borderRadius: 5,
-    width: Platform.OS === "android" ? 250 : 225,
+    width: "55%",
     height: 35,
     marginTop: 5,
     marginHorizontal: 20,
@@ -327,32 +323,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#4faf9c",
   },
-  dropdownTime: {
+  dropDownFlex: {
     backgroundColor: "white",
-    paddingTop: 15,
+    paddingTop: 5,
     borderRadius: 8,
-    flexDirection: Platform.OS === "android" ? "row" : "column-reverse",
-    alignItems: "center",
-    marginVertical: 10,
-    marginLeft: 22,
+    width: "90%",
+    flexDirection:
+      Platform.OS === "android" ? "column-reverse" : "column-reverse",
+    alignItems: "flex-start",
+    marginTop: 10,
+    marginLeft: 20,
     borderWidth: 1,
     borderColor: "#4faf9c",
-
-  },
-  dropdownWorkType: {
-    backgroundColor: "white",
-    paddingTop: 15,
-    borderRadius: 8,
-    flexDirection: Platform.OS === "android" ? "row" : "column-reverse",
-    alignItems: "center",
-    marginVertical: 10,
-    marginLeft: 22,
-    borderWidth: 1,
-    borderColor: "#4faf9c",
-
   },
   dropdownMenu: {
-    margin: 5,
+    margin: 3,
     backgroundColor: Platform.OS === "android" ? "#FFF" : "#0000",
     width: Platform.OS === "android" ? 200 : "70%",
     marginLeft: Platform.OS === "android" ? 9 : 0,
@@ -361,7 +346,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     borderWidth: 0.4,
     borderRadius: 5,
-    width: Platform.OS === "android" ? 375 : 355,
+    width: "90%",
     height: 80,
     marginTop: 10,
     marginHorizontal: 20,
@@ -383,7 +368,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     width: Platform.OS === "android" ? 125 : 150,
-    marginBottom: 30,
     padding: 10,
   },
   submitButtonPressed: {
