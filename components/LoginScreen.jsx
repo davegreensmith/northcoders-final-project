@@ -53,7 +53,7 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <KeyboardAwareScrollView
-      keyboardShouldPersistTaps="always"
+      keyboardShouldPersistTaps="handled"
       contentContainerStyle={styles.pageContent}
       enableOnAndroid={true}
     >

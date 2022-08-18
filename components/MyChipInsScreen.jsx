@@ -46,7 +46,7 @@ export default function MyChipInsScreen({ navigation }) {
       <Header navigation={navigation} />
       <ScrollView
         contentContainerStyle={styles.pageContent}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
       >
         {myChipIns.length > 0 ? (
           myChipIns.map((errand) => {

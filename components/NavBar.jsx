@@ -9,8 +9,6 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -52,7 +50,7 @@ export default function NavBar({ navigation }) {
         )}
       </Pressable>
       <Pressable style={styles.navBarIcon} onPress={handleChatsPress}>
-        {route.name === "Chats" ? (
+        {route.name === "MessageBoard" ? (
           <Ionicons name="chatbubble-ellipses" size={35} color="#47C9AF" />
         ) : (
           <Ionicons
@@ -90,27 +88,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-// map
-{
-  /* <MaterialCommunityIcons name="map-marker" size={24} color="black" />;
-<MaterialCommunityIcons name="map-marker-outline" size={24} color="black" />; */
-}
-
-// plus
-{
-  /* <FontAwesome name="plus-square" size={24} color="black" />
-<FontAwesome name="plus-square-o" size={24} color="black" />; */
-}
-
-// chat
-{
-  /* <Ionicons name="chatbubble-ellipses" size={24} color="black" />
-<Ionicons name="chatbubble-ellipses-outline" size={24} color="black" />; */
-}
-
-// profile
-{
-  /* <FontAwesome5 name="user" size={24} color="black" />;
-<FontAwesome5 name="user-alt" size={24} color="black" />; */
-}

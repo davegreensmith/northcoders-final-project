@@ -1,4 +1,3 @@
-import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./components/LoginScreen";
@@ -80,12 +79,12 @@ export default function App() {
         <Stack.Screen
           name="MessageBoard"
           component={MessageBoard}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
           name="MessageSingle"
           component={MessageSingle}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
         <Stack.Screen
           name="Edit Errand"
@@ -95,7 +94,7 @@ export default function App() {
         <Stack.Screen
           name="Another User"
           component={AnotherUserProfile}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, animation: "none" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

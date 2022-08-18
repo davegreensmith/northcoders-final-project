@@ -52,7 +52,7 @@ export default function MessageBoard({ navigation }) {
       <Header navigation={navigation} />
       <ScrollView
         contentContainerStyle={styles.pageContent}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
       >
         {isLoading ? (
           <Text>Loading message board</Text>
