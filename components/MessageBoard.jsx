@@ -27,11 +27,14 @@ export default function MessageBoard({ navigation }) {
   const [errandOwnerMessages, setErrandOwnerMessages] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [messagesButtonPressed, setMessagesButtonPressed] = useState(false);
+  const [refresh, setRefresh] = useState(true);
 
   function handleMessagesErrand(errandID) {
     navigation.navigate("MessageSingle", { errandID });
   }
-
+  function handleRefresh() {
+    setRefresh(!refresh);
+  }
   useEffect(() => {
     setIsLoading(true);
     getUsername().then((username) => {
@@ -45,20 +48,32 @@ export default function MessageBoard({ navigation }) {
         }
       );
     });
-  }, []);
+  }, [refresh]);
 
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
       <Header navigation={navigation} />
       <ScrollView
         contentContainerStyle={styles.pageContent}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
       >
         {isLoading ? (
           <Text>Loading message board</Text>
         ) : (
           <View>
-            <Text style={styles.headerH1}>Messages from My Errands</Text>
+            <View style={styles.headingContainer}>
+              <Text style={styles.headerH1}>Messages from My Errands</Text>
+              <Pressable
+                // onPressIn={() => setMessagesButtonPressed(true)}
+                onPressOut={() => {
+                  handleRefresh();
+                }}
+                style={styles.refreshButton}
+              >
+                <Text>Refresh </Text>
+                <Feather name="refresh-cw" size={18} color="black" />
+              </Pressable>
+            </View>
             {errandOwnerMessages.map((message) => {
               return (
                 <View key={message.id} style={styles.messageInfo}>
@@ -130,8 +145,23 @@ const styles = StyleSheet.create({
   pageContent: {
     flexGrow: 1,
   },
+  headingContainer: {
+    flexDirection: "row",
+  },
+  refreshButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#47C9AF",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 30,
+    width: 100,
+    padding: 5,
+    margin: 5,
+  },
   headerH1: {
-    fontSize: 20,
+    fontSize: 17,
     borderBottomWidth: 2,
     margin: 10,
   },
