@@ -16,6 +16,7 @@ import MessageSingle from "./components/MessageSingle";
 import EditErrandScreen from "./components/EditErrandScreen";
 import AnotherUserProfile from "./components/AnotherUserProfile";
 export default function App() {
+  console.disableYellowBox = true;
   const Stack = createNativeStackNavigator();
 
   return (
