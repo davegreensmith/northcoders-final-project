@@ -87,7 +87,7 @@ export default function SignUpScreen({ navigation }) {
       <KeyboardAwareScrollView
         enableOnAndroid={true}
         extraScrollHeight={75}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
       >
         <View style={styles.container}>
           <Image

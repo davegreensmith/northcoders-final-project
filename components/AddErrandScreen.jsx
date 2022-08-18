@@ -20,6 +20,8 @@ import {
   getUsername,
   updateLatLong,
   updateErrand,
+  addMessage,
+  updateMessagePropertyByMessageID,
 } from "../firebase/config";
 import { convertLocationToLatLong } from "../utils/api";
 
@@ -53,6 +55,19 @@ export default function AddErrandScreen({ navigation }) {
           return Promise.all([getUsername(), longLatData]);
         })
         .then(([{ user, id }, longLatData]) => {
+          const messageDetails = {
+            body: [],
+            chippers: [],
+            errandName,
+            errandOwner: { id, username: user },
+          };
+          return Promise.all([
+            addMessage(messageDetails),
+            { user, id },
+            longLatData,
+          ]);
+        })
+        .then(([{ messageID, messageUserId }, { user, id }, longLatData]) => {
           const errandDetails = {
             ...longLatData,
             timeFrame,
@@ -65,6 +80,7 @@ export default function AddErrandScreen({ navigation }) {
             author: user,
             authorId: id,
             chippers: [],
+            messageID,
           };
           return errandDetails;
         })
@@ -72,6 +88,9 @@ export default function AddErrandScreen({ navigation }) {
           return Promise.all([addErrand(errand), errand]);
         })
         .then(([{ errandID, errandUserId }, errand]) => {
+          const { messageID } = errand;
+          const messageBody = { errandID };
+          updateMessagePropertyByMessageID(messageID, messageBody);
           addErrandToUser(errandID, errandUserId);
           return Promise.all([
             convertLocationToLatLong(errand.location),
@@ -117,7 +136,7 @@ export default function AddErrandScreen({ navigation }) {
       <KeyboardAwareScrollView
         enableOnAndroid={true}
         extraScrollHeight={50}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
       >
         <View style={styles.pageContent}>
           <Text
@@ -126,6 +145,7 @@ export default function AddErrandScreen({ navigation }) {
               marginBottom: 10,
               marginTop: 10,
               fontSize: 18,
+
             }}
           >
             What is it you would like help with?
@@ -277,6 +297,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     width: "90%",
     marginLeft: 5,
+
   },
   genericInputField: {
     backgroundColor: "#FFF",
@@ -316,6 +337,7 @@ const styles = StyleSheet.create({
     marginLeft: 22,
     borderWidth: 1,
     borderColor: "#4faf9c",
+
   },
   dropdownWorkType: {
     backgroundColor: "white",
@@ -327,6 +349,7 @@ const styles = StyleSheet.create({
     marginLeft: 22,
     borderWidth: 1,
     borderColor: "#4faf9c",
+
   },
   dropdownMenu: {
     margin: 5,
@@ -374,6 +397,7 @@ const styles = StyleSheet.create({
   requiredText: {
     marginVertical: 5,
     marginLeft: 20,
+
     fontSize: 12,
   },
   errorText: {

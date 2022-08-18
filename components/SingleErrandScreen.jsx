@@ -16,6 +16,7 @@ import {
   getUsername,
   updateErrand,
   addChipperToErrand,
+  addChipperToMessages,
 } from "../firebase/config";
 
 export default function SingleErrandScreen({ route, navigation }) {
@@ -25,10 +26,13 @@ export default function SingleErrandScreen({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasChippedIn, setHasChippedIn] = useState(false);
   const [userID, setUserID] = useState("");
+  const [messagesChipper, setMessagesChipper] = useState("");
 
   const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
 
   function handleChipIn() {
+    const messageID = singleErrand.messageID;
+    addChipperToMessages(messageID, messagesChipper);
     addChipperToErrand(id);
     setHasChippedIn(true);
   }
@@ -40,6 +44,13 @@ export default function SingleErrandScreen({ route, navigation }) {
   useEffect(() => {
     fetchErrandByErrandID(id).then((errandData) => {
       return getUsername().then((username) => {
+        const userID = username.id;
+        const msgUsername = username.user;
+        const messageBody = {
+          userID,
+          username: msgUsername,
+        };
+        setMessagesChipper(messageBody);
         const user = username.user;
         errandData.chippers.forEach((chipper) => {
           if (chipper.user === user) {

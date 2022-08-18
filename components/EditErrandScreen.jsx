@@ -60,7 +60,7 @@ export default function EditErrandScreen({ route, navigation }) {
         <Header navigation={navigation} />
         <ScrollView
           contentContainerStyle={styles.pageContent}
-          keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps="handled"
         >
           <View key={errand.errandID} style={styles.listItem}>
             <View style={styles.titleField}>

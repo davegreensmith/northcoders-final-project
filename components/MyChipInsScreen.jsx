@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 import Header from "./Header";
 import NavBar from "./NavBar";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import {
   deleteErrand,
   deleteLatLongByErrandId,
@@ -17,6 +17,7 @@ import {
 export default function MyChipInsScreen({ navigation }) {
   const [myChipIns, setMyChipIns] = useState([]);
   const [refreshPage, setRefreshPage] = useState(true);
+  const [messagesButtonPressed, setMessagesButtonPressed] = useState(false);
 
   const [editButtonPressed, setEditButtonPressed] = useState(false);
 
@@ -27,6 +28,11 @@ export default function MyChipInsScreen({ navigation }) {
       return errand.id !== errandID;
     });
     setMyChipIns(newArray);
+  }
+
+  function handleMessagesErrand(errandID) {
+    console.log(errandID);
+    navigation.navigate("MessageSingle", { errandID });
   }
 
   useEffect(() => {
@@ -40,7 +46,7 @@ export default function MyChipInsScreen({ navigation }) {
       <Header navigation={navigation} />
       <ScrollView
         contentContainerStyle={styles.pageContent}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
       >
         {myChipIns.length > 0 ? (
           myChipIns.map((errand) => {
@@ -87,6 +93,21 @@ export default function MyChipInsScreen({ navigation }) {
                       color="black"
                     />
                   </Pressable>
+                  <Pressable
+                    onPressIn={() => setMessagesButtonPressed(true)}
+                    onPressOut={() => {
+                      setMessagesButtonPressed(false);
+                      handleMessagesErrand(errand.id);
+                    }}
+                    style={
+                      messagesButtonPressed
+                        ? styles.messagesButtonPressed
+                        : styles.messagesButton
+                    }
+                  >
+                    <Text>Messages </Text>
+                    <Feather name="message-circle" size={18} color="black" />
+                  </Pressable>
                 </View>
               </View>
             );
@@ -109,16 +130,16 @@ export default function MyChipInsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   pageContent: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   listItem: {
     justifyContent: "space-evenly",
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   titleField: {
     justifyContent: "center",
 
-    padding: 15
+    padding: 15,
   },
   descriptionField: {
     justifyContent: "center",
@@ -128,7 +149,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   requirementsField: {
     justifyContent: "center",
@@ -139,7 +160,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   jobTypeField: {
     justifyContent: "center",
@@ -150,7 +171,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   locationField: {
     justifyContent: "center",
@@ -161,7 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   dateField: {
     justifyContent: "center",
@@ -172,7 +193,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   jobLengthField: {
     justifyContent: "center",
@@ -183,14 +204,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#4faf9c"
+    borderColor: "#4faf9c",
   },
   buttonsFlexBox: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   editButton: {
     flexDirection: "row",
@@ -201,7 +222,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 120,
-    padding: 5
+    padding: 5,
   },
   editButtonPressed: {
     flexDirection: "row",
@@ -212,12 +233,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 120,
-    padding: 5
+    padding: 5,
   },
   noChipInsPage: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   noChipsInsBubble: {
     backgroundColor: "white",
@@ -225,6 +246,28 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     margin: 10,
     borderWidth: 0.5,
-    borderColor: "gray"
-  }
+    borderColor: "gray",
+  },
+  messagesButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFAF0",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 120,
+    padding: 5,
+  },
+  messagesButtonPressed: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgb(49, 151, 125)",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
+    width: 120,
+    padding: 5,
+  },
 });
