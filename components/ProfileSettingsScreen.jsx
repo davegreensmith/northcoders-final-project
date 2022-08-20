@@ -270,10 +270,8 @@ export default function ProfileSettingsScreen({ navigation }) {
               style={{ height: 15, marginRight: 15 }}
               value={canDrive}
               onValueChange={() => {
-                setProfileDetails(() => {
-                  setCanDrive(!canDrive);
-                  setFieldChanged(true);
-                });
+                setCanDrive(!canDrive);
+                setFieldChanged(true);
               }}
             />
           </View>
